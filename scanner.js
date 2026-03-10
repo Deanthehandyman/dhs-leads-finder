@@ -1,4 +1,4 @@
-// Dean's Handyman Service LLC — V6 MAXIMUM OVERDRIVE Scanner (FREE — Google Gemini)
+// Dean's Handyman Service LLC — V6 MAXIMUM OVERDRIVE (FREE — Groq + Tavily Search)
 // Pittsburg TX 75686 | Spiral from 75686 outward
 // 50+ service categories | Angi · Thumbtack · HomeAdvisor · Craigslist · Reddit
 // Facebook · Nextdoor · Twitter/X · Google · Yelp · Forums
@@ -970,28 +970,54 @@ Return ONLY valid JSON array (no markdown, no explanation):
 TARGET: Return 8-10 leads. Include hot, warm, AND cold. MORE IS BETTER.
 If you truly find nothing, return [].`;
 
-  const resp = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        tools: [{ google_search: {} }],
-        generationConfig: { maxOutputTokens: 4000, temperature: 0.7 },
-      }),
-    }
-  );
+  // Step 1: Run searches via Tavily (free tier: 1000/mo)
+  let searchContext = '';
+  const searchQueries = service.searches.slice(0, 5); // 5 searches per service
+  for (const q of searchQueries) {
+    try {
+      const sr = await fetch('https://api.tavily.com/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          api_key: process.env.TAVILY_API_KEY,
+          query: q + ' ' + region.cities[0],
+          search_depth: 'basic',
+          max_results: 5,
+          include_answer: false,
+        }),
+      });
+      if (sr.ok) {
+        const sd = await sr.json();
+        for (const r of (sd.results || [])) {
+          searchContext += `\nSOURCE: ${r.url}\nTITLE: ${r.title}\nSNIPPET: ${r.content}\n---`;
+        }
+      }
+    } catch(e) { /* skip failed search */ }
+  }
+
+  // Step 2: Send search results + prompt to Groq (free)
+  const fullPrompt = searchContext
+    ? prompt + `\n\nSEARCH RESULTS FOUND:\n${searchContext}\n\nBased on the above real search results, extract leads as JSON.`
+    : prompt + `\n\nNo live search results available. Based on your knowledge of these platforms and this area, suggest likely lead sources as JSON.`;
+
+  const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model:       'llama-3.3-70b-versatile',
+      max_tokens:  4000,
+      temperature: 0.7,
+      messages: [{ role: 'user', content: fullPrompt }],
+    }),
+  });
 
   const data = await resp.json();
   if (!resp.ok) { console.error(`    ❌ API error:`, JSON.stringify(data.error||data)); return []; }
 
-  let text = '';
-  for (const c of (data.candidates || [])) {
-    for (const p of (c.content?.parts || [])) {
-      if (p.text) text += p.text;
-    }
-  }
+  let text = data.choices?.[0]?.message?.content || '';
   const match = text.match(/\[[\s\S]*?\]/);
   if (!match) { console.log(`    No leads found`); return []; }
   try {
@@ -1194,7 +1220,7 @@ try { existing = JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8')); } catch {}
 
 (async () => {
   console.log(`\n🔨 DEAN'S V6 MAXIMUM OVERDRIVE — Mode: ${RUN_MODE.toUpperCase()}`);
-  console.log(`📍 ${BASE} | 50+ Services | FREE via Google Gemini | Reddit·FB·Nextdoor·Craigslist·Angi·Thumbtack`);
+  console.log(`📍 ${BASE} | 50+ Services | FREE: Groq LLM + Tavily Search | No billing needed`);
   console.log(`📅 ${new Date().toISOString()}\n`);
 
   if (RUN_MODE === 'digest') {
