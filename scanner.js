@@ -890,6 +890,268 @@ const SERVICES = [
     ],
   },
 
+  // ══ NEW LEAD TYPES ════════════════════════════════════════════════════════════
+  {
+    name:"Craigslist — Services Wanted", emoji:"📋", virtual:false, category:"Craigslist",
+    searches:[
+      'site:craigslist.org/search/lbg Texas "handyman" OR "repairs" OR "help needed"',
+      'site:craigslist.org Tyler TX services wanted handyman',
+      'site:craigslist.org Texarkana services wanted handyman repairs',
+      'site:craigslist.org Shreveport services wanted handyman repairs',
+      'site:craigslist.org Dallas services wanted "handyman" OR "repairs"',
+      'site:craigslist.org Oklahoma City services wanted handyman',
+      'site:craigslist.org East Texas "services wanted" handyman 2025 2026',
+      'site:craigslist.org "looking for handyman" OR "need handyman" Texas',
+    ],
+  },
+  {
+    name:"Facebook Groups — Need Recommendations", emoji:"👥", virtual:false, category:"Social",
+    searches:[
+      'site:facebook.com "group" "East Texas" "recommend" OR "looking for" handyman 2025',
+      'site:facebook.com "Texarkana" group "need a handyman" OR "who does" 2025',
+      'site:facebook.com "Tyler Texas" group "recommend" handyman repairs 2025',
+      'site:facebook.com "Longview Texas" group "need someone" repairs 2025',
+      'site:facebook.com "Shreveport" group "recommend" handyman 2025',
+      'site:facebook.com "Camp County" OR "Pittsburg TX" group need repairs 2025',
+      'site:facebook.com "ArkLaTex" group handyman recommendations 2025',
+      'site:facebook.com "Oklahoma" rural group "need handyman" 2025',
+    ],
+  },
+  {
+    name:"Nextdoor — Neighbor Recommendations", emoji:"🏘️", virtual:false, category:"Social",
+    searches:[
+      'site:nextdoor.com "East Texas" handyman recommend need 2025',
+      'site:nextdoor.com Tyler OR Longview OR Marshall TX handyman 2025',
+      'site:nextdoor.com Texarkana handyman recommend 2025',
+      'site:nextdoor.com "Shreveport" OR "Bossier" handyman recommend 2025',
+      'site:nextdoor.com Texas "who does" OR "does anyone know" handyman repairs 2025',
+      'site:nextdoor.com Texas "looking for" OR "need a" handyman 2025',
+      'site:nextdoor.com Texas "starlink" install recommend 2025',
+      'site:nextdoor.com Texas "pressure washing" OR "fence repair" recommend 2025',
+    ],
+  },
+  {
+    name:"New Business Openings — Need Setup Work", emoji:"🆕", virtual:false, category:"Business",
+    searches:[
+      '"new business" OR "opening soon" Texas need work renovations repairs 2025',
+      '"grand opening" Texas need repairs OR renovation OR setup handyman',
+      '"new restaurant" OR "new shop" Texas need work done repairs renovation',
+      '"new location" Texas need repairs renovation handyman affordable',
+      'site:reddit.com Texas "opening a business" need repairs renovation help 2025',
+      '"build out" OR "tenant improvement" Texas affordable handyman',
+      '"commercial renovation" Texas small business affordable',
+      '"new office" Texas need repairs setup handyman affordable',
+    ],
+  },
+  {
+    name:"Foreclosures & Auctions — Fix & Flip", emoji:"🏚️", virtual:false, category:"Real Estate",
+    searches:[
+      '"foreclosure" Texas need repairs fix up handyman affordable',
+      '"bank owned" OR "REO" Texas property repairs handyman',
+      '"auction property" OR "tax sale" Texas fix up repairs',
+      '"fix and flip" Texas handyman repairs affordable fast',
+      '"wholesale" OR "investor" Texas property repairs handyman',
+      'site:reddit.com Texas "foreclosure" OR "fix and flip" repairs handyman 2025',
+      '"probate" OR "estate sale" Texas property repairs needed',
+      '"as-is" Texas house need repairs fix up handyman',
+    ],
+  },
+  {
+    name:"Insurance Claims — Storm Repairs", emoji:"📋", virtual:false, category:"Storm",
+    searches:[
+      '"insurance claim" OR "insurance adjuster" Texas repairs handyman affordable',
+      '"hail claim" OR "wind claim" Texas repairs contractor affordable',
+      '"FEMA" OR "disaster relief" Texas repairs handyman affordable',
+      '"homeowners insurance" claim Texas repairs affordable contractor',
+      '"supplement" OR "insurance supplement" Texas repairs handyman',
+      '"public adjuster" Texas repairs contractor affordable',
+      '"storm claim" Texas roof fence deck repairs affordable',
+      'site:reddit.com Texas "insurance claim" repairs contractor affordable 2025',
+    ],
+  },
+  {
+    name:"Moving — Need Help Before & After", emoji:"📦", virtual:false, category:"New Homeowner",
+    searches:[
+      '"moving to Texas" OR "moving to East Texas" need handyman help repairs',
+      '"just moved" Texas house need repairs work done handyman',
+      '"moving out" Texas house need repairs clean fix',
+      '"moving company" referral Texas handyman repairs',
+      '"relocating to Texas" need handyman repairs affordable',
+      'site:reddit.com "moving to Texas" need repairs handyman 2025',
+      '"PCS to Texas" OR "transferred to Texas" need handyman',
+      '"uhaul" OR "penske" Texas moving need repairs help',
+    ],
+  },
+  {
+    name:"Property Management Companies", emoji:"🏢", virtual:false, category:"Business",
+    searches:[
+      '"property management" Texas need handyman repairs vendor',
+      '"property manager" East Texas OR Texarkana OR Tyler handyman contractor',
+      '"HOA" repairs OR maintenance Texas handyman affordable vendor',
+      '"apartment complex" repairs maintenance Texas handyman vendor',
+      '"commercial property" maintenance Texas handyman affordable',
+      'site:linkedin.com "property manager" Texas East TX handyman vendor',
+      '"maintenance request" property Texas handyman affordable',
+      '"preferred vendor" Texas property management handyman',
+    ],
+  },
+  {
+    name:"Real Estate Agents — Repair Referrals", emoji:"🤝", virtual:true, category:"Real Estate",
+    searches:[
+      '"real estate agent" Texas need handyman referral repairs',
+      '"realtor" East Texas OR Texarkana OR Tyler recommend handyman repairs',
+      '"RE/MAX" OR "Keller Williams" OR "Century 21" East Texas handyman',
+      '"real estate" Texas "handyman referral" OR "contractor referral"',
+      'site:linkedin.com "real estate agent" East Texas Tyler Longview Texarkana',
+      '"listing agent" Texas need handyman repairs before listing',
+      '"buyer agent" Texas need repairs after closing affordable',
+      '"real estate investor" Texas need handyman repairs affordable fast',
+    ],
+  },
+  {
+    name:"Reddit — Home Improvement Help Wanted", emoji:"💬", virtual:true, category:"Social",
+    searches:[
+      'site:reddit.com/r/HomeImprovement "East Texas" OR "Tyler TX" OR "Texarkana" help 2025',
+      'site:reddit.com/r/HomeImprovement "need someone" OR "hire" OR "contractor" Texas 2025',
+      'site:reddit.com/r/DIY "East Texas" OR "Tyler" OR "Longview" help hire 2025',
+      'site:reddit.com/r/homeowners Texas repairs "need help" OR "hire" 2025',
+      'site:reddit.com/r/Texas "handyman" OR "repairs" need recommend 2025',
+      'site:reddit.com/r/ArkLaTex handyman repairs recommend hire 2025',
+      'site:reddit.com/r/oklahoma handyman repairs need hire recommend 2025',
+      'site:reddit.com "Texas" "handyman" "recommend" OR "affordable" 2025 2026',
+    ],
+  },
+  {
+    name:"Water Well & Septic Issues", emoji:"💧", virtual:false, category:"Handyman",
+    searches:[
+      '"water well" repair OR pump OR pressure Texas affordable',
+      '"well pump" not working OR low pressure Texas fix',
+      '"septic" repair OR pump OR problem Texas affordable handyman',
+      '"septic system" issue OR backup Texas fix affordable',
+      '"well water" problem Texas fix repair affordable',
+      'site:reddit.com Texas "water well" OR "septic" problem repair 2025',
+      '"pressure tank" repair OR replace Texas affordable',
+      '"well house" OR "pump house" repair Texas affordable',
+    ],
+  },
+  {
+    name:"Generator Install & Repair", emoji:"⚡", virtual:false, category:"Handyman",
+    searches:[
+      '"generator install" OR "generator hookup" Texas affordable handyman',
+      '"standby generator" OR "whole house generator" install Texas',
+      '"Generac" OR "Kohler" install OR repair Texas affordable',
+      '"transfer switch" install Texas affordable handyman',
+      '"generator" not starting OR repair Texas affordable',
+      'site:reddit.com Texas "generator" install hookup affordable 2025',
+      '"natural gas generator" OR "propane generator" install Texas',
+      '"power outage" generator Texas install affordable need',
+    ],
+  },
+  {
+    name:"Tiny Homes, Containers & Cabins", emoji:"🏕️", virtual:false, category:"New Homeowner",
+    searches:[
+      '"tiny home" OR "tiny house" build OR repair Texas affordable',
+      '"shipping container" home OR cabin Texas build install',
+      '"container home" Texas build finish repairs affordable',
+      '"park model" OR "park home" repairs Texas affordable',
+      '"cabin build" OR "cabin repair" Texas affordable handyman',
+      'site:reddit.com Texas "tiny home" OR "container home" build repairs 2025',
+      '"shouse" OR "shop house" Texas build finish repairs',
+      '"accessory dwelling" OR "ADU" Texas build affordable',
+    ],
+  },
+  {
+    name:"Pool & Hot Tub Repairs", emoji:"🏊", virtual:false, category:"Handyman",
+    searches:[
+      '"pool repair" OR "pool deck" repair Texas affordable handyman',
+      '"hot tub" install OR repair OR move Texas affordable',
+      '"pool fence" install Texas affordable handyman',
+      '"pool pump" OR "pool motor" repair Texas affordable',
+      '"above ground pool" install OR repair Texas affordable',
+      '"pool house" OR "pool shed" build Texas affordable',
+      'site:craigslist.org Texas "pool repair" OR "hot tub" needed',
+      '"swim spa" install OR repair Texas affordable handyman',
+    ],
+  },
+  {
+    name:"Disabled & Low Income Home Repair Programs", emoji:"🏠", virtual:true, category:"Specialty",
+    searches:[
+      '"USDA" home repair grant OR loan Texas apply help',
+      '"CDBG" OR "community development" home repair Texas affordable',
+      '"weatherization" program Texas home repairs affordable',
+      '"LIHEAP" OR "low income" home repair Texas program',
+      'site:reddit.com Texas "home repair grant" OR "repair assistance" 2025',
+      '"critical home repair" Texas affordable program help',
+      '"Habitat for Humanity" Texas need repairs help affordable',
+      '"Area Agency on Aging" Texas home repair seniors affordable',
+    ],
+  },
+  {
+    name:"Weddings, Events & Temporary Structures", emoji:"🎪", virtual:false, category:"Business",
+    searches:[
+      '"wedding venue" OR "event venue" repairs Texas affordable handyman',
+      '"outdoor wedding" setup OR repairs Texas affordable',
+      '"event space" repairs OR renovation Texas affordable',
+      '"barn wedding" repair OR setup Texas affordable handyman',
+      '"temporary structure" OR "tent platform" build Texas',
+      'site:facebook.com Texas "wedding venue" repairs need handyman 2025',
+      '"venue renovation" Texas affordable handyman',
+      '"outdoor event" setup build Texas affordable handyman',
+    ],
+  },
+  {
+    name:"Schools, Daycares & Community Buildings", emoji:"🏫", virtual:false, category:"Business",
+    searches:[
+      '"school" repairs OR maintenance Texas affordable handyman',
+      '"daycare" repairs OR safety Texas affordable handyman',
+      '"church camp" OR "retreat center" repairs Texas affordable',
+      '"community building" repairs Texas affordable handyman',
+      '"fire station" OR "police station" repairs Texas affordable',
+      '"library" repairs maintenance Texas affordable handyman',
+      '"park pavilion" OR "park shelter" repair Texas affordable',
+      'site:craigslist.org Texas "school" OR "community" repairs handyman needed',
+    ],
+  },
+  {
+    name:"Contractors Needing Subcontractors", emoji:"🔧", virtual:false, category:"Business",
+    searches:[
+      '"subcontractor" needed Texas handyman work available',
+      '"looking for sub" OR "need sub" Texas handyman repairs',
+      '"general contractor" Texas need handyman subcontractor',
+      'site:craigslist.org Texas "subcontractor" OR "sub needed" handyman',
+      '"1099" handyman Texas work available contractor',
+      '"contract work" Texas handyman available',
+      '"construction company" Texas need handyman subcontractor affordable',
+      'site:indeed.com OR site:craigslist.org Texas "handyman subcontractor" 2025',
+    ],
+  },
+  {
+    name:"Farms & Agriculture — Equipment Buildings", emoji:"🚜", virtual:false, category:"Ranch/Farm",
+    searches:[
+      '"cotton gin" OR "grain elevator" repairs Texas affordable',
+      '"chicken house" OR "broiler house" repair Texas affordable',
+      '"dairy barn" OR "milking parlor" repair Texas affordable',
+      '"irrigation" repair OR install Texas farm affordable',
+      '"hay equipment" storage building Texas build repair',
+      '"pecan orchard" OR "peach orchard" structures Texas repair build',
+      '"catfish pond" OR "aquaculture" structures Texas build repair',
+      '"livestock barn" OR "show barn" Texas build repair affordable',
+    ],
+  },
+  {
+    name:"Car Ports, Garages & Shop Buildings", emoji:"🚗", virtual:false, category:"Handyman",
+    searches:[
+      '"garage door" repair OR replace Texas affordable handyman',
+      '"carport" build OR repair Texas affordable handyman',
+      '"detached garage" build OR repair Texas affordable',
+      '"workshop" OR "man cave" build Texas affordable handyman',
+      '"garage conversion" Texas affordable handyman',
+      '"epoxy floor" garage Texas affordable handyman',
+      '"garage organization" OR "garage shelving" Texas build install',
+      'site:craigslist.org Texas "garage" OR "carport" build repair needed',
+    ],
+  },
+
 ];
 
 // ─── Scan ─────────────────────────────────────────────────────────────────────
@@ -1020,6 +1282,78 @@ ${hotLeads.map(l=>`
   <b style="color:#92400e">📞 Call before someone else does: ${PHONE}</b>
 </div></body></html>`;
   await sendEmail(t, html, `🔥 ${hotLeads.length} HOT Lead${hotLeads.length>1?'s':''} — ${hotLeads[0].service} · ${region.name}`);
+}
+
+// ─── Auto-Reply ───────────────────────────────────────────────────────────────
+// Automatically replies to leads that have a Craigslist URL or direct email
+async function autoReply(leads) {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) return;
+  const nodemailer = require('nodemailer');
+  const t = nodemailer.createTransport({ service:'gmail', auth:{ user:process.env.GMAIL_USER, pass:process.env.GMAIL_APP_PASSWORD } });
+
+  // Load already-replied leads so we never double-reply
+  const repliedFile = path.join(__dirname, 'replied.json');
+  let replied = [];
+  try { replied = JSON.parse(require('fs').readFileSync(repliedFile, 'utf8')); } catch {}
+  const repliedSet = new Set(replied);
+
+  let count = 0;
+  for (const lead of leads) {
+    // Only reply to hot/warm Craigslist leads with a URL
+    if (!['hot','warm'].includes(lead.heat)) continue;
+    if (!lead.url || !lead.url.includes('craigslist.org')) continue;
+    if (repliedSet.has(lead.url)) continue;
+
+    try {
+      // Fetch the Craigslist post to get the reply email
+      const pageResp = await fetch(lead.url, { headers:{ 'User-Agent':'Mozilla/5.0' } });
+      if (!pageResp.ok) continue;
+      const html = await pageResp.text();
+
+      // Extract Craigslist anonymized reply email
+      const emailMatch = html.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.craigslist\.org/);
+      if (!emailMatch) continue;
+      const replyTo = emailMatch[0];
+
+      // Build a short friendly message
+      const serviceMsg = lead.service || 'handyman work';
+      const body = `Hi there,
+
+I saw your post and wanted to reach out — I'm Dean, a local handyman serving the ${lead.location || 'East Texas / ArkLaTex'} area.
+
+I do ${serviceMsg} and I'm available this week. I'm local, affordable, and reliable.
+
+Give me a call or text anytime: ${PHONE}
+Or visit: https://${WEBSITE}
+
+Hope to hear from you!
+— Dean
+${COMPANY}
+${PHONE}`;
+
+      await t.sendMail({
+        from: `"Dean's Handyman Service" <${process.env.GMAIL_USER}>`,
+        to: replyTo,
+        subject: `Re: ${lead.title || 'Your post'}`,
+        text: body,
+      });
+
+      repliedSet.add(lead.url);
+      replied.push(lead.url);
+      count++;
+      console.log(`  📧 Auto-replied to: ${lead.title} → ${replyTo}`);
+
+      // Wait 30s between replies so Gmail doesn't flag as spam
+      await new Promise(r => setTimeout(r, 30000));
+
+    } catch(e) {
+      console.log(`  ⚠️  Auto-reply failed for ${lead.url}: ${e.message}`);
+    }
+  }
+
+  // Save replied list
+  try { require('fs').writeFileSync(repliedFile, JSON.stringify(replied, null, 2)); } catch {}
+  if (count > 0) console.log(`✅ Auto-replied to ${count} Craigslist leads`);
 }
 
 // ─── Daily digest ─────────────────────────────────────────────────────────────
@@ -1232,6 +1566,12 @@ try { existing = JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8')); } catch {}
       try { await sendHotAlert(hotLeads, region); } catch(e) { console.error('Alert error:', e.message); }
     } else {
       console.log(`ℹ️  No hot leads this pass — all saved for 8am digest`);
+    }
+    // Auto-reply to Craigslist leads
+    const craigslistLeads = stamped.filter(l=>l.url && l.url.includes('craigslist.org'));
+    if (craigslistLeads.length) {
+      console.log(`📧 Auto-replying to ${craigslistLeads.length} Craigslist leads...`);
+      try { await autoReply(craigslistLeads); } catch(e) { console.error('Auto-reply error:', e.message); }
     }
   }
 
