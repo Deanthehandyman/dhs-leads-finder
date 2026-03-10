@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dean's Handyman — Texas Pro Lead Finder</title>
+<title>Dean's Handyman — V2 Lead Finder</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#050a12;--panel:#080f1c;--card:#0b1526;--border:rgba(0,200,255,0.12);--border2:rgba(0,200,255,0.22);--cyan:#00d4ff;--blue:#1a6cff;--green:#00ff88;--orange:#ff9d00;--red:#ff4466;--text:#ddeeff;--muted:#4a7090;--dim:#1a2a40;--comp:#ff4466}
+:root{--bg:#050a12;--panel:#080f1c;--card:#0b1526;--border:rgba(0,200,255,0.12);--border2:rgba(0,200,255,0.22);--cyan:#00d4ff;--blue:#1a6cff;--green:#00ff88;--orange:#ff9d00;--red:#ff4466;--text:#ddeeff;--muted:#4a7090;--dim:#1a2a40}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:9999}
@@ -15,7 +15,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px}
 .brand{display:flex;align-items:center;gap:12px}
 .brand-icon{width:44px;height:44px;background:linear-gradient(135deg,#1a6cff,#00d4ff);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 20px rgba(0,180,255,0.3);flex-shrink:0}
-.brand-name{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--cyan);letter-spacing:.1em;line-height:1.4}
+.brand-name{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.1em;line-height:1.4}
 .brand-sub{font-size:10px;color:var(--muted);letter-spacing:.06em}
 .topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .live-badge{display:flex;align-items:center;gap:7px;background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.2);border-radius:30px;padding:7px 16px}
@@ -24,42 +24,46 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .live-txt{font-size:11px;color:var(--green);font-family:'IBM Plex Mono',monospace;font-weight:500}
 .scan-info{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
 .phone-link{background:rgba(0,180,255,.08);border:1px solid var(--border2);border-radius:40px;padding:7px 18px;font-size:12px;color:var(--cyan);text-decoration:none}
-.phone-link:hover{background:rgba(0,180,255,.18)}
 
-/* Competitor intel bar */
-.comp-bar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,68,102,.06);border:1px solid rgba(255,68,102,.2);border-radius:12px;padding:12px 18px;margin:14px 0;flex-wrap:wrap;gap:10px}
-.comp-left{display:flex;align-items:center;gap:10px}
-.comp-icon{font-size:20px}
-.comp-text h4{font-size:12px;font-weight:700;color:var(--red);margin-bottom:2px;font-family:'Orbitron',monospace;letter-spacing:.06em}
-.comp-text p{font-size:11px;color:var(--muted)}
-.comp-right{display:flex;gap:10px;flex-wrap:wrap}
-.comp-pill{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600}
-.comp-pill.bad{background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.3);color:var(--red)}
-.comp-pill.good{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.25);color:var(--green)}
+/* Zone map */
+.zone-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:14px}
+.zone-box{text-align:center;padding:10px;border-radius:10px;border:1px solid var(--border)}
+.zone-box.z1{border-color:rgba(255,157,0,.3);background:rgba(255,157,0,.05)}
+.zone-box.z2{border-color:rgba(0,212,255,.2);background:rgba(0,212,255,.04)}
+.zone-box.z3{border-color:rgba(100,100,180,.2);background:rgba(100,100,180,.04)}
+.zone-num{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;margin-bottom:3px}
+.z1 .zone-num{color:var(--orange)}
+.z2 .zone-num{color:var(--cyan)}
+.z3 .zone-num{color:#9090ff}
+.zone-label{font-size:11px;font-weight:700;margin-bottom:4px}
+.z1 .zone-label{color:var(--orange)}
+.z2 .zone-label{color:var(--cyan)}
+.z3 .zone-label{color:#9090ff}
+.zone-desc{font-size:10px;color:var(--muted);line-height:1.4}
+.zone-pct{font-size:10px;font-weight:700;margin-top:5px;padding:2px 8px;border-radius:10px;display:inline-block}
+.z1 .zone-pct{background:rgba(255,157,0,.12);color:var(--orange)}
+.z2 .zone-pct{background:rgba(0,212,255,.1);color:var(--cyan)}
+.z3 .zone-pct{background:rgba(144,144,255,.1);color:#9090ff}
 
-/* Source badges row */
-.sources-bar{display:flex;gap:7px;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:4px;align-items:center}
-.src-label{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-right:4px}
-.src-chip{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
-.src-chip.reddit{background:rgba(255,87,34,.1);border:1px solid rgba(255,87,34,.2);color:#ff7043}
-.src-chip.facebook{background:rgba(66,103,178,.15);border:1px solid rgba(66,103,178,.25);color:#90b0ff}
-.src-chip.nextdoor{background:rgba(0,155,58,.1);border:1px solid rgba(0,155,58,.2);color:#4caf7d}
-.src-chip.craigslist{background:rgba(180,0,200,.1);border:1px solid rgba(180,0,200,.2);color:#df80ff}
-.src-chip.competitor{background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.25);color:var(--red)}
-.src-chip.active,.src-chip:hover{filter:brightness(1.3);border-width:1px}
-.src-chip.active{box-shadow:0 0 8px currentColor}
+/* Alert info */
+.alert-bar{display:flex;align-items:center;gap:12px;background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.18);border-radius:12px;padding:12px 18px;margin-bottom:10px;flex-wrap:wrap;gap:10px}
+.alert-bar .left{display:flex;align-items:center;gap:10px}
+.alert-bar .icon{font-size:22px}
+.alert-bar h4{font-size:12px;color:var(--green);font-weight:700;margin-bottom:2px}
+.alert-bar p{font-size:11px;color:var(--muted)}
 
-/* Service filter */
-.services-bar{display:flex;gap:7px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--border);margin-bottom:4px}
+/* Services */
+.services-bar{display:flex;gap:7px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--border)}
 .svc-badge{display:flex;align-items:center;gap:5px;padding:6px 13px;border-radius:30px;font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;transition:all .2s}
 .svc-badge.active{border-color:var(--cyan);background:rgba(0,180,255,.1);color:var(--cyan)}
-.svc-badge .ct{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-left:3px}
+.svc-badge .ct{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-left:2px}
+.virtual-tag{font-size:9px;background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.2);border-radius:6px;padding:1px 5px;margin-left:2px}
 
 /* Stats */
-.stats-row{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:14px 0 12px}
+.stats-row{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:12px 0}
 .stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
 .stat-num{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:900;line-height:1;margin-bottom:3px}
-.s-cyan{color:var(--cyan)}.s-green{color:var(--green)}.s-orange{color:var(--orange)}.s-red{color:var(--red)}.s-blue{color:#90b0ff}.s-comp{color:var(--comp)}
+.s-cyan{color:var(--cyan)}.s-green{color:var(--green)}.s-orange{color:var(--orange)}.s-red{color:var(--red)}.s-blue{color:#90b0ff}.s-comp{color:var(--red)}
 .stat-lbl{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
 
 /* Toolbar */
@@ -68,8 +72,8 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .pill{padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;font-family:'DM Sans',sans-serif;transition:all .2s}
 .pill.active{background:rgba(0,180,255,.12);border-color:var(--cyan);color:var(--cyan)}
-.region-select{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;outline:none}
-.region-select option{background:#0d1a2e}
+.sel{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;outline:none}
+.sel option{background:#0d1a2e}
 .export-btn{padding:6px 13px;border-radius:8px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.22);color:var(--green);font-size:11px;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer}
 
 /* Cards */
@@ -78,10 +82,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .lead-card:hover{border-color:var(--border2);transform:translateY(-2px)}
 .lead-card.hot{border-color:rgba(255,157,0,.4);box-shadow:0 0 16px rgba(255,120,0,.06)}
 .lead-card.warm{border-color:rgba(0,212,255,.22)}
-.lead-card.competitor-lead{border-color:rgba(255,68,102,.35);box-shadow:0 0 14px rgba(255,68,102,.08)}
+.lead-card.is-virtual{border-color:rgba(0,255,136,.25)}
+.lead-card.competitor-lead{border-color:rgba(255,68,102,.35)}
 @keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px;gap:8px;flex-wrap:wrap}
-.card-badges{display:flex;gap:6px;flex-wrap:wrap}
+.card-badges{display:flex;gap:5px;flex-wrap:wrap}
 .src-badge{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;text-transform:uppercase}
 .sb-reddit{background:rgba(255,87,34,.15);color:#ff7043;border:1px solid rgba(255,87,34,.25)}
 .sb-facebook{background:rgba(66,103,178,.2);color:#90b0ff;border:1px solid rgba(66,103,178,.3)}
@@ -92,21 +97,26 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .h-hot{background:rgba(255,100,0,.15);color:var(--orange);border:1px solid rgba(255,100,0,.3)}
 .h-warm{background:rgba(0,180,255,.1);color:var(--cyan);border:1px solid var(--border2)}
 .h-cold{background:rgba(100,100,120,.1);color:var(--muted);border:1px solid rgba(120,120,140,.2)}
+.zone-badge{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.zb-1{background:rgba(255,157,0,.1);color:var(--orange);border:1px solid rgba(255,157,0,.2)}
+.zb-2{background:rgba(0,212,255,.08);color:var(--cyan);border:1px solid var(--border2)}
+.zb-3{background:rgba(144,144,255,.08);color:#9090ff;border:1px solid rgba(144,144,255,.2)}
 .comp-flag{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(255,68,102,.12);color:var(--red);border:1px solid rgba(255,68,102,.3)}
+.virtual-flag{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(0,255,136,.08);color:var(--green);border:1px solid rgba(0,255,136,.2)}
 .svc-tag{display:inline-block;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:600;margin-bottom:7px}
-.region-tag{display:inline-block;padding:2px 8px;background:rgba(26,108,255,.12);border:1px solid rgba(26,108,255,.2);border-radius:8px;font-size:10px;color:#7090d0;margin-left:5px;margin-bottom:7px}
-.platform-tag{display:inline-block;padding:2px 8px;background:rgba(100,100,140,.12);border:1px solid rgba(100,100,140,.18);border-radius:8px;font-size:10px;color:var(--muted);margin-left:5px;margin-bottom:7px}
+.region-tag{display:inline-block;padding:2px 8px;background:rgba(26,108,255,.1);border:1px solid rgba(26,108,255,.18);border-radius:8px;font-size:10px;color:#7090d0;margin-left:5px;margin-bottom:7px}
+.platform-tag{display:inline-block;padding:2px 8px;background:rgba(100,100,140,.1);border:1px solid rgba(100,100,140,.16);border-radius:8px;font-size:10px;color:var(--muted);margin-left:5px;margin-bottom:7px}
 .card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.4}
 .card-snippet{font-size:12px;color:#7aabcc;line-height:1.6;margin-bottom:7px}
 .card-heat-reason{font-size:11px;color:var(--orange);margin-bottom:7px;font-style:italic}
 .contact-hint{font-size:11px;color:var(--green);background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.15);border-radius:8px;padding:5px 10px;margin-bottom:9px;font-weight:500}
 .card-meta{display:flex;gap:8px;font-size:10px;color:var(--muted);margin-bottom:9px;flex-wrap:wrap}
 .card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
-.tag{padding:2px 8px;border-radius:10px;font-size:10px;background:var(--dim);color:#6a9ab8;border:1px solid rgba(80,140,180,.12)}
+.tag{padding:2px 7px;border-radius:10px;font-size:10px;background:var(--dim);color:#6a9ab8;border:1px solid rgba(80,140,180,.12)}
 .card-actions{display:flex;gap:6px;flex-wrap:wrap}
 .act{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;text-decoration:none;display:inline-block}
 .act-call{background:linear-gradient(135deg,#1a6cff,#00c8ff);color:white}
-.act-call:hover{opacity:.85}
+.act-virtual{background:linear-gradient(135deg,#059669,#00d4aa);color:white}
 .act-msg{background:rgba(0,180,255,.1);border:1px solid var(--border2);color:var(--cyan)}
 .act-src{background:transparent;border:1px solid var(--border);color:var(--muted);font-size:10px}
 .act-dismiss{background:transparent;border:1px solid var(--border);color:var(--muted);margin-left:auto}
@@ -117,6 +127,10 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .svc-Plumbing{background:rgba(0,200,150,.1);color:#00d4aa;border:1px solid rgba(0,200,150,.2)}
 .svc-Electrical{background:rgba(255,220,0,.1);color:#ffd700;border:1px solid rgba(255,220,0,.2)}
 .svc-Pressure{background:rgba(0,150,255,.12);color:#60b0ff;border:1px solid rgba(0,150,255,.2)}
+.svc-Virtual{background:rgba(0,255,136,.08);color:var(--green);border:1px solid rgba(0,255,136,.2)}
+.svc-Smart{background:rgba(180,100,255,.1);color:#d0a0ff;border:1px solid rgba(180,100,255,.2)}
+.svc-Antenna{background:rgba(255,140,0,.1);color:#ffaa44;border:1px solid rgba(255,140,0,.2)}
+.svc-Furniture{background:rgba(100,180,255,.1);color:#80c0ff;border:1px solid rgba(100,180,255,.2)}
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px;color:var(--muted);gap:16px;grid-column:1/-1;text-align:center}
 .empty-icon{font-size:44px;opacity:.35}
 .empty-title{font-family:'Orbitron',monospace;font-size:13px}
@@ -136,7 +150,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @keyframes scanBar{0%{transform:scaleX(0);transform-origin:left}50%{transform:scaleX(1);transform-origin:left}51%{transform:scaleX(1);transform-origin:right}100%{transform:scaleX(0);transform-origin:right}}
 footer{text-align:center;padding:26px 0 0;border-top:1px solid var(--border);margin-top:40px;color:var(--muted);font-size:12px;line-height:2}
 footer a{color:var(--cyan);text-decoration:none}
-@media(max-width:700px){.stats-row{grid-template-columns:repeat(3,1fr)}.leads-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.stats-row{grid-template-columns:repeat(3,1fr)}.leads-grid{grid-template-columns:1fr}.zone-bar{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -146,8 +160,8 @@ footer a{color:var(--cyan);text-decoration:none}
     <div class="brand">
       <div class="brand-icon">🔨</div>
       <div>
-        <div class="brand-name">DEAN'S HANDYMAN — TEXAS PRO LEADS</div>
-        <div class="brand-sub">PITTSBURG TX · ALL TEXAS · 6 SERVICES · REDDIT · FACEBOOK · NEXTDOOR · CRAIGSLIST · 24/7</div>
+        <div class="brand-name">DEAN'S HANDYMAN — V2 PRO LEAD FINDER</div>
+        <div class="brand-sub">PITTSBURG TX · ARKLAT​EX + OK FIRST · ALL TX + NEIGHBORING STATES · 10 SERVICES · 24/7</div>
       </div>
     </div>
     <div class="topbar-right">
@@ -158,36 +172,40 @@ footer a{color:var(--cyan);text-decoration:none}
   </div>
   <div class="scan-bar"></div>
 
-  <!-- Competitor intel -->
-  <div class="comp-bar">
-    <div class="comp-left">
-      <div class="comp-icon">⚔️</div>
-      <div class="comp-text">
-        <h4>COMPETITOR INTEL</h4>
-        <p>installpros.io &amp; starlinkinstallationpros.com charge $899+ · You're local, faster, and cheaper. Win on that every time.</p>
+  <!-- Zone map -->
+  <div class="zone-bar">
+    <div class="zone-box z1">
+      <div class="zone-num">1</div>
+      <div class="zone-label">HOME TURF</div>
+      <div class="zone-desc">East TX · ArkLaTex<br>AR · LA · TX border</div>
+      <span class="zone-pct">50% of scans</span>
+    </div>
+    <div class="zone-box z2">
+      <div class="zone-num">2</div>
+      <div class="zone-label">REGIONAL</div>
+      <div class="zone-desc">Oklahoma · North TX<br>Central TX · SW Arkansas</div>
+      <span class="zone-pct">30% of scans</span>
+    </div>
+    <div class="zone-box z3">
+      <div class="zone-num">3</div>
+      <div class="zone-label">STATEWIDE</div>
+      <div class="zone-desc">All Texas · Louisiana<br>New Mexico · nationwide virtual</div>
+      <span class="zone-pct">20% of scans</span>
+    </div>
+  </div>
+
+  <!-- Alert info -->
+  <div class="alert-bar">
+    <div class="left">
+      <div class="icon">📬</div>
+      <div>
+        <h4>SMART ALERTS ACTIVE</h4>
+        <p>🔥 Hot leads → instant text + email &nbsp;·&nbsp; ☀️ Daily digest → 8am Central every morning &nbsp;·&nbsp; 💻 Virtual leads → no travel needed</p>
       </div>
     </div>
-    <div class="comp-right">
-      <span class="comp-pill bad">❌ Them: $899+</span>
-      <span class="comp-pill bad">❌ Nationwide, not local</span>
-      <span class="comp-pill good">✅ You: Local Texas</span>
-      <span class="comp-pill good">✅ Faster response</span>
-      <span class="comp-pill good">✅ Personal service</span>
-    </div>
   </div>
 
-  <!-- Source filters -->
-  <div class="sources-bar">
-    <span class="src-label">Source:</span>
-    <span class="src-chip reddit active" onclick="filterSource('',this)">All</span>
-    <span class="src-chip reddit" onclick="filterSource('reddit',this)">📰 Reddit</span>
-    <span class="src-chip facebook" onclick="filterSource('facebook',this)">👥 Facebook</span>
-    <span class="src-chip nextdoor" onclick="filterSource('nextdoor',this)">🏘 Nextdoor</span>
-    <span class="src-chip craigslist" onclick="filterSource('craigslist',this)">📋 Craigslist</span>
-    <span class="src-chip competitor" onclick="filterSource('competitor',this)">⚠️ Shopped Competitor</span>
-  </div>
-
-  <!-- Service filters -->
+  <!-- Services -->
   <div class="services-bar">
     <div class="svc-badge active" onclick="filterSvc('',this)">🔨 All <span class="ct" id="ctAll">0</span></div>
     <div class="svc-badge" onclick="filterSvc('Starlink',this)">🛰️ Starlink <span class="ct" id="ctStarlink">0</span></div>
@@ -196,36 +214,36 @@ footer a{color:var(--cyan);text-decoration:none}
     <div class="svc-badge" onclick="filterSvc('Plumbing',this)">🚿 Plumbing <span class="ct" id="ctPlumbing">0</span></div>
     <div class="svc-badge" onclick="filterSvc('Electrical',this)">⚡ Electrical <span class="ct" id="ctElectrical">0</span></div>
     <div class="svc-badge" onclick="filterSvc('Pressure',this)">💦 Pressure Wash <span class="ct" id="ctPressure">0</span></div>
+    <div class="svc-badge" onclick="filterSvc('Virtual',this)">💻 Virtual Consult <span class="virtual-tag">REMOTE</span> <span class="ct" id="ctVirtual">0</span></div>
+    <div class="svc-badge" onclick="filterSvc('Smart',this)">🏠 Smart Home <span class="virtual-tag">REMOTE</span> <span class="ct" id="ctSmart">0</span></div>
+    <div class="svc-badge" onclick="filterSvc('Antenna',this)">📡 Antenna <span class="ct" id="ctAntenna">0</span></div>
+    <div class="svc-badge" onclick="filterSvc('Furniture',this)">🪑 Furniture Assembly <span class="ct" id="ctFurniture">0</span></div>
   </div>
 
   <!-- Stats -->
   <div class="stats-row">
     <div class="stat-box"><div class="stat-num s-cyan" id="sTot">–</div><div class="stat-lbl">Total</div></div>
     <div class="stat-box"><div class="stat-num s-orange" id="sHot">–</div><div class="stat-lbl">🔥 Hot</div></div>
-    <div class="stat-box"><div class="stat-num s-green" id="sNew">–</div><div class="stat-lbl">Today</div></div>
+    <div class="stat-box"><div class="stat-num s-green" id="sVirtual">–</div><div class="stat-lbl">💻 Virtual</div></div>
+    <div class="stat-box"><div class="stat-num s-orange" id="sZ1">–</div><div class="stat-lbl">Zone 1</div></div>
     <div class="stat-box"><div class="stat-num s-comp" id="sComp">–</div><div class="stat-lbl">⚠️ vs Comp</div></div>
-    <div class="stat-box"><div class="stat-num s-blue" id="sRegions">–</div><div class="stat-lbl">Regions</div></div>
     <div class="stat-box"><div class="stat-num s-red" id="sAge">–</div><div class="stat-lbl">Last Lead</div></div>
   </div>
 
   <!-- Toolbar -->
   <div class="toolbar">
-    <div class="leads-title">LIVE LEADS — ALL TEXAS</div>
+    <div class="leads-title">LIVE LEADS</div>
     <div class="filter-row">
       <button class="pill active" onclick="filterHeat('all',this)">All</button>
       <button class="pill" onclick="filterHeat('hot',this)">🔥 Hot</button>
       <button class="pill" onclick="filterHeat('warm',this)">⚡ Warm</button>
+      <button class="pill" onclick="filterHeat('virtual',this)">💻 Virtual</button>
       <button class="pill" onclick="filterHeat('today',this)">Today</button>
-      <select class="region-select" onchange="filterRegion(this.value)">
-        <option value="">All Regions</option>
-        <option>East Texas</option><option>Deep East Texas</option><option>DFW Rural</option>
-        <option>North Texas</option><option>Northwest Texas</option><option>West Texas</option>
-        <option>Far West Texas</option><option>Permian Basin</option><option>Central Texas</option>
-        <option>Texas Hill Country</option><option>Austin Rural</option><option>South Texas</option>
-        <option>Rio Grande Valley</option><option>Coastal Bend</option>
-        <option>Greater Houston Rural</option><option>Golden Triangle</option>
-        <option>Gulf Coast Plains</option><option>Texas Panhandle</option>
-        <option>South Plains</option><option>San Antonio Rural</option>
+      <select class="sel" onchange="filterZone(this.value)">
+        <option value="">All Zones</option>
+        <option value="1">Zone 1 — Home Turf</option>
+        <option value="2">Zone 2 — Regional</option>
+        <option value="3">Zone 3 — Statewide</option>
       </select>
       <button class="export-btn" onclick="exportCSV()">⬇ CSV</button>
     </div>
@@ -234,15 +252,14 @@ footer a{color:var(--cyan);text-decoration:none}
   <div class="leads-grid" id="grid">
     <div class="empty"><div class="spin"></div><div class="empty-title">LOADING LEADS...</div></div>
   </div>
-
 </div>
 
 <footer>
   <strong>Dean's Handyman Service LLC</strong> &nbsp;·&nbsp;
   <a href="tel:2819179914">281-917-9914</a> &nbsp;·&nbsp;
   <a href="https://deanshandymanservice.me" target="_blank">deanshandymanservice.me</a><br>
-  Pittsburg TX · ALL of Texas · Starlink · Handyman · TV Mounting · Plumbing · Electrical · Pressure Washing<br>
-  Scanning Reddit · Facebook Groups · Nextdoor · Craigslist · Forums · 24/7 Auto-Scan
+  East TX + ArkLaTex + OK priority · All TX · Neighboring States · Virtual Services Nationwide<br>
+  🔥 Hot leads → instant alert · ☀️ 8am daily digest · 📱 Texts + email · 24/7 auto-scan
 </footer>
 
 <div class="modal" id="modal">
@@ -257,11 +274,10 @@ footer a{color:var(--cyan);text-decoration:none}
 </div>
 
 <script>
-const PHONE='281-917-9914', COMPANY="Dean's Handyman Service LLC", WEBSITE='deanshandymanservice.me';
-const SVC_COLORS={'Starlink Installation':'svc-Starlink','General Handyman':'svc-Handyman','TV Mounting':'svc-TV','Plumbing':'svc-Plumbing','Electrical':'svc-Electrical','Pressure Washing':'svc-Pressure'};
-const SVC_EMOJIS={'Starlink Installation':'🛰️','General Handyman':'🔧','TV Mounting':'📺','Plumbing':'🚿','Electrical':'⚡','Pressure Washing':'💦'};
+const PHONE='281-917-9914',COMPANY="Dean's Handyman Service LLC",WEBSITE='deanshandymanservice.me';
+const SVC_MAP={'Starlink Installation':'svc-Starlink','General Handyman':'svc-Handyman','TV Mounting':'svc-TV','Plumbing':'svc-Plumbing','Electrical':'svc-Electrical','Pressure Washing':'svc-Pressure','Virtual Handyman Consult':'svc-Virtual','Smart Home Setup':'svc-Smart','Antenna & Cable Setup':'svc-Antenna','Furniture Assembly':'svc-Furniture'};
 
-let allLeads=[], heatFilter='all', svcFilter='', srcFilter='', regionFilter='';
+let allLeads=[],heatFilter='all',svcFilter='',zoneFilter='';
 let dismissed=JSON.parse(localStorage.getItem('dhs_dismissed')||'[]');
 
 async function loadLeads(){
@@ -269,32 +285,30 @@ async function loadLeads(){
     const r=await fetch('leads.json?t='+Date.now());
     allLeads=await r.json();
     document.getElementById('scanInfo').textContent='Updated '+new Date().toLocaleTimeString();
-    updateCounts(); updateStats(); renderAll();
+    updateCounts();updateStats();renderAll();
   }catch{
-    document.getElementById('grid').innerHTML=`<div class="empty"><div class="empty-icon">🔨</div><div class="empty-title">NO LEADS YET</div><div class="empty-sub">GitHub Actions will populate leads every 30 minutes automatically once your ANTHROPIC_API_KEY secret is set. Follow the README setup guide.</div></div>`;
+    document.getElementById('grid').innerHTML=`<div class="empty"><div class="empty-icon">🔨</div><div class="empty-title">NO LEADS YET</div><div class="empty-sub">Make sure your ANTHROPIC_API_KEY secret is added in GitHub Settings → Secrets → Actions, then run the workflow manually from the Actions tab.</div></div>`;
   }
 }
 
 function updateCounts(){
-  const vis=allLeads.filter(l=>!dismissed.includes(l.id));
-  document.getElementById('ctAll').textContent=vis.length;
-  [['Starlink','Starlink'],['Handyman','Handyman'],['TV','TV'],['Plumbing','Plumbing'],['Electrical','Electrical'],['Pressure','Pressure']].forEach(([k,s])=>{
+  const v=allLeads.filter(l=>!dismissed.includes(l.id));
+  document.getElementById('ctAll').textContent=v.length;
+  [['Starlink','Starlink'],['Handyman','Handyman'],['TV','TV'],['Plumbing','Plumbing'],['Electrical','Electrical'],['Pressure','Pressure'],['Virtual','Virtual'],['Smart','Smart'],['Antenna','Antenna'],['Furniture','Furniture']].forEach(([k,s])=>{
     const el=document.getElementById('ct'+k);
-    if(el) el.textContent=vis.filter(l=>(l.service||'').includes(s)).length;
+    if(el)el.textContent=v.filter(l=>(l.service||'').includes(s)).length;
   });
 }
 
 function updateStats(){
-  const vis=allLeads.filter(l=>!dismissed.includes(l.id));
-  const today=new Date(); today.setHours(0,0,0,0);
-  const regions=new Set(vis.map(l=>l.region).filter(Boolean));
-  const comp=vis.filter(l=>l.competitorMention==='true'||l.competitorMention===true).length;
-  document.getElementById('sTot').textContent=vis.length;
-  document.getElementById('sHot').textContent=vis.filter(l=>l.heat==='hot').length;
-  document.getElementById('sNew').textContent=vis.filter(l=>new Date(l.foundAt)>=today).length;
-  document.getElementById('sComp').textContent=comp||'–';
-  document.getElementById('sRegions').textContent=regions.size||'–';
-  const last=vis[0];
+  const v=allLeads.filter(l=>!dismissed.includes(l.id));
+  const today=new Date();today.setHours(0,0,0,0);
+  document.getElementById('sTot').textContent=v.length;
+  document.getElementById('sHot').textContent=v.filter(l=>l.heat==='hot').length;
+  document.getElementById('sVirtual').textContent=v.filter(l=>l.isVirtual===true||l.isVirtual==='true').length;
+  document.getElementById('sZ1').textContent=v.filter(l=>l.zone==1||l.zone=='1').length;
+  document.getElementById('sComp').textContent=v.filter(l=>l.competitorMention===true||l.competitorMention==='true').length||'–';
+  const last=v[0];
   document.getElementById('sAge').textContent=last?ago(last.foundAt):'–';
 }
 
@@ -302,50 +316,47 @@ function renderAll(){
   let leads=allLeads.filter(l=>!dismissed.includes(l.id));
   if(heatFilter==='hot') leads=leads.filter(l=>l.heat==='hot');
   else if(heatFilter==='warm') leads=leads.filter(l=>l.heat==='warm');
+  else if(heatFilter==='virtual') leads=leads.filter(l=>l.isVirtual===true||l.isVirtual==='true');
   else if(heatFilter==='today'){const t=new Date();t.setHours(0,0,0,0);leads=leads.filter(l=>new Date(l.foundAt)>=t);}
   if(svcFilter) leads=leads.filter(l=>(l.service||'').includes(svcFilter));
-  if(regionFilter) leads=leads.filter(l=>l.region===regionFilter);
-  if(srcFilter==='competitor') leads=leads.filter(l=>l.competitorMention==='true'||l.competitorMention===true);
-  else if(srcFilter) leads=leads.filter(l=>(l.source||'').toLowerCase()===srcFilter);
+  if(zoneFilter) leads=leads.filter(l=>String(l.zone)===zoneFilter);
 
-  if(!leads.length){
-    document.getElementById('grid').innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">NO LEADS IN THIS FILTER</div><div class="empty-sub">Try a different filter. New leads from Reddit, Facebook, Nextdoor, and Craigslist come in every 30 minutes.</div></div>`;
-    return;
-  }
+  if(!leads.length){document.getElementById('grid').innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">NO LEADS IN THIS FILTER</div><div class="empty-sub">Try a different filter. New leads come in every 30 minutes.</div></div>`;return;}
 
   document.getElementById('grid').innerHTML=leads.map(l=>{
     const hCls=`h-${l.heat||'cold'}`;
     const hLabel=l.heat==='hot'?'🔥 HOT':l.heat==='warm'?'⚡ WARM':'· COLD';
-    const isComp=l.competitorMention==='true'||l.competitorMention===true;
-    const cCls=(l.heat==='hot'?'hot':l.heat==='warm'?'warm':'')+(isComp?' competitor-lead':'');
+    const isVirtual=l.isVirtual===true||l.isVirtual==='true';
+    const isComp=l.competitorMention===true||l.competitorMention==='true';
+    const cCls=[(l.heat==='hot'?'hot':l.heat==='warm'?'warm':''),(isVirtual?'is-virtual':''),(isComp?'competitor-lead':'')].filter(Boolean).join(' ');
     const sCls=`sb-${(l.source||'web').toLowerCase()}`;
-    const svcCls=SVC_COLORS[l.service]||'svc-Handyman';
-    const svcEmoji=l.serviceEmoji||SVC_EMOJIS[l.service]||'🔨';
+    const svcKey=Object.keys(SVC_MAP).find(k=>l.service&&l.service.includes(k.split(' ')[0]))||'';
+    const svcCls=SVC_MAP[svcKey]||'svc-Handyman';
+    const zoneNum=l.zone||3;
     const tags=(l.tags||[]).slice(0,3).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
     return `<div class="lead-card ${cCls}" id="c${l.id}">
       <div class="card-top">
         <div class="card-badges">
           <span class="src-badge ${sCls}">${(l.source||'web').toUpperCase()}</span>
-          ${isComp?'<span class="comp-flag">⚠️ SHOPPED COMPETITOR</span>':''}
+          <span class="zone-badge zb-${zoneNum}">Z${zoneNum}</span>
+          ${isVirtual?'<span class="virtual-flag">💻 VIRTUAL</span>':''}
+          ${isComp?'<span class="comp-flag">⚠️ COMP</span>':''}
         </div>
         <span class="heat-badge ${hCls}">${hLabel}</span>
       </div>
       <div>
-        <span class="svc-tag ${svcCls}">${svcEmoji} ${l.service||'Handyman'}</span>
+        <span class="svc-tag ${svcCls}">${l.serviceEmoji||'🔨'} ${l.service||'Handyman'}</span>
         ${l.region?`<span class="region-tag">📍 ${esc(l.region)}</span>`:''}
         ${l.platform?`<span class="platform-tag">${esc(l.platform)}</span>`:''}
       </div>
       <div class="card-title">${esc(l.title)}</div>
       <div class="card-snippet">${esc(l.snippet)}</div>
       ${l.heatReason?`<div class="card-heat-reason">💡 ${esc(l.heatReason)}</div>`:''}
-      ${l.contactHint?`<div class="contact-hint">📧 Contact hint: ${esc(l.contactHint)}</div>`:''}
-      <div class="card-meta">
-        ${l.location?`<span>🏙 ${esc(l.location)}</span>`:''}
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim)">${l.posted||ago(l.foundAt)}</span>
-      </div>
+      ${l.contactHint?`<div class="contact-hint">📧 ${esc(l.contactHint)}</div>`:''}
+      <div class="card-meta">${l.location?`<span>🏙 ${esc(l.location)}</span>`:''}<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim)">${l.posted||ago(l.foundAt)}</span></div>
       ${tags?`<div class="card-tags">${tags}</div>`:''}
       <div class="card-actions">
-        <a href="tel:2819179914" class="act act-call">📞 Call Now</a>
+        ${isVirtual?`<button class="act act-virtual" onclick='getMsg(${JSON.stringify(l)})'>💻 Video Consult Msg</button>`:`<a href="tel:2819179914" class="act act-call">📞 Call Now</a>`}
         <button class="act act-msg" onclick='getMsg(${JSON.stringify(l)})'>✉ Outreach</button>
         ${l.url?`<a href="${esc(l.url)}" target="_blank" class="act act-src">↗ Post</a>`:''}
         <button class="act act-dismiss" onclick="dismiss(${JSON.stringify(l.id)})">✕</button>
@@ -356,43 +367,43 @@ function renderAll(){
 
 function filterHeat(f,el){heatFilter=f;document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');renderAll();}
 function filterSvc(s,el){svcFilter=s;document.querySelectorAll('.svc-badge').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderAll();}
-function filterSource(s,el){srcFilter=s;document.querySelectorAll('.src-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderAll();}
-function filterRegion(r){regionFilter=r;renderAll();}
+function filterZone(z){zoneFilter=z;renderAll();}
 function dismiss(id){dismissed.push(id);localStorage.setItem('dhs_dismissed',JSON.stringify(dismissed));document.getElementById('c'+id)?.remove();updateCounts();updateStats();}
 
 async function getMsg(lead){
   document.getElementById('msgTxt').value='Writing your message...';
   document.getElementById('modal').classList.add('open');
-  const isComp=lead.competitorMention==='true'||lead.competitorMention===true;
+  const isVirtual=lead.isVirtual===true||lead.isVirtual==='true';
+  const isComp=lead.competitorMention===true||lead.competitorMention==='true';
   const prompt=`Write a short friendly outreach message for ${COMPANY}.
-Phone: ${PHONE}, Website: ${WEBSITE}. Local Texas business, serves all of Texas from Pittsburg TX.
-Service: ${lead.service||'handyman work'}
-Lead situation: "${lead.title}" — ${lead.snippet}
+Phone: ${PHONE}, Website: ${WEBSITE}. Based in Pittsburg TX, serves all of Texas + neighboring states.
+Service: ${lead.service||'handyman work'}${isVirtual?' (this is a VIRTUAL service — offer a video call consult, no travel needed)':''}
+Lead: "${lead.title}" — ${lead.snippet}
 Location: ${lead.location||lead.region||'Texas'}
-${isComp?`IMPORTANT: This person looked at installpros.io or starlinkinstallationpros.com who charge $899+. Mention you are local and more affordable without naming the competitor.`:''}
-Write 3-4 sentences. Sound like a real person. Reference their specific situation. Include phone number. Friendly and helpful tone. Under 100 words.`;
+${isComp?'They looked at expensive national companies ($899+). Mention you are local and more affordable.':''}
+${isVirtual?'Offer a video call consultation — they can be anywhere, you help remotely. Mention a price range like $25-50 for a 30-min consult.':''}
+3-4 sentences. Sound human. Reference their specific situation. Include phone. Under 100 words.`;
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:250,messages:[{role:'user',content:prompt}]})});
     const d=await r.json();
     document.getElementById('msgTxt').value=d.content.map(b=>b.text||'').join('').trim();
   }catch{
-    const compLine=isComp?' We work locally and are more affordable than the big national companies.':'';
-    document.getElementById('msgTxt').value=`Hey! Saw you need help with ${(lead.service||'handyman work').toLowerCase()} near ${lead.location||lead.region||'Texas'}.${compLine} Dean's Handyman Service is a local Texas company — we're fast, fair-priced, and actually show up. Give us a call at ${PHONE} or visit ${WEBSITE}. Happy to help!`;
+    const msg=isVirtual
+      ?`Hey! Saw you need help with ${(lead.service||'').toLowerCase()} — I offer virtual handyman consults via video call anywhere in the country. 30 minutes for $25-50 and I'll walk you through exactly what to do. Dean's Handyman Service, call or text ${PHONE} or visit ${WEBSITE}.`
+      :`Hey! Saw you need ${(lead.service||'handyman work').toLowerCase()} help near ${lead.location||lead.region||'Texas'}. Dean's Handyman Service is local, licensed, and available this week.${isComp?' We work directly with customers — no national middlemen, no $899 price tags.':''} Give us a call at ${PHONE} or check out ${WEBSITE}!`;
+    document.getElementById('msgTxt').value=msg;
   }
 }
 function closeModal(){document.getElementById('modal').classList.remove('open');}
-function copyMsg(){
-  navigator.clipboard.writeText(document.getElementById('msgTxt').value);
-  const b=document.querySelector('.m-copy');b.textContent='✅ Copied!';setTimeout(()=>b.textContent='📋 Copy',2000);
-}
+function copyMsg(){navigator.clipboard.writeText(document.getElementById('msgTxt').value);const b=document.querySelector('.m-copy');b.textContent='✅ Copied!';setTimeout(()=>b.textContent='📋 Copy',2000);}
 document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 
 function exportCSV(){
   if(!allLeads.length){alert('No leads yet.');return;}
-  const cols=['Found','Heat','Service','Source','Platform','Region','Location','Title','Snippet','ContactHint','URL','CompetitorMention','Tags'];
-  const rows=allLeads.map(l=>[l.foundAt,l.heat,l.service||'',l.source||'',l.platform||'',l.region||'',l.location||'',l.title,l.snippet,l.contactHint||'',l.url||'',l.competitorMention||'false',(l.tags||[]).join(';')].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(','));
+  const cols=['Found','Zone','Heat','Service','Virtual','Source','Platform','Region','Location','Title','Snippet','ContactHint','URL','CompetitorMention','Tags'];
+  const rows=allLeads.map(l=>[l.foundAt,l.zone||'',l.heat,l.service||'',l.isVirtual||'',l.source||'',l.platform||'',l.region||'',l.location||'',l.title,l.snippet,l.contactHint||'',l.url||'',l.competitorMention||'',(l.tags||[]).join(';')].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(','));
   const blob=new Blob([[cols.join(','),...rows].join('\n')],{type:'text/csv'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`dhs-pro-leads-${new Date().toISOString().slice(0,10)}.csv`;a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`dhs-v2-leads-${new Date().toISOString().slice(0,10)}.csv`;a.click();
 }
 
 function ago(iso){if(!iso)return'–';const s=(Date.now()-new Date(iso))/1000;if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
