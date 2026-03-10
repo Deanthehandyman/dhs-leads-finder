@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'Run mode: scan or digest'
+        description: 'scan = find leads | digest = send email | test = send test email'
         default: 'scan'
 
 jobs:
