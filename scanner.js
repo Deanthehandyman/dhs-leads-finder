@@ -80,7 +80,7 @@ function getThisRunTargets() {
   const zone   = ROTATION[slot % ROTATION.length];
   const region = zone.regions[slot % zone.regions.length];
   const svcs   = [];
-  for(let i=0;i<6;i++) svcs.push(SERVICES[(slot*7 + i*11) % SERVICES.length]);
+  for(let i=0;i<3;i++) svcs.push(SERVICES[(slot*7 + i*11) % SERVICES.length]);
   // Deduplicate
   const seen = new Set();
   return { zone, region, services: svcs.filter(s=>{ if(seen.has(s.name)) return false; seen.add(s.name); return true; }) };
@@ -895,132 +895,74 @@ const SERVICES = [
 // ─── Scan ─────────────────────────────────────────────────────────────────────
 async function scanCombo(zone, region, service) {
   console.log(`  ${service.emoji} ${service.name} — Z${zone.zone} ${region.name}`);
-  const cityStr = region.cities.slice(0, 6).join(', ');
+  const city = region.cities[0];
+  const city2 = region.cities[1] || region.cities[0];
 
-  const prompt = `You are an extremely aggressive lead hunter for "${COMPANY}", handyman & Starlink installer in Pittsburg TX ${region.zip}.
-
-TARGET SERVICE: **${service.name}** ${service.emoji} [${service.category}]
-AREA: ${region.name} — ${cityStr} — Zone ${zone.zone}
-${service.virtual ? '⚠️ VIRTUAL: Serve ANYONE anywhere — search nationwide broadly.' : ''}
-
-YOUR ONLY JOB: Find as many potential customers as possible. Be aggressive. Cast the WIDEST net.
-
-SEARCH ALL SOURCES — hit every one of these:
-${service.searches.map((s,i)=>`${i+1}. ${s}`).join('\n')}
-
-EXTRA SEARCHES TO RUN:
-- "${region.cities[0]}" "${service.name.split(' ')[0].toLowerCase()}" help OR need OR hire 2025
-- "${region.cities[1]}" "${service.name.toLowerCase()}" affordable 2025
-- site:reddit.com "${region.cities[0]}" "${service.name.split(' ')[0].toLowerCase()}" 2025
-- site:facebook.com "${region.cities[0]}" "${service.name.split(' ')[0].toLowerCase()}" group need help
-- site:nextdoor.com "${region.cities[0]}" "${service.name.split(' ')[0].toLowerCase()}"
-
-FIND ALL OF THESE PEOPLE:
-✅ Ready to hire RIGHT NOW — hot lead
-✅ Shopping around for quotes — warm lead  
-✅ Complaining about a problem this service solves — warm lead
-✅ New homeowners who will need this eventually — warm lead
-✅ Business owners with relevant needs — warm lead
-✅ People asking DIY questions who probably need a pro — cold lead
-✅ People on Angi/Thumbtack/HomeAdvisor requesting this service
-✅ People who got burned by expensive competitors — hot lead
-✅ Anyone expressing frustration that this service could fix — warm lead
-✅ People mentioning they "need to get this done" — warm/cold lead
-✅ People asking for recommendations on any platform
-
-ALSO CHECK THESE LEAD SOURCES:
-- Angi.com and HomeAdvisor job requests for this service in this area
-- Thumbtack.com requests for this service
-- Yelp reviews where people mention needing this service
-- Twitter/X posts from people frustrated about related problems
-- Local Facebook community groups mentioning this service need
-- Nextdoor posts asking for recommendations
-
-SKIP ONLY:
-❌ Businesses advertising their own services
-❌ Clearly fake/spam posts
-❌ Posts over 6 months old
-
-Return ONLY valid JSON array (no markdown, no explanation):
-[
-  {
-    "title": "Specific one line — what they need",
-    "snippet": "2-3 sentences — their exact words/situation, pain point, urgency. Include any amounts they mentioned.",
-    "service": "${service.name}",
-    "serviceEmoji": "${service.emoji}",
-    "category": "${service.category}",
-    "isVirtual": ${service.virtual},
-    "source": "reddit|facebook|nextdoor|craigslist|angi|thumbtack|yelp|twitter|forum|google",
-    "platform": "specific name e.g. r/HomeImprovement, Facebook East TX Community, Angi Tyler TX",
-    "url": "direct URL to post if found, else empty string",
-    "contactHint": "any visible email, username, phone, Reddit handle, or way to reach them",
-    "location": "City, State",
-    "region": "${region.name}",
-    "zone": ${zone.zone},
-    "heat": "hot|warm|cold",
-    "heatReason": "Why are they a lead? What pain do they have?",
-    "competitorMention": true or false,
-    "urgency": "immediate|this week|this month|flexible|unknown",
-    "estimatedJobValue": "rough estimate e.g. $200-500, $1000+, unknown",
-    "tags": ["tag1","tag2","tag3"],
-    "posted": "e.g. 2 hours ago, yesterday, 3 days ago, this week, this month"
-  }
-]
-
-TARGET: Return 8-10 leads. Include hot, warm, AND cold. MORE IS BETTER.
-If you truly find nothing, return [].`;
-
-  // Step 1: Run searches via Tavily (free tier: 1000/mo)
+  // Run 2 Tavily searches
   let searchContext = '';
-  const searchQueries = service.searches.slice(0, 5); // 5 searches per service
-  for (const q of searchQueries) {
+  for (const q of service.searches.slice(0, 2)) {
     try {
       const sr = await fetch('https://api.tavily.com/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           api_key: process.env.TAVILY_API_KEY,
-          query: q + ' ' + region.cities[0],
+          query: q,
           search_depth: 'basic',
-          max_results: 5,
+          max_results: 3,
           include_answer: false,
         }),
       });
       if (sr.ok) {
         const sd = await sr.json();
         for (const r of (sd.results || [])) {
-          searchContext += `\nSOURCE: ${r.url}\nTITLE: ${r.title}\nSNIPPET: ${r.content}\n---`;
+          searchContext += `\nURL: ${r.url}\nTITLE: ${r.title}\nSNIPPET: ${r.content?.slice(0,200)}\n---`;
         }
       }
-    } catch(e) { /* skip failed search */ }
+    } catch(e) {}
+    await new Promise(r => setTimeout(r, 1000));
   }
 
-  // Step 2: Send search results + prompt to Groq (free)
-  const fullPrompt = searchContext
-    ? prompt + `\n\nSEARCH RESULTS FOUND:\n${searchContext}\n\nBased on the above real search results, extract leads as JSON.`
-    : prompt + `\n\nNo live search results available. Based on your knowledge of these platforms and this area, suggest likely lead sources as JSON.`;
+  // Short focused prompt to stay under token limits
+  const prompt = `Find people who need "${service.name}" near ${city}, ${region.zip}. Category: ${service.category}.${service.virtual ? ' Also search nationwide for virtual help.' : ''}
 
-  const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type':  'application/json',
-      'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model:       'llama-3.3-70b-versatile',
-      max_tokens:  4000,
-      temperature: 0.7,
-      messages: [{ role: 'user', content: fullPrompt }],
-    }),
-  });
+Search results:
+${searchContext || 'No results — use your knowledge of Reddit, Facebook, Craigslist, Nextdoor for this area.'}
 
-  const data = await resp.json();
-  if (!resp.ok) { console.error(`    ❌ API error:`, JSON.stringify(data.error||data)); return []; }
+Return ONLY a JSON array of leads (up to 5). Each lead:
+{"title":"what they need","snippet":"their situation in 1-2 sentences","service":"${service.name}","serviceEmoji":"${service.emoji}","category":"${service.category}","isVirtual":${service.virtual},"source":"reddit|facebook|nextdoor|craigslist|angi|thumbtack|google","platform":"specific platform","url":"url or empty","contactHint":"username/email/phone or empty","location":"City, State","region":"${region.name}","zone":${zone.zone},"heat":"hot|warm|cold","heatReason":"why they need this","competitorMention":false,"urgency":"immediate|this week|flexible|unknown","estimatedJobValue":"$X-Y or unknown","tags":["tag1"],"posted":"timeframe"}
 
-  let text = data.choices?.[0]?.message?.content || '';
-  const match = text.match(/\[[\s\S]*?\]/);
-  if (!match) { console.log(`    No leads found`); return []; }
-  try {
+JSON only, no markdown.`;
+
+  // Groq call with retry on rate limit
+  let text = '';
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model:       'llama-3.3-70b-versatile',
+        max_tokens:  1000,
+        temperature: 0.7,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    const data = await resp.json();
+    if (resp.status === 429) {
+      const wait = 25000;
+      console.log(`    ⏳ Rate limited — waiting 25s...`);
+      await new Promise(r => setTimeout(r, wait));
+      continue;
+    }
+    if (!resp.ok) { console.error(`    ❌ API error:`, JSON.stringify(data.error||data)); return []; }
+    text = data.choices?.[0]?.message?.content || '';
+    break;
+  }
+
+    try {
     const leads = JSON.parse(match[0]);
     const hot  = leads.filter(l=>l.heat==='hot').length;
     const warm = leads.filter(l=>l.heat==='warm').length;
@@ -1237,8 +1179,12 @@ try { existing = JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8')); } catch {}
 
   let allNew = [];
   try {
-    const results = await Promise.all(services.map(svc => scanCombo(zone, region, svc)));
-    allNew = results.flat();
+    for (const svc of services) {
+      const results = await scanCombo(zone, region, svc);
+      allNew = allNew.concat(results);
+      // Wait 8 seconds between services to avoid rate limits
+      await new Promise(r => setTimeout(r, 30000));
+    }
   } catch(e) { console.error('Scan error:', e); process.exit(1); }
 
   const hot  = allNew.filter(l=>l.heat==='hot').length;
