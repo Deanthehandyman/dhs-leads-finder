@@ -1,0 +1,12 @@
+{
+  "name": "dhs-lead-finder",
+  "version": "1.0.0",
+  "description": "Dean's Handyman Service — 24/7 AI Starlink Lead Scanner",
+  "main": "scanner.js",
+  "scripts": {
+    "scan": "node scanner.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.13"
+  }
+}
