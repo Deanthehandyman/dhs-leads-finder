@@ -962,13 +962,30 @@ JSON only, no markdown.`;
     break;
   }
 
-    try {
+  if (!text) { console.log(`    No response text`); return []; }
+
+  // Strip markdown code fences if present (Llama often adds them)
+  let clean = text
+    .replace(/```json/gi, '')
+    .replace(/```/g, '')
+    .trim();
+
+  // Extract JSON array
+  const match = clean.match(/\[[\s\S]*\]/);
+  if (!match) { console.log(`    No JSON array found in response`); return []; }
+
+  try {
     const leads = JSON.parse(match[0]);
+    if (!Array.isArray(leads)) { console.log(`    Response was not an array`); return []; }
     const hot  = leads.filter(l=>l.heat==='hot').length;
     const warm = leads.filter(l=>l.heat==='warm').length;
     console.log(`    ✅ ${leads.length} leads (${hot}🔥 ${warm}⚡ ${leads.length-hot-warm}cold)`);
     return leads;
-  } catch(e) { console.log(`    Parse error`); return []; }
+  } catch(e) {
+    console.log(`    Parse error: ${e.message}`);
+    console.log(`    Raw text sample: ${text.slice(0, 200)}`);
+    return [];
+  }
 }
 
 // ─── Hot alert email ──────────────────────────────────────────────────────────
