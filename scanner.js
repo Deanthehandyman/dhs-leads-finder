@@ -199,7 +199,6 @@ const SERVICES = [
 ];
 
 const CARRIERS = {
-  google:  n => `${n}@txt.voice.google.com`,
   att:     n => `${n}@txt.att.net`,
   verizon: n => `${n}@vtext.com`,
   tmobile: n => `${n}@tmomail.net`,
@@ -413,22 +412,15 @@ ${comp.length?`<div style="background:#fee2e2;border:2px solid #f87171;border-ra
 
 // ─── Shared send helper ───────────────────────────────────────────────────────
 async function sendMessage(transport, html, sms, subject) {
-  const recipients = [process.env.NOTIFY_EMAIL].filter(Boolean);
-  const rawPhone   = (process.env.NOTIFY_PHONE||'').replace(/\D/g,'');
-  const carrier    = (process.env.NOTIFY_CARRIER||'').toLowerCase();
-  if (rawPhone && carrier && CARRIERS[carrier]) recipients.push(CARRIERS[carrier](rawPhone));
-
-  for (const to of recipients) {
-    const isSms = !['gmail','yahoo','hotmail','outlook','icloud','aol','proton'].some(d=>to.includes(d));
-    try {
-      await transport.sendMail({
-        from: `"Dean's Leads 🔨" <${process.env.GMAIL_USER}>`,
-        to, subject,
-        ...(isSms ? { text: sms } : { html }),
-      });
-      console.log(`✅ Sent to: ${to}`);
-    } catch(e) { console.error(`❌ Failed ${to}:`, e.message); }
-  }
+  const to = process.env.NOTIFY_EMAIL;
+  if (!to) { console.warn('⚠️  No NOTIFY_EMAIL set'); return; }
+  try {
+    await transport.sendMail({
+      from: `"Dean's Leads 🔨" <${process.env.GMAIL_USER}>`,
+      to, subject, html,
+    });
+    console.log(`✅ Email sent to: ${to}`);
+  } catch(e) { console.error(`❌ Email failed:`, e.message); }
 }
 
 function ago(iso){if(!iso)return'–';const s=(Date.now()-new Date(iso))/1000;if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
