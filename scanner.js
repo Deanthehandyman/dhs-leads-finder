@@ -2053,8 +2053,120 @@ const SERVICES = [
       'site:craigslist.org Texas "odd jobs" OR "handyman" small tasks needed affordable',
     ],
   },
+  // ══ BUILDING PERMIT MONITOR ═══════════════════════════════════════════════════
+  {
+    name:"Building Permits — East Texas", emoji:"📋", virtual:false, category:"Permits",
+    searches:[
+      '"building permit" East Texas OR "Camp County" OR "Morris County" 2025 2026',
+      '"building permit" Tyler TX OR Longview TX OR Marshall TX 2025 2026',
+      '"permit pulled" OR "permit issued" East Texas construction 2025',
+      'site:smith-county.com OR site:co.smith.tx.us building permit 2025',
+      '"new construction" permit East Texas Tyler Longview 2025',
+      '"remodel permit" OR "renovation permit" East Texas 2025',
+      '"electrical permit" OR "plumbing permit" East Texas 2025',
+      '"deck permit" OR "fence permit" OR "pool permit" East Texas 2025',
+      '"Camp County" building permit issued 2025 2026',
+      '"Titus County" OR "Morris County" building permit 2025',
+    ],
+  },
+  {
+    name:"Building Permits — Texarkana & ArkLaTex", emoji:"📋", virtual:false, category:"Permits",
+    searches:[
+      '"building permit" Texarkana TX OR AR 2025 2026',
+      '"building permit" "Bowie County" OR "Miller County" 2025',
+      '"permit" issued Texarkana construction remodel 2025',
+      '"building permit" Shreveport OR "Bossier City" LA 2025',
+      '"permit" "Caddo Parish" OR "Bossier Parish" 2025',
+      '"new home" permit ArkLaTex 2025 construction',
+      '"remodel" OR "addition" permit Texarkana 2025',
+      '"deck" OR "pool" OR "fence" permit Texarkana area 2025',
+    ],
+  },
+  {
+    name:"Building Permits — Oklahoma & North TX", emoji:"📋", virtual:false, category:"Permits",
+    searches:[
+      '"building permit" Durant OK OR Ardmore OK 2025 2026',
+      '"building permit" Sherman TX OR Denison TX 2025',
+      '"permit" issued "Bryan County" OR "Marshall County" Oklahoma 2025',
+      '"new construction" permit North Texas rural 2025',
+      '"remodel permit" Oklahoma rural 2025',
+      '"permit" "Grayson County" OR "Lamar County" Texas 2025',
+    ],
+  },
+  {
+    name:"New Home Sales — Recent Closings", emoji:"🏠", virtual:false, category:"Permits",
+    searches:[
+      '"just closed" OR "new homeowner" East Texas Tyler Longview 2025',
+      '"sold" East Texas new homeowner need repairs internet 2025',
+      '"deed" OR "title transfer" East Texas new owner 2025',
+      '"closing disclosure" East Texas new home need handyman',
+      '"new listing sold" East Texas Tyler Longview 2025',
+      '"recently sold" East Texas homes new owner need work 2025',
+      'site:zillow.com "recently sold" Tyler TX OR Longview TX 2025',
+      'site:realtor.com "recently sold" East Texas Texarkana 2025',
+      '"home sold" East Texas need repairs handyman internet 2025',
+      '"moved in" East Texas new home need handyman repairs 2025',
+    ],
+  },
 
 ];
+
+
+// ─── Outreach scripts by category ─────────────────────────────────────────────
+const OUTREACH_SCRIPTS = {
+  Internet: {
+    subject: "Local Starlink installer here — can help you switch",
+    message: `Hi! I saw you're looking for better internet. I'm Dean, a local Starlink installer in East Texas. I can get you set up fast — usually same week. Starlink runs $120/mo and is WAY faster than HughesNet or Viasat. Give me a call: ${PHONE} or visit ${WEBSITE}`
+  },
+  "New Homeowner": {
+    subject: "Local handyman here — congrats on the new home!",
+    message: `Hey, congrats on the new place! I'm Dean, a local handyman in East Texas. Whether it's a punch list, repairs, or just getting things set up the way you want — I'm affordable and reliable. Call or text me: ${PHONE}`
+  },
+  "Real Estate": {
+    subject: "Handyman for pre-sale repairs — fast turnaround",
+    message: `Hi! I'm Dean, a local handyman. I specialize in quick pre-sale repairs and punch lists for homeowners getting ready to list. Fast turnaround, affordable prices. Call me: ${PHONE} or visit ${WEBSITE}`
+  },
+  "Ranch/Farm": {
+    subject: "Local handyman for ranch & farm work",
+    message: `Hey! I'm Dean, a local handyman serving East Texas ranches and farms. Fencing, barn repairs, ag buildings, equipment sheds — I do it all. Affordable and reliable. Give me a call: ${PHONE}`
+  },
+  Business: {
+    subject: "Handyman for your business — fast & affordable",
+    message: `Hi! I'm Dean with Dean's Handyman Service. I do commercial repairs and maintenance for small businesses in East Texas — fast turnaround, affordable rates. Let me know what you need: ${PHONE}`
+  },
+  Storm: {
+    subject: "Storm damage repair — available now",
+    message: `Hi, I'm Dean — local handyman in East Texas. I can help with storm and hail damage repairs quickly. Call me today and I can often come out same week: ${PHONE}`
+  },
+  "Smart Home": {
+    subject: "Local smart home installer — I can help set that up",
+    message: `Hey! I'm Dean, a local handyman and smart home installer in East Texas. I install Ring cameras, Nest thermostats, smart switches, ceiling fans, TV mounts and more. Affordable and quick. Call me: ${PHONE}`
+  },
+  Assembly: {
+    subject: "I can assemble that for you — local & affordable",
+    message: `Hi! I'm Dean, a local handyman in East Texas. I assemble furniture, playsets, grills, exercise equipment — anything you bought in a box. Quick turnaround, affordable rates. Call me: ${PHONE}`
+  },
+  Installation: {
+    subject: "Local installer — I can handle that for you",
+    message: `Hey! I'm Dean, a local handyman. I install ceiling fans, light fixtures, faucets, TV mounts, blinds, smart devices and more. No job too small. Call or text: ${PHONE}`
+  },
+  Permits: {
+    subject: "Local handyman — saw you're doing some work",
+    message: `Hi! I'm Dean with Dean's Handyman Service in East Texas. I noticed you may be working on your property and wanted to reach out. I do repairs, installations, and all kinds of handyman work — affordable and reliable. Call me: ${PHONE}`
+  },
+  Handyman: {
+    subject: "Local handyman available — affordable & reliable",
+    message: `Hi! I'm Dean, a local handyman serving East Texas and the ArkLaTex area. Whatever you need done around the house, I can help. Affordable rates, reliable work. Call or text: ${PHONE}`
+  },
+  default: {
+    subject: "Local handyman here to help",
+    message: `Hi! I'm Dean with Dean's Handyman Service in East Texas. I can help with repairs, installations, assembly, Starlink setup and more. Give me a call: ${PHONE} or visit ${WEBSITE}`
+  }
+};
+
+function getScript(category) {
+  return OUTREACH_SCRIPTS[category] || OUTREACH_SCRIPTS.default;
+}
 
 // ─── Scan ─────────────────────────────────────────────────────────────────────
 async function scanCombo(zone, region, service) {
@@ -2165,7 +2277,13 @@ async function sendHotAlert(hotLeads, region) {
   <h2 style="color:#ff9d00;margin:8px 0 4px">HOT LEAD${hotLeads.length>1?'S':''} — CALL NOW</h2>
   <p style="color:#7a9cc0;margin:0;font-size:12px">${hotLeads.length} hot lead${hotLeads.length>1?'s':''} · ${region.name}</p>
 </div>
-${hotLeads.map(l=>`
+${hotLeads.map(l=>{
+  const script = getScript(l.category);
+  const mailtoBody = encodeURIComponent(script.message);
+  const mailtoSubj = encodeURIComponent(script.subject);
+  const contactEmail = (l.contactHint||'').match(/[^\s]+@[^\s]+/)?.[0] || '';
+  const mailtoLink = contactEmail ? `mailto:${contactEmail}?subject=${mailtoSubj}&body=${mailtoBody}` : '';
+  return `
 <div style="background:white;border:2px solid #f59e0b;border-radius:12px;padding:16px;margin-bottom:12px">
   <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap">
     <b style="color:#111;font-size:14px">${l.serviceEmoji||'🔨'} ${l.title}</b>
@@ -2178,8 +2296,13 @@ ${hotLeads.map(l=>`
   <div style="font-size:11px;color:#888;margin-bottom:6px">📍 ${l.location||region.name} · ${l.platform||l.source} · ${l.posted||'recent'}${l.isVirtual?' · 💻 VIRTUAL':''}</div>
   ${l.heatReason?`<div style="font-size:12px;color:#b45309;font-style:italic;margin-bottom:6px">💡 ${l.heatReason}</div>`:''}
   ${l.contactHint?`<div style="font-size:12px;color:#059669;font-weight:600;background:#f0fdf4;padding:6px 10px;border-radius:8px;margin-bottom:6px">📧 ${l.contactHint}</div>`:''}
-  ${l.url?`<a href="${l.url}" style="font-size:11px;color:#2563eb;word-break:break-all">${l.url}</a>`:''}
-</div>`).join('')}
+  ${l.url?`<a href="${l.url}" style="font-size:11px;color:#2563eb;word-break:break-all;display:block;margin-bottom:8px">${l.url}</a>`:''}
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-top:8px">
+    <div style="font-size:10px;color:#64748b;font-weight:700;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em">📝 What to say:</div>
+    <div style="font-size:11px;color:#334155;line-height:1.6;white-space:pre-wrap">${script.message}</div>
+    ${mailtoLink?`<a href="${mailtoLink}" style="display:inline-block;margin-top:8px;background:#2563eb;color:white;padding:6px 14px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none">📧 Send Email Now</a>`:''}
+  </div>
+</div>`}).join('')}
 <div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;padding:12px;text-align:center">
   <b style="color:#92400e">📞 Call before someone else does: ${PHONE}</b>
 </div></body></html>`;
@@ -2265,8 +2388,18 @@ async function sendDailyDigest() {
   const t = nodemailer.createTransport({ service:'gmail', auth:{ user:process.env.GMAIL_USER, pass:process.env.GMAIL_APP_PASSWORD } });
 
   const cutoff   = new Date(Date.now() - 24*60*60*1000);
+  const threeDaysCutoff = new Date(Date.now() - 3*24*60*60*1000);
   const recent   = existing.filter(l => new Date(l.foundAt) >= cutoff);
   const hot      = recent.filter(l=>l.heat==='hot');
+  // Follow-up tracker: hot/warm leads 1-3 days old still marked 'new'
+  const needFollowUp = existing.filter(l => {
+    const age = Date.now() - new Date(l.foundAt);
+    const oneDayMs = 24*60*60*1000;
+    return (l.status === 'new') &&
+           ['hot','warm'].includes(l.heat) &&
+           age > oneDayMs &&
+           age < 7*oneDayMs;
+  });
   const warm     = recent.filter(l=>l.heat==='warm');
   const cold     = recent.filter(l=>l.heat==='cold');
   const comp     = recent.filter(l=>l.competitorMention===true||l.competitorMention==='true');
@@ -2318,7 +2451,10 @@ async function sendDailyDigest() {
     ${l.heatReason?`<div style="font-size:10px;color:${tc};font-style:italic;margin-top:3px">💡 ${l.heatReason}</div>`:''}
     ${l.contactHint?`<div style="font-size:10px;color:#059669;font-weight:600;margin-top:3px">📧 ${l.contactHint}</div>`:''}
     ${l.url?`<a href="${l.url}" style="font-size:10px;color:#2563eb;display:block;margin-top:3px;word-break:break-all">${l.url}</a>`:''}
-  </div>`;}).join('')}
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:7px;margin-top:6px;font-size:10px;color:#475569;line-height:1.6">
+      <b style="color:#334155">📝 Say:</b> ${getScript(l.category).message.split('\n')[0]}
+    </div>
+  </div>`}).join('')}
 </div>`;
   }).join('');
 
@@ -2367,6 +2503,28 @@ ${recent.length===0
   </div>`:''}
   ${storm.length?`<div style="background:#fff7ed;border:2px solid #fb923c;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center;font-size:13px">
     <b style="color:#c2410c">⛈️ ${storm.length} STORM DAMAGE LEADS — These are urgent and insurance often covers it. Strike fast.</b>
+  </div>`:''}
+  ${needFollowUp.length?`<div style="background:#fdf4ff;border:2px solid #c084fc;border-radius:12px;padding:14px;margin-bottom:12px">
+    <div style="text-align:center;font-size:13px;font-weight:700;color:#7e22ce;margin-bottom:10px">
+      ⏰ ${needFollowUp.length} LEAD${needFollowUp.length>1?'S':''} WAITING ON YOU — Haven't been followed up on yet
+    </div>
+    ${needFollowUp.slice(0,5).map(l=>{
+      const script = getScript(l.category);
+      const ageHrs = Math.floor((Date.now()-new Date(l.foundAt))/3600000);
+      const ageDays = ageHrs >= 24 ? Math.floor(ageHrs/24)+'d ago' : ageHrs+'h ago';
+      return `<div style="background:white;border:1px solid #e9d5ff;border-radius:8px;padding:11px;margin-bottom:7px">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:4px">
+        <b style="font-size:12px;color:#111">${l.serviceEmoji||'🔨'} ${l.title}</b>
+        <span style="font-size:10px;color:#9333ea;font-weight:700;background:#fdf4ff;padding:2px 7px;border-radius:5px">⏰ ${ageDays} — not called yet</span>
+      </div>
+      <p style="font-size:11px;color:#555;margin:0 0 6px;line-height:1.5">${l.snippet}</p>
+      ${l.contactHint?`<div style="font-size:11px;color:#059669;font-weight:600;margin-bottom:5px">📧 ${l.contactHint}</div>`:''}
+      ${l.url?`<a href="${l.url}" style="font-size:10px;color:#2563eb;word-break:break-all;display:block;margin-bottom:6px">${l.url}</a>`:''}
+      <div style="background:#fdf4ff;border-radius:6px;padding:8px;font-size:11px;color:#4c1d95;line-height:1.6">
+        <b>Say:</b> ${script.message.split('\n')[0]}
+      </div>
+    </div>`;}).join('')}
+    ${needFollowUp.length>5?`<div style="text-align:center;font-size:11px;color:#9333ea;margin-top:6px">...and ${needFollowUp.length-5} more waiting</div>`:''}
   </div>`:''}
   ${catBlocks}`}
 
