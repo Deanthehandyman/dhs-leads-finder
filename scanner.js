@@ -18,7 +18,7 @@ const RUN_MODE = process.env.RUN_MODE || 'scan';
 // ─── ZONES — spiral outward from ZIP 75686 ────────────────────────────────────
 const ZONES = [
   {
-    zone: 1, label: "Home Base (0-30mi)", weight: 8,
+    zone: 1, label: "Home Base (0-30mi)", weight: 16,
     regions: [
       { name: "Pittsburg TX & Camp County",  zip:"75686", cities:["Pittsburg","Avinger","Lone Star","Linden","Hughes Springs","Daingerfield","Omaha","Naples","Talco","Bogata"] },
       { name: "East Texas Core",             zip:"75701", cities:["Tyler","Longview","Marshall","Henderson","Jacksonville","Kilgore","Gladewater","White Oak","Hallsville","Rusk"] },
@@ -41,7 +41,7 @@ const ZONES = [
     ]
   },
   {
-    zone: 3, label: "Texas Statewide", weight: 4,
+    zone: 3, label: "Texas Statewide", weight: 2,
     regions: [
       { name: "Greater Houston Rural",  zip:"77301", cities:["Conroe","Huntsville","Livingston","Coldspring","Dayton","Liberty","Cleveland","Splendora","New Caney","Huffman"] },
       { name: "Golden Triangle",        zip:"77701", cities:["Beaumont","Port Arthur","Orange","Vidor","Silsbee","Jasper","Woodville","Lumberton","Nederland","Bridge City"] },
@@ -54,7 +54,7 @@ const ZONES = [
     ]
   },
   {
-    zone: 4, label: "Neighboring States", weight: 3,
+    zone: 4, label: "Neighboring States", weight: 1,
     regions: [
       { name: "Louisiana Statewide",    zip:"71101", cities:["Baton Rouge LA","Lafayette LA","Lake Charles LA","Alexandria LA","Opelousas LA","Hammond LA","Slidell LA","Bogalusa LA"] },
       { name: "Arkansas Statewide",     zip:"72201", cities:["Little Rock AR","Fort Smith AR","Fayetteville AR","Jonesboro AR","Pine Bluff AR","Conway AR","Russellville AR","Searcy AR"] },
@@ -62,7 +62,7 @@ const ZONES = [
     ]
   },
   {
-    zone: 5, label: "National Virtual", weight: 3,
+    zone: 5, label: "National Virtual", weight: 1,
     regions: [
       { name: "Rural South",     zip:"38601", cities:["Rural Mississippi","Rural Alabama","Rural Tennessee","Rural Kentucky","Rural Georgia","Rural South Carolina"] },
       { name: "Rural Midwest",   zip:"64501", cities:["Rural Missouri","Rural Kansas","Rural Nebraska","Rural Iowa","Rural Indiana","Rural Illinois"] },
@@ -2200,7 +2200,9 @@ async function scanCombo(zone, region, service) {
   }
 
   // Short focused prompt to stay under token limits
-  const prompt = `Find people who need "${service.name}" near ${city}, ${region.zip}. Category: ${service.category}.${service.virtual ? ' Also search nationwide for virtual help.' : ''}
+  const prompt = `Find people who need "${service.name}" near ${city}, Texas ZIP ${region.zip}. Category: ${service.category}.${service.virtual ? ' Also search nationwide for virtual help.' : ''}
+Focus on: ${region.cities.slice(0,4).join(', ')} and surrounding rural areas.
+${zone.zone === 1 ? 'PRIORITY ZONE — Home base. Search EXTRA hard here. These are Dean\'s best customers.' : ''}
 
 Search results:
 ${searchContext || 'No results — use your knowledge of Reddit, Facebook, Craigslist, Nextdoor for this area.'}
@@ -2558,7 +2560,7 @@ ${recent.length===0
 }
 
 async function sendEmail(transport, html, subject) {
-  const to = process.env.NOTIFY_EMAIL;
+  const to = process.env.NOTIFY_EMAIL || process.env.GMAIL_USER;
   if (!to) { console.warn('⚠️  No NOTIFY_EMAIL set'); return; }
   try {
     await transport.sendMail({ from:`"Dean's Leads 🔨" <${process.env.GMAIL_USER}>`, to, subject, html });
@@ -2576,10 +2578,16 @@ try { existing = JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8')); } catch {}
   console.log(`📍 ${BASE} | 50+ Services | FREE: Groq LLM + Tavily Search | No billing needed`);
   console.log(`📅 ${new Date().toISOString()}\n`);
 
-  if (RUN_MODE === 'digest') {
+  if (RUN_MODE === 'digest' || RUN_MODE === 'test') {
     if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+      console.log('📧 Sending digest email now...');
       await sendDailyDigest();
-    } else { console.warn('⚠️  No Gmail credentials'); }
+    } else {
+      console.error('❌ Missing GMAIL_USER or GMAIL_APP_PASSWORD secrets');
+      console.log('  GMAIL_USER set:', !!process.env.GMAIL_USER);
+      console.log('  GMAIL_APP_PASSWORD set:', !!process.env.GMAIL_APP_PASSWORD);
+      console.log('  NOTIFY_EMAIL set:', !!process.env.NOTIFY_EMAIL);
+    }
     process.exit(0);
   }
 
