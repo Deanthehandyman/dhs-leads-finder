@@ -24,12 +24,10 @@ jobs:
       - run: npm install
       - name: Run lead scanner
         env:
-          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY:     ${{ secrets.GEMINI_API_KEY }}
           GMAIL_USER:         ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           NOTIFY_EMAIL:       ${{ secrets.NOTIFY_EMAIL }}
-          NOTIFY_PHONE:       ${{ secrets.NOTIFY_PHONE }}
-          NOTIFY_CARRIER:     ${{ secrets.NOTIFY_CARRIER }}
           RUN_MODE: ${{ github.event.inputs.mode || 'scan' }}
         run: node scanner.js
       - name: Commit leads
@@ -53,11 +51,9 @@ jobs:
       - run: npm install
       - name: Send daily digest
         env:
-          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY:     ${{ secrets.GEMINI_API_KEY }}
           GMAIL_USER:         ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           NOTIFY_EMAIL:       ${{ secrets.NOTIFY_EMAIL }}
-          NOTIFY_PHONE:       ${{ secrets.NOTIFY_PHONE }}
-          NOTIFY_CARRIER:     ${{ secrets.NOTIFY_CARRIER }}
           RUN_MODE: digest
         run: node scanner.js
