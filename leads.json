@@ -1,5 +1,33 @@
 [
   {
+    "title": "Off-grid home building and maintenance",
+    "snippet": "Looking for ways to build and maintain an off-grid home with a limited budget, considering using old blankets and clothing for insulation.",
+    "service": "Homesteaders & Self-Sufficient Living",
+    "serviceEmoji": "🌱",
+    "category": "Ranch/Farm",
+    "isVirtual": false,
+    "source": "facebook",
+    "platform": "Facebook Groups",
+    "url": "https://www.facebook.com/groups/offgridlivingsurvival/posts/1595254434212545/",
+    "contactHint": "",
+    "location": "Little Rock, AR",
+    "region": "Arkansas Statewide",
+    "zone": 4,
+    "heat": "warm",
+    "heatReason": "Limited budget and desire for self-sufficiency",
+    "competitorMention": false,
+    "urgency": "flexible",
+    "estimatedJobValue": "unknown",
+    "tags": [
+      "off-grid",
+      "homesteading"
+    ],
+    "posted": "unknown",
+    "id": "1773178351984-i9lc0u",
+    "foundAt": "2026-03-10T21:32:31.984Z",
+    "status": "new"
+  },
+  {
     "title": "Help Fixing Up a Lake House",
     "snippet": "Looking for someone to help with minor repairs and general upkeep of a lake house in exchange for discounted rent.",
     "service": "Lake Houses & Vacation Properties",
