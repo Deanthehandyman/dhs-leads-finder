@@ -1,4 +1,4 @@
-// Dean's Handyman Service LLC — V6 MAXIMUM OVERDRIVE Scanner
+// Dean's Handyman Service LLC — V6 MAXIMUM OVERDRIVE Scanner (FREE — Google Gemini)
 // Pittsburg TX 75686 | Spiral from 75686 outward
 // 50+ service categories | Angi · Thumbtack · HomeAdvisor · Craigslist · Reddit
 // Facebook · Nextdoor · Twitter/X · Google · Yelp · Forums
@@ -970,26 +970,28 @@ Return ONLY valid JSON array (no markdown, no explanation):
 TARGET: Return 8-10 leads. Include hot, warm, AND cold. MORE IS BETTER.
 If you truly find nothing, return [].`;
 
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type':      'application/json',
-      'x-api-key':         process.env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model:      'claude-sonnet-4-20250514',
-      max_tokens: 4000,
-      tools:      [{ type: 'web_search_20250305', name: 'web_search' }],
-      messages:   [{ role: 'user', content: prompt }],
-    }),
-  });
+  const resp = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        tools: [{ google_search: {} }],
+        generationConfig: { maxOutputTokens: 4000, temperature: 0.7 },
+      }),
+    }
+  );
 
   const data = await resp.json();
-  if (!resp.ok) { console.error(`    ❌ API error:`, data.error?.message); return []; }
+  if (!resp.ok) { console.error(`    ❌ API error:`, JSON.stringify(data.error||data)); return []; }
 
   let text = '';
-  for (const b of (data.content || [])) if (b.type === 'text') text += b.text;
+  for (const c of (data.candidates || [])) {
+    for (const p of (c.content?.parts || [])) {
+      if (p.text) text += p.text;
+    }
+  }
   const match = text.match(/\[[\s\S]*?\]/);
   if (!match) { console.log(`    No leads found`); return []; }
   try {
@@ -1192,7 +1194,7 @@ try { existing = JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8')); } catch {}
 
 (async () => {
   console.log(`\n🔨 DEAN'S V6 MAXIMUM OVERDRIVE — Mode: ${RUN_MODE.toUpperCase()}`);
-  console.log(`📍 ${BASE} | 50+ Services | Reddit·FB·Nextdoor·Craigslist·Angi·Thumbtack·Yelp·Twitter`);
+  console.log(`📍 ${BASE} | 50+ Services | FREE via Google Gemini | Reddit·FB·Nextdoor·Craigslist·Angi·Thumbtack`);
   console.log(`📅 ${new Date().toISOString()}\n`);
 
   if (RUN_MODE === 'digest') {
