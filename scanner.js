@@ -199,6 +199,7 @@ const SERVICES = [
 ];
 
 const CARRIERS = {
+  google:  n => `${n}@txt.voice.google.com`,
   att:     n => `${n}@txt.att.net`,
   verizon: n => `${n}@vtext.com`,
   tmobile: n => `${n}@tmomail.net`,
