@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "Lead Bot"
           git config user.email "bot@deanshandymanservice.me"
-          git add leads.json
+          git add leads.json replied.json
           git diff --staged --quiet || git commit -m "🔍 Scan $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
 
