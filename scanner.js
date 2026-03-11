@@ -3092,8 +3092,7 @@ hot = actively looking RIGHT NOW, asked for recommendations, urgent
 warm = has the problem, shopping around
 cold = mentioned the topic but no clear intent
 
-JSON only. No markdown. No explanation.`;
-
+JSON only. No markdown. No explanation. Ensure all quotes inside values are properly escaped and do not use line breaks inside strings.`;
   // Groq call with retry on rate limit
   let text = '';
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -3105,7 +3104,7 @@ JSON only. No markdown. No explanation.`;
       },
       body: JSON.stringify({
         model:       'llama-3.3-70b-versatile',
-        max_tokens:  1000,
+        max_tokens:  3000,
         temperature: 0.7,
         messages: [{ role: 'user', content: prompt }],
       }),
