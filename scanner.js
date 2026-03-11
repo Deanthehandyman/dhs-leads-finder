@@ -110,22 +110,21 @@ function getThisRunTargets() {
   const zone   = ROTATION[slot % ROTATION.length];
   const region = zone.regions[slot % zone.regions.length];
 
-  // Split services into priority (money makers) and general (electrical, plumbing, etc.)
   const priority = SERVICES.filter(s => PRIORITY_CATEGORIES.has(s.category));
   const general  = SERVICES.filter(s => !PRIORITY_CATEGORIES.has(s.category));
 
   const seen = new Set();
   const svcs = [];
 
-  // Aggressively pick 3 priority services per scan (rotating through them)
-  const p1 = priority[(slot * 4)     % priority.length];
-  const p2 = priority[(slot * 4 + 1) % priority.length];
-  const p3 = priority[(slot * 4 + 2) % priority.length];
-  [p1, p2, p3].forEach(s => { if (!seen.has(s.name)) { seen.add(s.name); svcs.push(s); } });
+  // Aggressively pull 6 PRIORITY services per run
+  for (let i = 0; i < 6; i++) {
+    const p = priority[(slot * 7 + i) % priority.length];
+    if (p && !seen.has(p.name)) { seen.add(p.name); svcs.push(p); }
+  }
 
-  // Fill the remaining 1 slot with a general service (electrical, drywall, etc.)
-  const s = general[(slot * 7) % general.length];
-  if (!seen.has(s.name)) { seen.add(s.name); svcs.push(s); }
+  // Pull 1 GENERAL service (plumbing, electrical, fences, etc.)
+  const g = general[(slot * 11) % general.length];
+  if (g && !seen.has(g.name)) { seen.add(g.name); svcs.push(g); }
 
   return { zone, region, services: svcs };
 }
@@ -2799,6 +2798,20 @@ const SERVICES = [
       '"HomeAdvisor estimate" OR "Thumbtack estimate" East Texas handyman "too high" 2025',
     ],
   },
+  // ══ COMPETITOR INTERCEPT (BEATING THE BIG GUYS) ═════════════════════════════
+  {
+    name:"Angry at Big Companies", emoji:"🥊", virtual:false, category:"PriceShopper",
+    searches:[
+      '"Geek Squad" "too expensive" OR "didn\'t show up" OR "rescheduled" "East Texas" OR "Tyler" OR "Longview"',
+      '"Angi" OR "HomeAdvisor" "contractor never showed" OR "scam" OR "bad experience" "East Texas" OR "Tyler"',
+      '"Lowe\'s installation" OR "Home Depot installation" "taking too long" OR "terrible" "East Texas"',
+      '"quoted me $500" OR "quoted me $1000" "ridiculous" OR "insane" handyman "East Texas"',
+      '"ADT" OR "Vivint" "too expensive" OR "canceling" need security cameras "East Texas"',
+      '"waiting weeks for" internet OR repair OR install "East Texas" OR "Tyler"',
+      '"electrician wanted $300 just to come out" "East Texas" OR "Tyler" OR "Longview"',
+      '"plumber wanted $400" to fix a faucet "East Texas" OR "Tyler" OR "Longview"'
+    ],
+  },
 ];
 
 
@@ -2988,9 +3001,8 @@ function buildHumanQueries(service, region, zone) {
 }
 
 async function tavilySearch(query) {
-  // Strip site operators and hardcoded years — Tavily filters by date natively now
   const cleanQ = query
-    .replace(/2025|2026/g, '') // Remove years so it matches natural language
+    .replace(/2025|2026/g, '') 
     .replace(/site:\S+\s*/gi, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
@@ -3001,23 +3013,20 @@ async function tavilySearch(query) {
     body: JSON.stringify({
       api_key: process.env.TAVILY_API_KEY,
       query: cleanQ,
-      search_depth: 'advanced', // Upgraded to advanced to scrape deeper into forums
-      days: 30,                  // STRICT RECENCY: Only grabs results from the last 7 days
-      max_results: 20,
+      search_depth: 'advanced', 
+      days: 14,                 // THE SWEET SPOT: Last 2 weeks only
+      max_results: 15,          // INCREASED: Pull 15 results per query instead of 8
       include_answer: false,
       exclude_domains: [
         'wikipedia.org','amazon.com','ebay.com','walmart.com',
-        'homedepot.com','lowes.com', 'yelp.com', 'yellowpages.com', 'bbb.org'
+        'homedepot.com','lowes.com', 'yelp.com', 'yellowpages.com', 'bbb.org',
+        'angi.com', 'homeadvisor.com', 'thumbtack.com', 'taskrabbit.com' // Block the big lead sites from cluttering results
       ],
     }),
   });
-  if (!resp.ok) {
-    const err = await resp.text();
-    console.log(`    ⚠️  Tavily ${resp.status}: ${err.slice(0,120)}`);
-    return [];
-  }
+  if (!resp.ok) return [];
   const data = await resp.json();
-  if (data.error) { console.log(`    ⚠️  Tavily error: ${data.error}`); return []; }
+  if (data.error) return [];
   return data.results || [];
 }
 
@@ -3068,16 +3077,17 @@ async function scanCombo(zone, region, service) {
   const prompt = `You are a lead hunter for Dean's Handyman Service in ${city} (${region.name}).
 Dean's HIGH-TICKET PRIORITIES: Starlink installation, WiFi/networking, smart home devices, equipment/furniture assembly, and TV mounting. Look for these aggressively.
 
-WHAT COUNTS AS A LEAD — real people who posted IN THE LAST 7 DAYS:
+WHAT COUNTS AS A LEAD — real people who posted IN THE LAST 14 DAYS:
+- Vented about a problem they can't fix themselves (IKEA box, bad HughesNet, broken tech)
+- Complained about a big company (Geek Squad, Angi, Home Depot) being too expensive or not showing up.
 - Asked "anyone recommend a [handyman/installer]" on Nextdoor/Facebook
 - Posted "need someone to [install/fix/assemble]" 
-- Vented about a problem they can't fix themselves (IKEA box, bad HughesNet, broken tech)
-- Asked "how much does it cost to [install/fix]" 
 - Said "just moved in" or "just bought"
 
 WHAT TO REJECT (DO NOT INCLUDE THESE):
-- Anything older than a few weeks.
-- News articles, business directory listings, generic blog posts, or competitor ads.
+- Anything older than 30 days. If the snippet implies it's an old thread, REJECT IT.
+- News articles, business directory listings, generic blog posts.
+- National companies hiring W2 employees.
 
 Search results:
 ${searchContext || 'No search results found for this query.'}
@@ -3086,9 +3096,9 @@ IMPORTANT: If there are no search results above that look like a real person ask
 Do not invent or guess leads. 
 
 Return ONLY a JSON array (up to 5 leads). Each:
-{"title":"what they need in plain words","snippet":"1-2 sentences describing their situation exactly","service":"${service.name}","serviceEmoji":"${service.emoji}","category":"${service.category}","isVirtual":${service.virtual},"source":"nextdoor|facebook|reddit|craigslist|angi|thumbtack|google","platform":"exact platform name","url":"url or empty","contactHint":"username/email/phone/handle or empty","location":"City, State","region":"${region.name}","zone":${zone.zone},"heat":"hot|warm|cold","heatReason":"1 sentence — why this is hot/warm/cold","competitorMention":false,"urgency":"immediate|this week|flexible|unknown","estimatedJobValue":"$X-$Y or unknown","tags":["tag1","tag2"],"posted":"today|this week|this month","status":"new"}
+{"title":"what they need","snippet":"Exact description of their situation","service":"${service.name}","serviceEmoji":"${service.emoji}","category":"${service.category}","isVirtual":${service.virtual},"source":"platform name","platform":"platform name","url":"url or empty","contactHint":"email/phone or empty","location":"City, State","region":"${region.name}","zone":${zone.zone},"heat":"hot|warm|cold","heatReason":"Why this is hot (e.g., 'Mad at competitor, easy steal')","competitorMention":true/false,"urgency":"immediate|this week|flexible|unknown","estimatedJobValue":"$X-$Y or unknown","tags":["tag1","tag2"],"posted":"today|this week","status":"new"}
 
-hot = actively looking RIGHT NOW, asked for recommendations, urgent
+hot = actively looking RIGHT NOW, frustrated with competitor, urgent
 warm = has the problem, shopping around
 cold = mentioned the topic but no clear intent
 
