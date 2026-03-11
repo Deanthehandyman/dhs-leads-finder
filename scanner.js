@@ -15,59 +15,77 @@ const WEBSITE  = "deanshandymanservice.me";
 const BASE     = "Pittsburg TX 75686";
 const RUN_MODE = process.env.RUN_MODE || 'scan';
 
-// ─── ZONES — spiral outward from ZIP 75686 ────────────────────────────────────
+// ─── ZONES — 200mi home territory from 75686, then outward ───────────────────
+// Zone 1 = Dean's full service area (0-200mi from Pittsburg TX)
+// Zone 2 = Extended reach (200-400mi) — worth driving for big jobs
+// Zone 3 = Texas-wide (400mi+) — Starlink/virtual/large contracts
+// Zone 4 = National Virtual — remote consulting only
 const ZONES = [
   {
-    zone: 1, label: "Home Base (0-30mi)", weight: 16,
+    zone: 1, label: "Home Territory (0-200mi)", weight: 20,
     regions: [
-      { name: "Pittsburg TX & Camp County",  zip:"75686", cities:["Pittsburg","Avinger","Lone Star","Linden","Hughes Springs","Daingerfield","Omaha","Naples","Talco","Bogata"] },
-      { name: "East Texas Core",             zip:"75701", cities:["Tyler","Longview","Marshall","Henderson","Jacksonville","Kilgore","Gladewater","White Oak","Hallsville","Rusk"] },
-      { name: "Deep East Texas",             zip:"75961", cities:["Nacogdoches","Lufkin","Center","Carthage","Jasper","San Augustine","Tenaha","Hemphill","Timpson","Joaquin"] },
-      { name: "ArkLaTex TX",                 zip:"75501", cities:["Texarkana TX","Atlanta TX","Mount Pleasant","Sulphur Springs","Paris TX","Clarksville","New Boston","Queen City","De Kalb"] },
-      { name: "ArkLaTex AR",                 zip:"71854", cities:["Texarkana AR","Hope AR","El Dorado AR","Camden AR","Magnolia AR","Arkadelphia AR","Hot Springs AR","Gurdon","Nashville AR"] },
-      { name: "ArkLaTex LA",                 zip:"71101", cities:["Shreveport LA","Bossier City LA","Minden LA","Ruston LA","Monroe LA","Natchitoches LA","Mansfield LA","Logansport LA","Many LA"] },
-      { name: "East TX Lakes & Rural",       zip:"75941", cities:["Gilmer","Mineola","Canton","Lindale","Palestine","Fairfield","Corsicana","Athens","Gun Barrel City","Mabank"] },
+      // ── Core East Texas (0-80mi) ──────────────────────────────────────────
+      { name: "Pittsburg & Camp County TX",    zip:"75686", cities:["Pittsburg","Avinger","Lone Star","Linden","Hughes Springs","Daingerfield","Omaha","Naples","Talco","Bogata","Clarksville","Detroit TX","Annona"] },
+      { name: "Tyler & Smith County TX",       zip:"75701", cities:["Tyler","Lindale","Whitehouse","Bullard","Chandler","Troup","Hideaway","New Chapel Hill","Arp","Overton"] },
+      { name: "Longview & Gregg County TX",    zip:"75601", cities:["Longview","White Oak","Hallsville","Gladewater","Kilgore","Gilmer","Big Sandy","Ore City","Harleton","Warren City"] },
+      { name: "Marshall & Harrison County TX", zip:"75670", cities:["Marshall","Waskom","Uncertain","Karnack","Harleton","Elysian Fields","Hallsville","Scottsville","Nesbitt","Elmo"] },
+      { name: "Mount Pleasant & Titus County", zip:"75455", cities:["Mount Pleasant","Winnsboro","Quitman","Mineola","Alba","Yantis","Como","Pickton","Talco","Birthright"] },
+      { name: "Sulphur Springs & Hopkins County",zip:"75482",cities:["Sulphur Springs","Emory","Winnsboro","Commerce","Greenville","Cumby","Brashear","Como","Saltillo","Weaver"] },
+      { name: "Henderson & Rusk County TX",    zip:"75652", cities:["Henderson","Kilgore","Carthage","Center","Tenaha","Timpson","Joaquin","Panola County","Gary","Garrison"] },
+      { name: "Nacogdoches & Deep East TX",    zip:"75961", cities:["Nacogdoches","Lufkin","Center","San Augustine","Jasper","Hemphill","Shelbyville","Garrison","Cushing","Douglass"] },
+      // ── ArkLaTex (0-100mi) ───────────────────────────────────────────────
+      { name: "Texarkana TX/AR",               zip:"75501", cities:["Texarkana TX","Texarkana AR","Atlanta TX","New Boston TX","Queen City TX","De Kalb TX","Wake Village TX","Nash TX","Redwater TX","Hooks TX"] },
+      { name: "Shreveport & Bossier City LA",  zip:"71101", cities:["Shreveport LA","Bossier City LA","Benton LA","Haughton LA","Blanchard LA","Stonewall LA","Minden LA","Plain Dealing LA","Vivian LA","Oil City LA"] },
+      { name: "North Louisiana",               zip:"71201", cities:["Monroe LA","West Monroe LA","Ruston LA","Farmerville LA","Homer LA","Arcadia LA","Jonesboro LA","Winnfield LA","Natchitoches LA","Many LA"] },
+      { name: "SW Arkansas",                   zip:"71854", cities:["Texarkana AR","Hope AR","Magnolia AR","El Dorado AR","Camden AR","Nashville AR","Prescott AR","Gurdon AR","Fordyce AR","Warren AR"] },
+      // ── North/Northeast Texas (80-200mi) ─────────────────────────────────
+      { name: "Paris & Lamar County TX",       zip:"75460", cities:["Paris TX","Clarksville","Honey Grove","Bonham","Powderly","Roxton","Deport","Blossom","Bogata","Detroit TX"] },
+      { name: "Sherman & Denison TX",          zip:"75090", cities:["Sherman","Denison","Pottsboro","Durant border","Whitesboro","Gainesville","Gunter","Van Alstyne","Howe","Bells"] },
+      { name: "Greenville & Hunt County TX",   zip:"75401", cities:["Greenville","Commerce","Wolfe City","Caddo Mills","Quinlan","Royse City","Rockwall","Fate","Lavon","Nevada TX"] },
+      { name: "Dallas Rural & East DFW",       zip:"75126", cities:["Forney","Terrell","Wills Point","Canton","Kaufman","Mabank","Gun Barrel City","Kemp","Athens","Corsicana"] },
+      { name: "DFW South & Ellis County TX",   zip:"75154", cities:["Waxahachie","Ennis","Midlothian","Corsicana","Hillsboro","Cleburne","Burleson","Mansfield","Venus","Maypearl"] },
+      { name: "Waco & McLennan County TX",     zip:"76701", cities:["Waco","Hewitt","Woodway","Bellmead","McGregor","Hillsboro","West TX","Lorena","Hewitt","Hillsboro","Corsicana"] },
+      { name: "East Houston Corridor TX",      zip:"77339", cities:["Humble","Kingwood","Atascocita","Baytown","Crosby","Highlands","Liberty","Dayton","Hardin","Kountze"] },
+      { name: "Lufkin & Angelina County TX",   zip:"75901", cities:["Lufkin","Diboll","Huntington","Zavalla","Jasper","Woodville","Livingston","Corrigan","Crockett","Groveton"] },
+      // ── Oklahoma South (within 200mi) ────────────────────────────────────
+      { name: "Southern Oklahoma",             zip:"74701", cities:["Durant OK","Ardmore OK","Broken Bow OK","Idabel OK","Hugo OK","Atoka OK","Coalgate OK","Tishomingo OK","Madill OK","Sulphur OK"] },
+      { name: "Southeast Oklahoma",            zip:"74521", cities:["McAlester OK","Poteau OK","Heavener OK","Wilburton OK","Talihina OK","Antlers OK","Stigler OK","Eufaula OK","Checotah OK","Henryetta OK"] },
+      { name: "Central Arkansas",              zip:"72201", cities:["Little Rock AR","North Little Rock AR","Conway AR","Benton AR","Bryant AR","Hot Springs AR","Arkadelphia AR","Pine Bluff AR","Malvern AR","Searcy AR"] },
     ]
   },
   {
-    zone: 2, label: "Regional (30-150mi)", weight: 6,
+    zone: 2, label: "Extended Reach (200-400mi)", weight: 4,
     regions: [
-      { name: "Oklahoma South",    zip:"74701", cities:["Durant OK","Ardmore OK","Broken Bow OK","McAlester OK","Poteau OK","Idabel OK","Hugo OK","Antlers OK","Tishomingo OK"] },
-      { name: "Oklahoma Central",  zip:"73101", cities:["Oklahoma City OK","Norman OK","Shawnee OK","Ada OK","Seminole OK","Coalgate OK","Sulphur OK","Pauls Valley OK"] },
-      { name: "Oklahoma East",     zip:"74401", cities:["Muskogee OK","Tahlequah OK","Stilwell OK","Sallisaw OK","Fort Smith border OK","Heavener OK","Wilburton OK"] },
-      { name: "North Texas",       zip:"75090", cities:["Sherman","Denison","Gainesville","Greenville","Bonham","Paris TX","Clarksville","Honey Grove","Blossom","Deport"] },
-      { name: "DFW Rural",         zip:"76086", cities:["Weatherford","Granbury","Cleburne","Corsicana","Waxahachie","Hillsboro","Stephenville","Glen Rose","Mineral Wells","Clifton"] },
-      { name: "Central Texas",     zip:"76701", cities:["Waco","Temple","Killeen","Belton","Georgetown","Taylor","Cameron","Rockdale","Hearne","Bryan"] },
+      { name: "Oklahoma City Metro",     zip:"73101", cities:["Oklahoma City OK","Norman OK","Edmond OK","Yukon OK","Mustang OK","Moore OK","Midwest City OK","Del City OK","Shawnee OK","Chickasha OK"] },
+      { name: "Oklahoma Northeast",      zip:"74401", cities:["Muskogee OK","Tahlequah OK","Stilwell OK","Sallisaw OK","Pryor OK","Claremore OK","Vinita OK","Grove OK","Miami OK","Afton OK"] },
+      { name: "Fort Worth & Tarrant TX", zip:"76101", cities:["Fort Worth","Arlington","Mansfield","Burleson","Granbury","Weatherford","Mineral Wells","Stephenville","Glen Rose","Cleburne"] },
+      { name: "Central Louisiana",       zip:"71301", cities:["Alexandria LA","Pineville LA","Leesville LA","DeRidder LA","Opelousas LA","Eunice LA","Crowley LA","Jennings LA","Lake Charles LA","Sulphur LA"] },
+      { name: "South Arkansas",          zip:"71601", cities:["Pine Bluff AR","Monticello AR","El Dorado AR","Camden AR","Warren AR","Fordyce AR","Crossett AR","McGehee AR","Dumas AR","Helena AR"] },
+      { name: "Northwest Arkansas",      zip:"72701", cities:["Fayetteville AR","Springdale AR","Rogers AR","Bentonville AR","Siloam Springs AR","Fort Smith AR","Van Buren AR","Russellville AR","Clarksville AR","Ozark AR"] },
+      { name: "Houston Metro East",      zip:"77002", cities:["Houston","Pasadena","Pearland","League City","Deer Park","La Marque","Texas City","Galveston","Friendswood","Alvin"] },
+      { name: "Golden Triangle TX",      zip:"77701", cities:["Beaumont","Port Arthur","Orange","Vidor","Silsbee","Jasper","Woodville","Lumberton","Nederland","Bridge City"] },
     ]
   },
   {
-    zone: 3, label: "Texas Statewide", weight: 2,
+    zone: 3, label: "Texas Statewide + Far States", weight: 2,
     regions: [
-      { name: "Greater Houston Rural",  zip:"77301", cities:["Conroe","Huntsville","Livingston","Coldspring","Dayton","Liberty","Cleveland","Splendora","New Caney","Huffman"] },
-      { name: "Golden Triangle",        zip:"77701", cities:["Beaumont","Port Arthur","Orange","Vidor","Silsbee","Jasper","Woodville","Lumberton","Nederland","Bridge City"] },
       { name: "West Texas",             zip:"79701", cities:["Midland","Odessa","Big Spring","San Angelo","Abilene","Pecos","Fort Stockton","Snyder","Sweetwater","Colorado City"] },
       { name: "South Texas",            zip:"78040", cities:["Laredo","Eagle Pass","Uvalde","Hondo","Cotulla","Pearsall","Carrizo Springs","Crystal City","Dilley","Freer"] },
       { name: "Texas Hill Country",     zip:"78028", cities:["Kerrville","Fredericksburg","Boerne","Comfort","Bandera","Uvalde","Del Rio","Junction","Mason","Llano"] },
-      { name: "Texas Panhandle Plains", zip:"79101", cities:["Amarillo","Lubbock","Canyon","Pampa","Borger","Plainview","Levelland","Tahoka","Littlefield","Lamesa"] },
-      { name: "Gulf Coast TX",          zip:"77901", cities:["Victoria","Bay City","Port Lavaca","Cuero","Edna","El Campo","Wharton","Richmond","Columbus","Hallettsville"] },
-      { name: "San Antonio Rural",      zip:"78006", cities:["Boerne","New Braunfels","Seguin","Pleasanton","Floresville","Pearsall","Castroville","Hondo","Poteet","Jourdanton"] },
-    ]
-  },
-  {
-    zone: 4, label: "Neighboring States", weight: 1,
-    regions: [
-      { name: "Louisiana Statewide",    zip:"71101", cities:["Baton Rouge LA","Lafayette LA","Lake Charles LA","Alexandria LA","Opelousas LA","Hammond LA","Slidell LA","Bogalusa LA"] },
-      { name: "Arkansas Statewide",     zip:"72201", cities:["Little Rock AR","Fort Smith AR","Fayetteville AR","Jonesboro AR","Pine Bluff AR","Conway AR","Russellville AR","Searcy AR"] },
+      { name: "Texas Panhandle",        zip:"79101", cities:["Amarillo","Lubbock","Canyon","Pampa","Borger","Plainview","Levelland","Tahoka","Littlefield","Lamesa"] },
+      { name: "San Antonio Rural",      zip:"78006", cities:["Boerne","New Braunfels","Seguin","Pleasanton","Floresville","Castroville","Hondo","Poteet","Jourdanton","Pearsall"] },
+      { name: "Mississippi Rural",      zip:"38601", cities:["Southaven MS","Tupelo MS","Hattiesburg MS","Gulfport MS","Meridian MS","Starkville MS","Columbus MS","Corinth MS"] },
+      { name: "Tennessee Rural",        zip:"38101", cities:["Memphis TN","Jackson TN","Dyersburg TN","Clarksville TN","Cookeville TN","Columbia TN","Murfreesboro TN"] },
       { name: "New Mexico East",        zip:"88201", cities:["Hobbs NM","Carlsbad NM","Roswell NM","Alamogordo NM","Clovis NM","Artesia NM","Lovington NM","Portales NM"] },
     ]
   },
   {
-    zone: 5, label: "National Virtual", weight: 1,
+    zone: 4, label: "National Virtual", weight: 1,
     regions: [
-      { name: "Rural South",     zip:"38601", cities:["Rural Mississippi","Rural Alabama","Rural Tennessee","Rural Kentucky","Rural Georgia","Rural South Carolina"] },
       { name: "Rural Midwest",   zip:"64501", cities:["Rural Missouri","Rural Kansas","Rural Nebraska","Rural Iowa","Rural Indiana","Rural Illinois"] },
       { name: "Rural West",      zip:"87501", cities:["Rural New Mexico","Rural Colorado","Rural Utah","Rural Nevada","Rural Arizona","Rural Wyoming"] },
       { name: "Rural Southeast", zip:"29601", cities:["Rural North Carolina","Rural Virginia","Rural West Virginia","Rural Ohio","Rural Pennsylvania"] },
+      { name: "Rural Northeast", zip:"04101", cities:["Rural Maine","Rural Vermont","Rural New Hampshire","Rural Upstate New York","Rural Connecticut"] },
     ]
   },
 ];
@@ -2109,6 +2127,427 @@ const SERVICES = [
     ],
   },
 
+  // ══ SUBCONTRACTING — LIVE WORK ORDERS FROM COMPANIES THAT HIRE INSTALLERS ══════
+  // These searches find actual open jobs posted by platforms needing someone in East TX
+
+  {
+    name:"Field Nation — Live Work Orders East TX", emoji:"🔧", virtual:true, category:"Subcontract",
+    searches:[
+      'site:fieldnation.com "work order" Texas 75686 OR 75647 OR 75651 OR 75601 2025',
+      'site:fieldnation.com "Pittsburg" OR "Marshall" OR "Longview" OR "Tyler" installer 2025',
+      '"field nation" work order Texas East TX installer handyman 2025',
+      '"fieldnation" "75686" OR "75647" OR "75601" open work order',
+      '"field nation" TV mounting OR smart home OR Starlink Texas 2025',
+      '"field nation" installer needed Texas East TX open job 2025',
+    ],
+  },
+  {
+    name:"WorkMarket — Live Gigs East TX", emoji:"💼", virtual:true, category:"Subcontract",
+    searches:[
+      'site:workmarket.com assignment Texas East TX installer handyman 2025',
+      '"workmarket" "75686" OR "75647" OR "75601" installer open assignment',
+      '"work market" installer handyman Texas open gig 2025',
+      '"workmarket" TV mounting OR Starlink OR smart home Texas 2025',
+      '"workmarket" East Texas installer needed open 2025',
+    ],
+  },
+  {
+    name:"InstallPros — Open Jobs East TX", emoji:"📲", virtual:true, category:"Subcontract",
+    searches:[
+      'site:installpros.io job OR "open order" Texas 2025',
+      '"installpros" job available Texas East TX 75686 2025',
+      '"installpros" installer needed Pittsburg OR Marshall OR Longview TX',
+      '"installpros" "work order" OR "open job" Texas installer 2025',
+      '"install pros" subcontractor needed East Texas open 2025',
+    ],
+  },
+  {
+    name:"Handy Pro — Open Jobs East TX", emoji:"🛠️", virtual:true, category:"Subcontract",
+    searches:[
+      'site:handy.com pro jobs Texas East TX installer 2025',
+      '"handy pro" jobs available Texas East TX 2025',
+      '"handy.com" installer OR handyman Texas open job 2025',
+      '"handy" "75686" OR "75647" OR "75601" installer job available',
+      '"handy" furniture assembly OR TV mounting OR smart home Texas open 2025',
+    ],
+  },
+  {
+    name:"TaskRabbit — Open Tasks East TX", emoji:"🐇", virtual:true, category:"Subcontract",
+    searches:[
+      'site:taskrabbit.com task Texas East TX installer handyman 2025',
+      '"taskrabbit" open task Texas East TX available 2025',
+      '"task rabbit" installer OR handyman OR assembly Tyler OR Longview TX',
+      '"taskrabbit" "75686" OR "75601" OR "75647" open task 2025',
+      '"taskrabbit" TV mounting OR furniture assembly OR smart home Texas 2025',
+    ],
+  },
+  {
+    name:"Dispatch — Field Service Jobs East TX", emoji:"📡", virtual:true, category:"Subcontract",
+    searches:[
+      '"dispatch.me" OR "dispatch platform" installer Texas East TX open job 2025',
+      '"dispatch" field service installer Texas East TX open order 2025',
+      '"dispatch" smart home OR cable OR internet installer Texas open 2025',
+      '"dispatch field" installer handyman Texas East TX work order 2025',
+    ],
+  },
+  {
+    name:"DIRECTV & Dish Installer Jobs", emoji:"📺", virtual:false, category:"Subcontract",
+    searches:[
+      '"DIRECTV" installer subcontractor Texas East TX open job 2025',
+      '"DIRECTV" "independent contractor" installer Texas apply open',
+      '"Dish Network" installer subcontractor Texas East TX apply open 2025',
+      '"DIRECTV" OR "Dish" installer contractor East Texas Pittsburg Marshall',
+      '"satellite installer" contractor open Texas East TX 2025',
+      '"DIRECTV" installer needed Texas East TX 75686 2025',
+    ],
+  },
+  {
+    name:"Starlink Dealer & Installer Open Slots", emoji:"🛰️", virtual:false, category:"Subcontract",
+    searches:[
+      '"starlink installer" needed OR wanted East Texas 2025',
+      '"starlink" "independent installer" open Texas East TX 2025',
+      '"starlinkinstallationpros" installer Texas open slot 2025',
+      '"starlink" dealer OR reseller installer Texas East TX open',
+      '"starlink installation" contractor open East Texas Pittsburg 2025',
+      '"starlink" certified installer East Texas open job 2025',
+      '"starlink" installer subcontractor Tyler OR Longview OR Texarkana TX 2025',
+    ],
+  },
+  {
+    name:"Lowe's & Home Depot Active Install Jobs", emoji:"🟠", virtual:false, category:"Subcontract",
+    searches:[
+      '"Lowes" installer contractor needed Texas East TX open 2025',
+      '"Home Depot" installer contractor open Texas East TX 2025',
+      '"Lowes" "installation services" contractor open East Texas 2025',
+      '"Home Depot" "pro referral" installer open Texas 2025',
+      '"Lowes" flooring OR appliance installer contractor Texas open job',
+      '"Home Depot" fence OR flooring OR appliance installer Texas open',
+      'site:indeed.com "Lowes installer" OR "Home Depot installer" Texas',
+      'site:craigslist.org Texas "Lowes" OR "Home Depot" installer contractor needed',
+    ],
+  },
+  {
+    name:"Best Buy & Geek Squad Open Installer Slots", emoji:"💙", virtual:false, category:"Subcontract",
+    searches:[
+      '"Best Buy" installer contractor needed Texas East TX open 2025',
+      '"Geek Squad" "third party" installer open Texas East TX',
+      '"Best Buy" "in-home installer" open Texas 2025',
+      '"Best Buy" appliance OR TV installer contractor open East Texas',
+      'site:indeed.com "Best Buy installer" OR "Geek Squad contractor" Texas',
+      '"Best Buy" authorized installer open slot Texas East TX 2025',
+    ],
+  },
+  {
+    name:"Amazon Home Services Open Jobs", emoji:"📦", virtual:true, category:"Subcontract",
+    searches:[
+      'site:services.amazon.com installer Texas open job 2025',
+      '"Amazon Home Services" installer open Texas East TX 2025',
+      '"Amazon" "service provider" open slot Texas East TX installer',
+      '"Amazon" furniture OR TV OR appliance installer open Texas 2025',
+      '"Amazon" home services installer contractor Texas apply open',
+    ],
+  },
+  {
+    name:"Walmart & Sam's Club Install Jobs", emoji:"🛒", virtual:false, category:"Subcontract",
+    searches:[
+      '"Walmart" in-home installer open Texas East TX 2025',
+      '"Walmart" TV mounting OR appliance installer needed Texas open',
+      '"Sams Club" installer open Texas East TX 2025',
+      '"Walmart" installation contractor open East Texas Pittsburg 2025',
+      'site:indeed.com "Walmart installer" Texas open 2025',
+    ],
+  },
+  {
+    name:"Solar & EV Charger Install Open Jobs", emoji:"☀️", virtual:false, category:"Subcontract",
+    searches:[
+      '"solar installer" needed OR open Texas East TX 2025',
+      '"Sunrun" installer open Texas East TX contractor 2025',
+      '"SunPower" installer open Texas contractor 2025',
+      '"Vivint Solar" installer open Texas East TX 2025',
+      '"EV charger" installer open job Texas East TX 2025',
+      '"Generac" installer dealer open Texas East TX 2025',
+      '"solar panel" installer contractor open East Texas 2025',
+      '"Tesla Powerwall" installer open Texas East TX 2025',
+    ],
+  },
+  {
+    name:"Home Warranty Open Repair Jobs", emoji:"📋", virtual:false, category:"Subcontract",
+    searches:[
+      '"American Home Shield" contractor open Texas East TX 2025',
+      '"Choice Home Warranty" contractor open Texas East TX 2025',
+      '"First American Home Warranty" contractor open Texas 2025',
+      '"Frontdoor" contractor open Texas East TX 2025',
+      '"home warranty" contractor open East Texas Pittsburg 2025',
+      '"home warranty" repair contractor needed Texas East TX 2025',
+      '"warranty repair" contractor open Texas East TX handyman 2025',
+    ],
+  },
+  {
+    name:"Insurance Restoration Open Subcontract Jobs", emoji:"🏚️", virtual:false, category:"Subcontract",
+    searches:[
+      '"ServPro" subcontractor open Texas East TX 2025',
+      '"ServiceMaster" subcontractor open Texas East TX 2025',
+      '"Paul Davis" subcontractor open Texas East TX 2025',
+      '"insurance restoration" subcontractor open East Texas 2025',
+      '"hail damage" restoration subcontractor open Texas 2025',
+      '"storm damage" restoration contractor open East Texas 2025',
+      '"Xactimate" contractor open East Texas 2025',
+      '"water damage" restoration subcontractor open Texas East TX',
+    ],
+  },
+  {
+    name:"Property Management Open Vendor Slots", emoji:"🏢", virtual:false, category:"Subcontract",
+    searches:[
+      '"property management" vendor needed Texas East TX 2025',
+      '"preferred vendor" needed property management Texas East TX',
+      '"maintenance contractor" needed Texas East TX 2025',
+      '"HOA" maintenance vendor needed Texas East TX 2025',
+      'site:craigslist.org Texas "property management" maintenance contractor needed',
+      '"apartment" maintenance contractor open Texas East TX 2025',
+      '"facilities maintenance" contractor needed East Texas 2025',
+    ],
+  },
+  {
+    name:"Craigslist — Contractors Hiring Subs East TX", emoji:"👷", virtual:false, category:"Subcontract",
+    searches:[
+      'site:craigslist.org "East Texas" "sub needed" OR "subcontractor needed" 2025',
+      'site:craigslist.org texarkana OR tyler OR longview "sub needed" handyman 2025',
+      'site:craigslist.org "East Texas" "1099" handyman installer 2025',
+      'site:craigslist.org Texas "contract work" handyman installer available 2025',
+      'site:craigslist.org "Pittsburg" OR "Marshall" OR "Longview" contractor sub needed',
+      'site:craigslist.org East Texas "looking for installer" OR "need installer" 2025',
+      'site:craigslist.org "75686" OR "75647" OR "75601" contractor work available',
+    ],
+  },
+  {
+    name:"Indeed & LinkedIn — Installer Contract Jobs", emoji:"💼", virtual:true, category:"Subcontract",
+    searches:[
+      'site:indeed.com "1099 installer" OR "contract installer" Texas East TX 2025',
+      'site:indeed.com "handyman contractor" Texas East TX open 2025',
+      'site:indeed.com "installation technician" Texas East TX 2025',
+      'site:linkedin.com "installer" contractor open Texas East TX 2025',
+      'site:indeed.com "Starlink installer" OR "satellite installer" Texas 2025',
+      'site:indeed.com "smart home installer" Texas East TX 2025',
+      'site:indeed.com "appliance installer" Texas East TX open 2025',
+    ],
+  },
+  {
+    name:"Cable & Telecom Installer Open Jobs", emoji:"📡", virtual:false, category:"Subcontract",
+    searches:[
+      '"AT&T" installer contractor open Texas East TX 2025',
+      '"Spectrum" installer contractor open East Texas 2025',
+      '"Windstream" installer contractor open East Texas 2025',
+      '"fiber optic" installer contractor open East Texas 2025',
+      '"low voltage" installer contractor open Texas East TX 2025',
+      '"cable contractor" open job East Texas 2025',
+      '"telecom" installer contractor open East Texas 2025',
+      'site:indeed.com "cable installer" OR "telecom installer" Texas East TX',
+    ],
+  },
+  {
+    name:"Smart Home & Security Dealer Open Slots", emoji:"🏠", virtual:false, category:"Subcontract",
+    searches:[
+      '"ADT" dealer OR installer open Texas East TX 2025',
+      '"Vivint" installer dealer open Texas East TX 2025',
+      '"SimpliSafe" installer open Texas East TX 2025',
+      '"Ring" authorized installer open Texas East TX 2025',
+      '"Alarm.com" dealer installer open Texas East TX 2025',
+      '"smart home" installer contractor open East Texas 2025',
+      '"security system" installer open East Texas Pittsburg 2025',
+      '"home automation" contractor open Texas East TX 2025',
+    ],
+  },
+
+  {
+    name:"InstallPros & Retail Install Networks", emoji:"🔧", virtual:false, category:"Subcontract",
+    searches:[
+      '"installpros" OR "install pros" subcontractor Texas apply join network',
+      '"installpros.io" installer apply Texas East TX',
+      '"retail install" subcontractor Texas East TX join network 2025',
+      '"installation network" subcontractor Texas handyman apply join',
+      '"authorized installer" Texas East TX apply handyman',
+      '"certified installer" Texas handyman subcontract apply 2025',
+    ],
+  },
+  {
+    name:"Best Buy Geek Squad Subcontractors", emoji:"💙", virtual:false, category:"Subcontract",
+    searches:[
+      '"Best Buy" "in-home installer" OR "installation contractor" Texas apply',
+      '"Geek Squad" subcontractor OR "third party installer" Texas',
+      '"Best Buy" "authorized installer" Texas East TX apply',
+      '"home theater installation" subcontractor Best Buy Texas',
+      '"TV mounting" OR "smart home" subcontractor Best Buy Texas apply',
+      '"appliance installation" Best Buy subcontractor Texas apply',
+    ],
+  },
+  {
+    name:"Lowes & Home Depot Install Subcontractors", emoji:"🟠", virtual:false, category:"Subcontract",
+    searches:[
+      '"Lowes" "independent installer" OR "installation contractor" Texas apply',
+      '"Home Depot" "pro installer" OR "installation subcontractor" Texas',
+      '"Lowes" "authorized installer" Texas East TX apply 2025',
+      '"Home Depot" installation services subcontractor Texas apply',
+      '"Lowes installation" subcontractor flooring OR appliance OR fence Texas',
+      '"Home Depot" flooring OR appliance OR fence installer subcontractor Texas',
+      '"pro referral" installer Texas Home Depot Lowes apply join',
+    ],
+  },
+  {
+    name:"Walmart Sams Club Costco Installers", emoji:"🛒", virtual:false, category:"Subcontract",
+    searches:[
+      '"Walmart" installation subcontractor OR "in-home installer" Texas apply',
+      '"Sams Club" installation subcontractor Texas handyman apply',
+      '"Costco" installation subcontractor OR "authorized installer" Texas',
+      '"Walmart" TV mounting OR appliance install subcontractor Texas',
+      '"Costco" appliance installation subcontractor Texas apply',
+    ],
+  },
+  {
+    name:"Amazon Home Services Subcontractors", emoji:"📦", virtual:false, category:"Subcontract",
+    searches:[
+      '"Amazon Home Services" installer subcontractor apply Texas',
+      '"Amazon" "home services" handyman installer Texas apply join',
+      '"Amazon" appliance OR TV OR furniture installer Texas subcontractor',
+      '"Amazon" "service provider" handyman Texas apply join network',
+      'site:services.amazon.com installer OR handyman Texas apply',
+    ],
+  },
+  {
+    name:"Starlink & Satellite Install Networks", emoji:"🛰️", virtual:false, category:"Subcontract",
+    searches:[
+      '"starlink installer" subcontractor OR network Texas apply join',
+      '"starlink installation" subcontractor Texas East TX 2025',
+      '"authorized starlink installer" apply Texas',
+      '"starlinkinstallationpros" subcontractor Texas',
+      '"starlink" "authorized dealer" OR "certified installer" Texas apply',
+      '"dish network" OR "directv" installer subcontractor Texas apply',
+      '"starlink" installer wanted OR needed Texas East TX 2025',
+      '"WISP" OR "wireless internet" installer subcontractor Texas join',
+    ],
+  },
+  {
+    name:"Cable & Telecom Subcontractors", emoji:"📡", virtual:false, category:"Subcontract",
+    searches:[
+      '"cable installer" subcontractor Texas East TX apply join 2025',
+      '"telecom subcontractor" Texas apply handyman installer',
+      '"AT&T" installer subcontractor Texas apply join 2025',
+      '"Spectrum" OR "Charter" installer subcontractor Texas apply',
+      '"Windstream" installer subcontractor Texas apply join',
+      '"fiber optic" installer subcontractor Texas apply 2025',
+      '"low voltage" installer subcontractor Texas apply join',
+      '"telecommunications" subcontractor Texas handyman apply',
+    ],
+  },
+  {
+    name:"Solar & Energy Install Subcontractors", emoji:"☀️", virtual:false, category:"Subcontract",
+    searches:[
+      '"solar installer" subcontractor Texas East TX apply join 2025',
+      '"solar panel" installation subcontractor Texas apply',
+      '"Sunrun" OR "SunPower" OR "Vivint Solar" subcontractor Texas',
+      '"Tesla Solar" OR "Tesla Powerwall" installer subcontractor Texas',
+      '"EV charger" installer subcontractor Texas apply join',
+      '"Generac" installer subcontractor Texas apply join',
+      '"generator" installer subcontractor Texas apply join 2025',
+    ],
+  },
+  {
+    name:"Smart Home & Security Install Companies", emoji:"🏠", virtual:false, category:"Subcontract",
+    searches:[
+      '"ADT" installer subcontractor Texas East TX apply 2025',
+      '"Vivint" installer subcontractor Texas East TX apply',
+      '"Ring" OR "SimpliSafe" installer subcontractor Texas apply',
+      '"security system" installer subcontractor Texas apply join',
+      '"smart home" installer subcontractor Texas apply join 2025',
+      '"home automation" installer subcontractor Texas apply 2025',
+      '"low voltage" smart home subcontractor Texas apply join',
+      '"AV installer" OR "audio visual" subcontractor Texas apply',
+    ],
+  },
+  {
+    name:"Appliance & HVAC Install Subcontractors", emoji:"❄️", virtual:false, category:"Subcontract",
+    searches:[
+      '"appliance installer" subcontractor Texas apply join 2025',
+      '"HVAC" installer subcontractor Texas East TX apply',
+      '"mini split" installer subcontractor Texas apply join',
+      '"appliance installation" contractor Texas East TX apply 2025',
+      '"washer dryer" installer subcontractor Texas apply join',
+      '"water heater" installer subcontractor Texas apply 2025',
+    ],
+  },
+  {
+    name:"Flooring & Furniture Install Companies", emoji:"🪵", virtual:false, category:"Subcontract",
+    searches:[
+      '"flooring installer" subcontractor Texas East TX apply join 2025',
+      '"Floor and Decor" installer subcontractor Texas apply',
+      '"LL Flooring" installer subcontractor Texas apply join',
+      '"carpet installer" subcontractor Texas apply join 2025',
+      '"tile installer" subcontractor Texas apply join 2025',
+      '"furniture installer" OR "furniture assembler" subcontractor Texas',
+      '"delivery and install" subcontractor Texas apply 2025',
+    ],
+  },
+  {
+    name:"Gig & On-Demand Handyman Platforms", emoji:"📱", virtual:false, category:"Subcontract",
+    searches:[
+      '"TaskRabbit" pro apply Texas East TX handyman 2025',
+      '"Handy" pro apply Texas handyman installer 2025',
+      '"Thumbtack" pro handyman Texas East TX apply 2025',
+      '"Angi" pro handyman installer Texas apply join 2025',
+      '"Bark.com" pro handyman apply Texas 2025',
+      '"Porch.com" pro handyman installer Texas apply',
+      '"Mr. Handyman" franchise OR subcontractor Texas East TX',
+    ],
+  },
+  {
+    name:"Property Management Vendor Networks", emoji:"🏢", virtual:false, category:"Subcontract",
+    searches:[
+      '"property management" vendor OR subcontractor Texas East TX apply 2025',
+      '"maintenance vendor" apply Texas East TX handyman 2025',
+      '"preferred vendor" property management Texas apply join',
+      '"HOA" maintenance contractor Texas apply join 2025',
+      '"apartment" maintenance subcontractor Texas East TX apply',
+      '"property maintenance" subcontractor Texas East TX apply 2025',
+      '"facilities management" subcontractor Texas handyman apply',
+    ],
+  },
+  {
+    name:"Insurance Restoration Subcontractors", emoji:"🏚️", virtual:false, category:"Subcontract",
+    searches:[
+      '"insurance restoration" subcontractor Texas East TX apply 2025',
+      '"storm restoration" subcontractor Texas apply join',
+      '"ServPro" OR "ServiceMaster" subcontractor Texas apply',
+      '"Paul Davis" subcontractor Texas apply join 2025',
+      '"disaster restoration" subcontractor Texas apply',
+      '"hail damage" restoration subcontractor Texas apply 2025',
+      '"insurance contractor" Texas East TX apply join',
+    ],
+  },
+  {
+    name:"General Contractors Needing Subs", emoji:"👷", virtual:false, category:"Subcontract",
+    searches:[
+      '"general contractor" subcontractor needed Texas East TX 2025',
+      '"sub needed" OR "subs needed" Texas East TX handyman 2025',
+      'site:craigslist.org Texas "subcontractor" OR "sub needed" handyman 2025',
+      '"looking for reliable sub" Texas East TX handyman 2025',
+      '"new construction" subcontractor Texas East TX handyman apply',
+      '"1099" handyman subcontractor Texas East TX work available',
+      'site:craigslist.org East Texas "1099" OR "contract" handyman installer',
+      'site:indeed.com "handyman subcontractor" OR "installer subcontractor" Texas',
+    ],
+  },
+  {
+    name:"Home Warranty Repair Networks", emoji:"📋", virtual:false, category:"Subcontract",
+    searches:[
+      '"home warranty" contractor OR technician Texas East TX apply 2025',
+      '"American Home Shield" contractor Texas apply join network',
+      '"Choice Home Warranty" contractor Texas apply join',
+      '"First American Home Warranty" contractor Texas apply',
+      '"Frontdoor" contractor Texas apply join network 2025',
+      '"home warranty" service contractor Texas East TX apply',
+      '"warranty repair" contractor Texas East TX handyman apply',
+    ],
+  },
+
 ];
 
 
@@ -2157,6 +2596,10 @@ const OUTREACH_SCRIPTS = {
   Handyman: {
     subject: "Local handyman available — affordable & reliable",
     message: `Hi! I'm Dean, a local handyman serving East Texas and the ArkLaTex area. Whatever you need done around the house, I can help. Affordable rates, reliable work. Call or text: ${PHONE}`
+  },
+  Subcontract: {
+    subject: "Local installer available — East Texas — looking to partner",
+    message: `Hi! I'm Dean with Dean's Handyman Service in Pittsburg TX (East Texas / ArkLaTex area). I'm an experienced handyman and installer looking to join your installer network or subcontract. I do Starlink, smart home, TV mounting, appliances, flooring, general repairs and more. Insured, reliable, fast. Would love to talk. Call or text: ${PHONE} or visit ${WEBSITE}`
   },
   default: {
     subject: "Local handyman here to help",
@@ -2412,6 +2855,7 @@ async function sendDailyDigest() {
   const ranch    = recent.filter(l=>l.category==='Ranch/Farm');
   const biz      = recent.filter(l=>l.category==='Business');
   const storm    = recent.filter(l=>l.category==='Storm');
+  const subcon   = recent.filter(l=>l.category==='Subcontract');
 
   // Group by category
   const byCat = {};
@@ -2425,8 +2869,8 @@ async function sendDailyDigest() {
   const uc = u=>u==='immediate'?'#dc2626':u==='this week'?'#d97706':'transparent';
   const ul = u=>u==='immediate'?'⚡NOW':u==='this week'?'📅WK':'';
 
-  const catOrder = ['Internet','New Homeowner','Real Estate','Ranch/Farm','Business','Storm','Handyman','Specialty','Tech','Virtual','Other'];
-  const catEmoji = {Internet:'📡',['New Homeowner']:'🏠',['Real Estate']:'🏡',['Ranch/Farm']:'🤠',Business:'🏪',Storm:'⛈️',Handyman:'🔨',Specialty:'♿',Tech:'📷',Virtual:'💻',Other:'📋'};
+  const catOrder = ['Subcontract','Internet','New Homeowner','Real Estate','Ranch/Farm','Business','Storm','Handyman','Assembly','Installation','Hyperlocal','Permits','Seasonal','Social','Lead Platforms','Specialty','Tech','Smart Home','Virtual','New Mover','Other'];
+  const catEmoji = {Subcontract:'🔧',Internet:'📡',['New Homeowner']:'🏠',['Real Estate']:'🏡',['Ranch/Farm']:'🤠',Business:'🏪',Storm:'⛈️',Handyman:'🔨',Assembly:'📦',Installation:'⚙️',Hyperlocal:'📍',Permits:'📋',Seasonal:'🌸',['Lead Platforms']:'📌',Social:'👥',Specialty:'♿',Tech:'📷',['Smart Home']:'🏠',Virtual:'💻',['New Mover']:'🚚',Other:'📋'};
 
   const catBlocks = catOrder.filter(c=>byCat[c]&&byCat[c].length).map(cat=>{
     const leads = byCat[cat];
@@ -2506,7 +2950,9 @@ ${recent.length===0
   ${storm.length?`<div style="background:#fff7ed;border:2px solid #fb923c;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center;font-size:13px">
     <b style="color:#c2410c">⛈️ ${storm.length} STORM DAMAGE LEADS — These are urgent and insurance often covers it. Strike fast.</b>
   </div>`:''}
-  ${needFollowUp.length?`<div style="background:#fdf4ff;border:2px solid #c084fc;border-radius:12px;padding:14px;margin-bottom:12px">
+  ${subcon.length?`<div style="background:#f0fdf4;border:2px solid #4ade80;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center;font-size:13px">
+    <b style="color:#166534">🔧 ${subcon.length} SUBCONTRACT LEADS — Companies looking for local installers. Steady recurring work. Apply today.</b>
+  </div>`:''}\n  ${needFollowUp.length?`<div style="background:#fdf4ff;border:2px solid #c084fc;border-radius:12px;padding:14px;margin-bottom:12px">
     <div style="text-align:center;font-size:13px;font-weight:700;color:#7e22ce;margin-bottom:10px">
       ⏰ ${needFollowUp.length} LEAD${needFollowUp.length>1?'S':''} WAITING ON YOU — Haven't been followed up on yet
     </div>
