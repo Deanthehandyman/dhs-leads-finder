@@ -94,9 +94,9 @@ const ROTATION = [];
 ZONES.forEach(z=>{ for(let i=0;i<z.weight;i++) ROTATION.push(z); });
 
 // ── PRIORITY SERVICES — Dean's money makers ──────────────────────────────────
-// These run EVERY scan — at least 1 guaranteed per run, rotating through the list
+// Focuses heavily on tech, smart home, and assembly, then filters down to electrical/general
 const PRIORITY_CATEGORIES = new Set([
-  'Internet', 'Smart Home', 'Tech', 'Subcontract'
+  'Internet', 'Smart Home', 'Tech', 'Assembly', 'Subcontract'
 ]);
 
 function getThisRunTargets() {
@@ -104,26 +104,25 @@ function getThisRunTargets() {
   const zone   = ROTATION[slot % ROTATION.length];
   const region = zone.regions[slot % zone.regions.length];
 
-  // Split services into priority (money makers) and general
+  // Split services into priority (money makers) and general (electrical, plumbing, etc.)
   const priority = SERVICES.filter(s => PRIORITY_CATEGORIES.has(s.category));
   const general  = SERVICES.filter(s => !PRIORITY_CATEGORIES.has(s.category));
 
   const seen = new Set();
   const svcs = [];
 
-  // Always pick 2 priority services per scan (rotating through them)
-  const p1 = priority[(slot * 3)     % priority.length];
-  const p2 = priority[(slot * 3 + 1) % priority.length];
-  [p1, p2].forEach(s => { if (!seen.has(s.name)) { seen.add(s.name); svcs.push(s); } });
+  // Aggressively pick 3 priority services per scan (rotating through them)
+  const p1 = priority[(slot * 4)     % priority.length];
+  const p2 = priority[(slot * 4 + 1) % priority.length];
+  const p3 = priority[(slot * 4 + 2) % priority.length];
+  [p1, p2, p3].forEach(s => { if (!seen.has(s.name)) { seen.add(s.name); svcs.push(s); } });
 
-  // Fill remaining slot with general services
-  for (let i = 0; svcs.length < 3; i++) {
-    const s = general[(slot * 7 + i * 11) % general.length];
-    if (!seen.has(s.name)) { seen.add(s.name); svcs.push(s); }
-  }
+  // Fill the remaining 1 slot with a general service (electrical, drywall, etc.)
+  const s = general[(slot * 7) % general.length];
+  if (!seen.has(s.name)) { seen.add(s.name); svcs.push(s); }
 
   return { zone, region, services: svcs };
-} 'last 30 days'
+}
 
 // ─── 50+ SERVICE CATEGORIES ───────────────────────────────────────────────────
 const SERVICES = [
@@ -2983,8 +2982,9 @@ function buildHumanQueries(service, region, zone) {
 }
 
 async function tavilySearch(query) {
-  // Strip site: operators — Tavily can't scrape login-gated sites like Nextdoor/Facebook
+  // Strip site operators and hardcoded years — Tavily filters by date natively now
   const cleanQ = query
+    .replace(/2025|2026/g, '') // Remove years so it matches natural language
     .replace(/site:\S+\s*/gi, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
@@ -2995,10 +2995,14 @@ async function tavilySearch(query) {
     body: JSON.stringify({
       api_key: process.env.TAVILY_API_KEY,
       query: cleanQ,
-      search_depth: 'basic',
-      max_results: 5,
+      search_depth: 'advanced', // Upgraded to advanced to scrape deeper into forums
+      days: 7,                  // STRICT RECENCY: Only grabs results from the last 7 days
+      max_results: 8,
       include_answer: false,
-      exclude_domains: ['wikipedia.org','amazon.com','ebay.com','walmart.com','homedepot.com','lowes.com'],
+      exclude_domains: [
+        'wikipedia.org','amazon.com','ebay.com','walmart.com',
+        'homedepot.com','lowes.com', 'yelp.com', 'yellowpages.com', 'bbb.org'
+      ],
     }),
   });
   if (!resp.ok) {
@@ -3054,36 +3058,33 @@ async function scanCombo(zone, region, service) {
 
   console.log(`    📄 Total search context: ${searchContext.length} chars`);
 
-  // Short focused prompt to stay under token limits
+ // Short focused prompt to stay under token limits and enforce quality
   const prompt = `You are a lead hunter for Dean's Handyman Service in ${city} (${region.name}).
-Dean's SPECIALTY and highest-paying services: Starlink installation, internet setup, WiFi/networking, smart home devices (cameras, doorbells, thermostats, locks, switches), TV mounting, and smart device installation. PRIORITIZE these above all else.
-Service this scan: "${service.name}" | Category: ${service.category}
-${zone.zone === 1 ? 'PRIORITY ZONE: This is Dean\'s home territory within 200 miles of Pittsburg TX. Be aggressive here.' : ''}
+Dean's HIGH-TICKET PRIORITIES: Starlink installation, WiFi/networking, smart home devices, equipment/furniture assembly, and TV mounting. Look for these aggressively.
 
-WHAT COUNTS AS A LEAD — real people who:
-- Asked "anyone recommend a [handyman/installer]" on Nextdoor or Facebook
-- Posted "need someone to [install/fix/assemble]" on Craigslist or Facebook Marketplace
-- Vented about a problem they can't fix themselves (leaking faucet, broken fan, IKEA box)
-- Asked "how much does it cost to [install/fix]" — they're shopping right now
-- Said "just moved in" or "just bought" — new homeowners always have a list
-- Posted "looking for a reliable handyman" or "ISO handyman"
-- Asked for recommendations on Nextdoor or a local Facebook group
-- Complained about a quote being too expensive — they're still looking
+WHAT COUNTS AS A LEAD — real people who posted IN THE LAST 7 DAYS:
+- Asked "anyone recommend a [handyman/installer]" on Nextdoor/Facebook
+- Posted "need someone to [install/fix/assemble]" 
+- Vented about a problem they can't fix themselves (IKEA box, bad HughesNet, broken tech)
+- Asked "how much does it cost to [install/fix]" 
+- Said "just moved in" or "just bought"
 
-NOT a lead: news articles, business directory listings, generic blog posts, ads.
+WHAT TO REJECT (DO NOT INCLUDE THESE):
+- Anything older than a few weeks.
+- News articles, business directory listings, generic blog posts, or competitor ads.
 
 Search results:
 ${searchContext || 'No search results found for this query.'}
 
-IMPORTANT: If there are no search results above, return an empty array: []
-Only return leads based on REAL search results above. Do not invent or guess leads. 
+IMPORTANT: If there are no search results above that look like a real person asking for help recently, return an empty array: []
+Do not invent or guess leads. 
 
 Return ONLY a JSON array (up to 5 leads). Each:
-{"title":"what they need in plain words","snippet":"1-2 sentences describing their situation exactly","service":"${service.name}","serviceEmoji":"${service.emoji}","category":"${service.category}","isVirtual":${service.virtual},"source":"nextdoor|facebook|reddit|craigslist|angi|thumbtack|google","platform":"exact platform name","url":"url or empty","contactHint":"username/email/phone/handle or empty","location":"City, State","region":"${region.name}","zone":${zone.zone},"heat":"hot|warm|cold","heatReason":"1 sentence — why this is hot/warm/cold","competitorMention":false,"urgency":"immediate|this week|flexible|unknown","estimatedJobValue":"$X-$Y or unknown","tags":["tag1","tag2"],"posted":"today|this week|this month|unknown","status":"new"}
+{"title":"what they need in plain words","snippet":"1-2 sentences describing their situation exactly","service":"${service.name}","serviceEmoji":"${service.emoji}","category":"${service.category}","isVirtual":${service.virtual},"source":"nextdoor|facebook|reddit|craigslist|angi|thumbtack|google","platform":"exact platform name","url":"url or empty","contactHint":"username/email/phone/handle or empty","location":"City, State","region":"${region.name}","zone":${zone.zone},"heat":"hot|warm|cold","heatReason":"1 sentence — why this is hot/warm/cold","competitorMention":false,"urgency":"immediate|this week|flexible|unknown","estimatedJobValue":"$X-$Y or unknown","tags":["tag1","tag2"],"posted":"today|this week|this month","status":"new"}
 
-hot = actively looking RIGHT NOW, asked for recommendations, said urgent/asap/today
-warm = has the problem, hasn't hired yet, shopping around
-cold = mentioned the topic but no clear intent to hire soon
+hot = actively looking RIGHT NOW, asked for recommendations, urgent
+warm = has the problem, shopping around
+cold = mentioned the topic but no clear intent
 
 JSON only. No markdown. No explanation.`;
 
