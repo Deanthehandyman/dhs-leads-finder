@@ -3477,6 +3477,29 @@ const LEADS_FILE = path.join(__dirname, 'leads.json');
 let existing = [];
 try { existing = JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8')); } catch {}
 
+// ─── Push to Google Sheets ────────────────────────────────────────────────────
+async function pushToGoogleSheet(lead) {
+  if (!process.env.GOOGLE_SHEET_WEBHOOK) return;
+  try {
+    await fetch(process.env.GOOGLE_SHEET_WEBHOOK, {
+      method: 'POST',
+      body: JSON.stringify({
+        date: new Date().toLocaleDateString(),
+        title: lead.title || '',
+        service: lead.service || '',
+        snippet: lead.snippet || '',
+        urgency: lead.urgency || '',
+        value: lead.estimatedJobValue || '',
+        location: lead.location || '',
+        contact: lead.contactHint || '',
+        url: lead.url || ''
+      })
+    });
+  } catch (e) {
+    console.log(`  ⚠️ Failed to push to Google Sheet: ${e.message}`);
+  }
+}
+
 (async () => {
   console.log(`\n🔨 DEAN'S V6 MAXIMUM OVERDRIVE — Mode: ${RUN_MODE.toUpperCase()}`);
   console.log(`📍 ${BASE} | 50+ Services | FREE: Groq LLM + Tavily Search | No billing needed`);
@@ -3515,7 +3538,7 @@ try { existing = JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8')); } catch {}
   console.log(`\n📊 Found: ${allNew.length} leads (${hot}🔥 ${warm}⚡ ${allNew.length-hot-warm}cold)`);
   if (!allNew.length) { console.log('No leads this cycle.'); process.exit(0); }
 
-  const existingKeys = new Set(existing.map(l=>(l.title||'').toLowerCase().slice(0,50)));
+ const existingKeys = new Set(existing.map(l=>(l.title||'').toLowerCase().slice(0,50)));
   const fresh = allNew.filter(l=>!existingKeys.has((l.title||'').toLowerCase().slice(0,50)));
   console.log(`✨ ${fresh.length} new (${allNew.length-fresh.length} dupes skipped)`);
   if (!fresh.length) process.exit(0);
@@ -3526,6 +3549,13 @@ try { existing = JSON.parse(fs.readFileSync(LEADS_FILE, 'utf8')); } catch {}
     foundAt: new Date().toISOString(),
     status:  'new',
   }));
+
+  // Push every fresh lead to your Google Sheet pipeline
+  console.log(`📊 Pushing ${fresh.length} leads to Google Sheets Pipeline...`);
+  for (const lead of stamped) {
+    await pushToGoogleSheet(lead);
+    await new Promise(r => setTimeout(r, 500)); // Brief pause so Google doesn't block it
+  }
 
   const merged = [...stamped, ...existing].slice(0, 10000);
   fs.writeFileSync(LEADS_FILE, JSON.stringify(merged, null, 2));
