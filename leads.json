@@ -1,5 +1,33 @@
 [
   {
+    "title": "Handyman overcharging for small repair job",
+    "snippet": "I called a handyman to fix one small hole, and he had the nerve to quote me $600! For what?! A $20 patch kit from Home Depot? He claims he needs",
+    "service": "Sticker Shock — Too Expensive Quote",
+    "serviceEmoji": "%ɸȇ",
+    "category": "PriceShopper",
+    "isVirtual": false,
+    "source": "Facebook",
+    "platform": "Facebook",
+    "url": "https://www.facebook.com/groups/1041746727883726/posts/1202339888491075/",
+    "contactHint": "",
+    "location": "Unknown",
+    "region": "DFW South & Ellis County TX",
+    "zone": 1,
+    "heat": "hot",
+    "heatReason": "Mad at competitor, easy steal",
+    "competitorMention": true,
+    "urgency": "immediate",
+    "estimatedJobValue": "$20-$100",
+    "tags": [
+      "handyman",
+      "overcharging"
+    ],
+    "posted": "this week",
+    "status": "new",
+    "id": "1773213467974-hcv11l",
+    "foundAt": "2026-03-11T07:17:47.974Z"
+  },
+  {
     "title": "Need installer for Govee Smart Lights",
     "snippet": "Any installers East of Houston, TX? Discussion about finding installers for Govee Smart Lights East of Houston, TX.",
     "service": "Smart Lighting & Switches",
