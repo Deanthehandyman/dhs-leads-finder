@@ -117,7 +117,7 @@ function getThisRunTargets() {
   const svcs = [];
 
   // Aggressively pull 6 PRIORITY services per run
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 3; i++) {
     const p = priority[(slot * 7 + i) % priority.length];
     if (p && !seen.has(p.name)) { seen.add(p.name); svcs.push(p); }
   }
@@ -3053,7 +3053,7 @@ async function scanCombo(zone, region, service) {
     } catch(e) {
       console.log(`    ❌ Tavily exception: ${e.message}`);
     }
-    await new Promise(r => setTimeout(r, 800));
+    await new Promise(r => setTimeout(r, 30000));
   }
 
   // If still empty, try one broad fallback query
