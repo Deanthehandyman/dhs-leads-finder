@@ -94,9 +94,15 @@ const ROTATION = [];
 ZONES.forEach(z=>{ for(let i=0;i<z.weight;i++) ROTATION.push(z); });
 
 // ── PRIORITY SERVICES — Dean's money makers ──────────────────────────────────
-// Focuses heavily on tech, smart home, and assembly, then filters down to electrical/general
+// Strictly targets REAL HUMANS: Starlink, Facebook groups, Nextdoor, DIY Fails, and Assembly
 const PRIORITY_CATEGORIES = new Set([
-  'Internet', 'Smart Home', 'Tech', 'Assembly', 'Subcontract'
+  'Internet',       // Starlink & rural internet complainers
+  'Smart Home',     // Cameras, wifi, thermostats
+  'Facebook',       // Local East TX Facebook groups
+  'Social',         // Nextdoor, Reddit, Twitter complainers
+  'DIYFail',        // People who tried to fix it themselves and gave up
+  'PriceShopper',   // People complaining about expensive quotes
+  'Assembly'        // IKEA/Wayfair/Gym equipment in boxes
 ]);
 
 function getThisRunTargets() {
