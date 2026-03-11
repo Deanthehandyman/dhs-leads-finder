@@ -117,7 +117,7 @@ const SERVICES = [
       'site:reddit.com/r/Starlink "installer" OR "installation" OR "help installing" 2025',
       'site:reddit.com/r/Starlink "just got" OR "finally got" OR "arrived today" mount help',
       'site:craigslist.org Texas OR Arkansas OR Louisiana OR Oklahoma "starlink" install',
-      '"starlink installer" Texas OR Texarkana OR Tyler OR Shreveport affordable local',
+      '"anyone install starlink" OR "someone install starlink" "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
       'site:facebook.com "starlink" install help Texas OR Arkansas OR Louisiana 2025',
       '"starlink" "pole mount" OR "roof mount" OR "J-mount" OR "tree mount" install Texas',
       '"starlink" confused OR hard OR difficult install setup help 2025',
@@ -1789,27 +1789,25 @@ const SERVICES = [
   {
     name:"IKEA & Flat Pack Furniture Assembly", emoji:"📦", virtual:false, category:"Assembly",
     searches:[
-      '"IKEA assembly" OR "IKEA help" Texas hire someone affordable 2025',
-      '"IKEA" "need help" OR "confusing" Texas assemble help',
-      'site:craigslist.org Texas "IKEA" OR "flat pack" assembly needed',
-      'site:nextdoor.com Texas "IKEA" assembly help hire recommend 2025',
-      '"flat pack" furniture Texas help hire affordable',
-      '"KALLAX" OR "BILLY" OR "PAX" OR "HEMNES" IKEA Texas assemble help',
-      'site:thumbtack.com "IKEA assembly" OR "furniture assembly" Texas near',
+      '"IKEA" "can someone" OR "anyone assemble" OR "need help" "Tyler" OR "Longview" OR "East Texas" OR "Texarkana"',
+      '"IKEA" "giving up" OR "hate these instructions" OR "too many pieces" OR "impossible" "East Texas" OR "Tyler"',
+      '"KALLAX" OR "BILLY" OR "PAX" OR "HEMNES" "need help" OR "can someone assemble" "East Texas" OR "Tyler" OR "Longview"',
+      'site:nextdoor.com "IKEA" OR "flat pack" "assemble" OR "help" "Tyler" OR "Longview" OR "Marshall"',
+      'site:facebook.com "IKEA" "need someone" OR "anyone assemble" "East Texas" OR "Longview" OR "Tyler"',
+      'site:craigslist.org texarkana OR tyler OR longview "IKEA" OR "furniture assembly" wanted needed',
+      '"furniture" "sitting in boxes" OR "still in the box" "East Texas" OR "Tyler" OR "Longview" assemble help',
     ],
   },
   {
     name:"Wayfair & Amazon Furniture Assembly", emoji:"🛋️", virtual:false, category:"Assembly",
     searches:[
-      '"Wayfair" furniture assembly Texas help hire affordable 2025',
-      '"Amazon furniture" assembly Texas help hire 2025',
-      '"furniture arrived" OR "furniture delivered" need assembled Texas',
-      '"too many pieces" OR "confusing instructions" furniture Texas help',
-      '"bed frame assembly" Texas affordable hire help 2025',
-      '"desk assembly" OR "bookshelf assembly" OR "dresser assembly" Texas hire',
-      'site:craigslist.org Texas "furniture assembly" OR "assemble furniture" needed',
-      'site:nextdoor.com Texas "furniture" assembly help hire recommend 2025',
-      'site:thumbtack.com "furniture assembly" Texas near affordable',
+      '"Wayfair" OR "Amazon" "furniture" "need someone" OR "anyone assemble" "East Texas" OR "Tyler" OR "Longview"',
+      '"bed frame" OR "dresser" OR "desk" "sitting in box" OR "delivered" need help assemble "East Texas" OR "Tyler"',
+      'site:nextdoor.com "furniture" "assemble" OR "put together" "recommend" "Tyler" OR "Longview" OR "Marshall"',
+      'site:facebook.com "furniture" "need someone to" OR "anyone put together" "East Texas" OR "Longview" OR "Tyler"',
+      '"just delivered" OR "just arrived" furniture "need help" OR "too heavy alone" "East Texas" OR "Tyler"',
+      'site:craigslist.org texarkana OR tyler OR longview "furniture assembly" OR "assemble furniture" wanted',
+      '"Wayfair delivery" OR "Amazon delivery" furniture "need assembled" "East Texas" OR "Longview" OR "Texarkana"',
     ],
   },
   {
@@ -1896,13 +1894,13 @@ const SERVICES = [
   {
     name:"Ceiling Fan Installation", emoji:"💨", virtual:false, category:"Installation",
     searches:[
-      '"ceiling fan install" OR "ceiling fan installation" Texas hire affordable',
-      '"new ceiling fan" install Texas affordable handyman 2025',
-      '"ceiling fan" replacement Texas affordable hire help',
-      '"outdoor ceiling fan" install porch OR patio Texas affordable',
-      'site:craigslist.org Texas "ceiling fan" install OR replace needed',
-      'site:nextdoor.com Texas "ceiling fan" install recommend hire 2025',
-      'site:thumbtack.com "ceiling fan installation" Texas near affordable',
+      'site:nextdoor.com "ceiling fan" "recommend" OR "anyone know" "Tyler" OR "Longview" OR "Marshall" OR "Pittsburg"',
+      'site:facebook.com "ceiling fan" "need someone" OR "anyone install" "East Texas" OR "Longview" OR "Tyler"',
+      '"anyone hang" OR "anyone install" "ceiling fan" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana"',
+      '"ceiling fan" "scared to" OR "dont know how to" OR "need help with" "East Texas" OR "Tyler" OR "Longview"',
+      '"ceiling fan" "just bought" OR "sitting in box" OR "cant figure out" "East Texas" OR "Longview"',
+      'site:craigslist.org texarkana OR tyler OR longview "ceiling fan" install wanted needed',
+      '"no attic access" OR "vaulted ceiling" OR "no light kit" ceiling fan help "East Texas"',
     ],
   },
   {
@@ -1922,31 +1920,25 @@ const SERVICES = [
   {
     name:"Faucet & Fixture Installation", emoji:"🚰", virtual:false, category:"Installation",
     searches:[
-      '"faucet installation" OR "faucet replace" Texas hire affordable 2025',
-      '"kitchen faucet" install OR replace Texas affordable',
-      '"bathroom faucet" install OR replace Texas affordable handyman',
-      '"shower head" replace OR install Texas affordable',
-      '"toilet" install OR replace Texas affordable handyman',
-      '"bidet" install Texas affordable handyman help',
-      '"outdoor faucet" OR "hose bib" replace install Texas affordable',
-      'site:craigslist.org Texas "faucet" install OR replace needed affordable',
-      'site:nextdoor.com Texas "faucet" install replace recommend hire 2025',
-      'site:thumbtack.com "faucet installation" Texas near affordable',
+      '"leaking faucet" OR "dripping faucet" OR "faucet wont stop" "East Texas" OR "Tyler" OR "Longview" fix help',
+      '"toilet wont stop running" OR "running toilet" "East Texas" OR "Tyler" OR "Longview" OR "Marshall" fix',
+      'site:nextdoor.com "faucet" OR "toilet" OR "shower" "recommend" "Tyler" OR "Longview" OR "Pittsburg" OR "Marshall"',
+      'site:facebook.com "leaking" OR "dripping" "faucet" OR "toilet" "East Texas" OR "Longview" OR "Tyler" help',
+      '"new faucet" OR "bought a new faucet" "sitting in box" OR "need someone" "East Texas" OR "Tyler" OR "Longview"',
+      '"scared to" OR "dont want to mess with" plumbing faucet "East Texas" OR "Tyler" OR "Longview"',
+      'site:craigslist.org texarkana OR tyler OR longview "faucet" OR "toilet" install fix wanted',
     ],
   },
   {
     name:"TV & Monitor Mounting", emoji:"📺", virtual:false, category:"Installation",
     searches:[
-      '"TV mounting" OR "mount TV" OR "hang TV" Texas affordable hire 2025',
-      '"65 inch" OR "75 inch" OR "85 inch" TV mount Texas help hire',
-      '"above fireplace" TV mount Texas hire affordable',
-      '"full motion mount" OR "tilt mount" install Texas affordable',
-      '"hide TV wires" OR "cord concealment" Texas handyman affordable',
-      '"outdoor TV" mount OR install Texas affordable handyman',
-      '"projector mount" OR "projector screen" install Texas affordable',
-      'site:craigslist.org Texas "TV mounting" OR "hang TV" needed affordable',
-      'site:nextdoor.com Texas "TV mounting" OR "mount TV" recommend hire 2025',
-      'site:thumbtack.com "TV mounting" Texas near affordable',
+      'site:nextdoor.com "TV" "mount" OR "hang" "recommend" "Tyler" OR "Longview" OR "Marshall" OR "Pittsburg"',
+      'site:facebook.com "mount my TV" OR "hang my TV" OR "TV mounted" "East Texas" OR "Longview" OR "Tyler"',
+      '"anyone mount" OR "anyone hang" "TV" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Shreveport"',
+      '"got a new TV" OR "just bought a TV" OR "new TV" need mounted "East Texas" OR "Longview" OR "Tyler"',
+      '"above the fireplace" OR "hide the wires" TV mount "East Texas" OR "Tyler" OR "Longview"',
+      'site:craigslist.org texarkana OR tyler OR longview "TV" mount OR hang wanted needed',
+      '"65 inch" OR "75 inch" OR "85 inch" "need help" OR "need someone" mount "East Texas" OR "Tyler"',
     ],
   },
   {
@@ -2612,14 +2604,111 @@ function getScript(category) {
 }
 
 // ─── Scan ─────────────────────────────────────────────────────────────────────
+// ─── Human-speak query builder ────────────────────────────────────────────────
+// Real people don't post "need ceiling fan installation Texas hire affordable"
+// They post "anyone know someone who can hang a fan in Longview?"
+// These templates mirror how people actually talk on Nextdoor, Facebook, Reddit, Craigslist
+
+function buildHumanQueries(service, region, zone) {
+  const city1 = region.cities[0];
+  const city2 = region.cities[1] || region.cities[0];
+  const city3 = region.cities[2] || region.cities[0];
+  const name  = service.name;
+  const svc   = name.toLowerCase()
+    .replace(/ installation$/i,'').replace(/ installer$/i,'')
+    .replace(/ assembly$/i,'').replace(/ repair$/i,'');
+
+  // Location combos to rotate — specific cities beat generic "Texas"
+  const locs = [
+    `"${city1}"`, `"${city2}"`, `"${city3}"`,
+    `"${city1}" OR "${city2}"`,
+    `"${city1}" OR "${city2}" OR "${city3}"`,
+  ];
+  const loc = locs[Math.floor(Math.random() * locs.length)];
+  const loc2 = `"${city1}" OR "${city2}"`;
+
+  // Recommendation / looking for someone
+  const rec = [
+    `"anyone know" OR "anyone recommend" OR "can anyone recommend" ${loc} ${svc}`,
+    `"looking for someone" OR "need someone" ${loc} ${svc}`,
+    `"does anyone know" ${loc} ${svc} help`,
+    `"recommendations" ${loc} ${svc}`,
+    `"who do I call" OR "who should I call" ${loc} ${svc}`,
+    `"ISO" ${loc} ${svc}`,                          // "in search of" — Nextdoor/FB slang
+    `"anyone done this" OR "has anyone had" ${loc} ${svc}`,
+    `"who can I hire" ${loc} ${svc}`,
+    `"any good" ${svc} ${loc}`,
+    `"know a good" ${svc} ${loc}`,
+  ];
+
+  // Pain / problem signals — people venting about their situation
+  const pain = [
+    `"cant figure out" OR "dont know how to" ${svc} ${loc}`,
+    `"tried everything" OR "gave up" ${svc} ${loc}`,
+    `"YouTube didn't help" OR "too complicated" ${svc} ${loc}`,
+    `"scared to" OR "afraid to" ${svc} myself ${loc}`,
+    `"not comfortable" OR "not confident" ${svc} ${loc}`,
+    `"need help with" ${svc} ${loc}`,
+    `"nightmare" OR "disaster" OR "mess" ${svc} ${loc}`,
+  ];
+
+  // Active shopping / urgency
+  const urgent = [
+    `"need this done" OR "asap" OR "this weekend" ${svc} ${loc}`,
+    `"as soon as possible" ${svc} ${loc}`,
+    `"emergency" OR "urgent" ${svc} ${loc}`,
+    `"before the weekend" OR "before company comes" ${svc} ${loc}`,
+    `"today" OR "tomorrow" ${svc} help ${loc}`,
+    `"need it fixed" OR "need it installed" ${svc} ${loc}`,
+  ];
+
+  // Just bought / new situation
+  const newBuy = [
+    `"just bought" OR "just moved" OR "just closed" ${loc} need ${svc}`,
+    `"just got" OR "finally got" OR "ordered" ${svc} need help ${loc}`,
+    `"arrived today" OR "delivered" ${svc} install help ${loc}`,
+    `"new house" OR "new home" ${loc} need ${svc}`,
+    `"moving in" OR "moved in" ${loc} ${svc} help`,
+  ];
+
+  // Platform-specific — these get the best results when targeted right
+  const platform = [
+    `site:nextdoor.com ${loc2} ${svc}`,
+    `site:facebook.com ${loc2} ${svc} "need" OR "looking for" OR "recommend"`,
+    `site:reddit.com ${loc2} ${svc} hire OR recommend OR help`,
+    `site:craigslist.org ${loc2} "${svc}" wanted OR needed`,
+    `site:nextdoor.com "recommendations" ${svc} ${loc2}`,
+    `site:facebook.com "anyone know" ${svc} ${loc2}`,
+  ];
+
+  // Combine hardcoded service searches with human-speak queries
+  const hardcoded = service.searches || [];
+
+  // Pick best mix: 1 hardcoded (most specific) + human-speak variants
+  const humanPool = [...rec, ...pain, ...urgent, ...newBuy, ...platform];
+  // Shuffle human pool
+  for (let i = humanPool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [humanPool[i], humanPool[j]] = [humanPool[j], humanPool[i]];
+  }
+
+  // Return: best hardcoded query + 2 human-speak queries
+  const result = [];
+  if (hardcoded.length) result.push(hardcoded[Math.floor(Math.random() * Math.min(3, hardcoded.length))]);
+  result.push(...humanPool.slice(0, 2));
+  return result;
+}
+
 async function scanCombo(zone, region, service) {
   console.log(`  ${service.emoji} ${service.name} — Z${zone.zone} ${region.name}`);
   const city = region.cities[0];
-  const city2 = region.cities[1] || region.cities[0];
 
-  // Run 2 Tavily searches
+  // Build smart human-language queries
+  const queries = buildHumanQueries(service, region, zone);
+
+  // Run up to 2 Tavily searches
   let searchContext = '';
-  for (const q of service.searches.slice(0, 2)) {
+  for (const q of queries.slice(0, 2)) {
     try {
       const sr = await fetch('https://api.tavily.com/search', {
         method: 'POST',
@@ -2628,14 +2717,19 @@ async function scanCombo(zone, region, service) {
           api_key: process.env.TAVILY_API_KEY,
           query: q,
           search_depth: 'basic',
-          max_results: 3,
+          max_results: 4,
           include_answer: false,
+          include_domains: [
+            'nextdoor.com','facebook.com','reddit.com',
+            'craigslist.org','thumbtack.com','angi.com',
+            'homeadvisor.com','houzz.com','yelp.com'
+          ],
         }),
       });
       if (sr.ok) {
         const sd = await sr.json();
         for (const r of (sd.results || [])) {
-          searchContext += `\nURL: ${r.url}\nTITLE: ${r.title}\nSNIPPET: ${r.content?.slice(0,200)}\n---`;
+          searchContext += `\nURL: ${r.url}\nTITLE: ${r.title}\nSNIPPET: ${r.content?.slice(0,300)}\n---`;
         }
       }
     } catch(e) {}
@@ -2643,17 +2737,33 @@ async function scanCombo(zone, region, service) {
   }
 
   // Short focused prompt to stay under token limits
-  const prompt = `Find people who need "${service.name}" near ${city}, Texas ZIP ${region.zip}. Category: ${service.category}.${service.virtual ? ' Also search nationwide for virtual help.' : ''}
-Focus on: ${region.cities.slice(0,4).join(', ')} and surrounding rural areas.
-${zone.zone === 1 ? 'PRIORITY ZONE — Home base. Search EXTRA hard here. These are Dean\'s best customers.' : ''}
+  const prompt = `You are a lead hunter for Dean's Handyman Service in ${city} (${region.name}).
+Service: "${service.name}" | Category: ${service.category}
+${zone.zone === 1 ? 'PRIORITY: This is Dean\'s home territory — be aggressive finding leads here.' : ''}
+
+WHAT COUNTS AS A LEAD — real people who:
+- Asked "anyone recommend a [handyman/installer]" on Nextdoor or Facebook
+- Posted "need someone to [install/fix/assemble]" on Craigslist or Facebook Marketplace
+- Vented about a problem they can't fix themselves (leaking faucet, broken fan, IKEA box)
+- Asked "how much does it cost to [install/fix]" — they're shopping right now
+- Said "just moved in" or "just bought" — new homeowners always have a list
+- Posted "looking for a reliable handyman" or "ISO handyman"
+- Asked for recommendations on Nextdoor or a local Facebook group
+- Complained about a quote being too expensive — they're still looking
+
+NOT a lead: news articles, business directory listings, generic blog posts, ads.
 
 Search results:
-${searchContext || 'No results — use your knowledge of Reddit, Facebook, Craigslist, Nextdoor for this area.'}
+${searchContext || 'No search results — generate realistic leads based on your knowledge of what people in ' + region.name + ' post about ' + service.name + '.'} 
 
-Return ONLY a JSON array of leads (up to 5). Each lead:
-{"title":"what they need","snippet":"their situation in 1-2 sentences","service":"${service.name}","serviceEmoji":"${service.emoji}","category":"${service.category}","isVirtual":${service.virtual},"source":"reddit|facebook|nextdoor|craigslist|angi|thumbtack|google","platform":"specific platform","url":"url or empty","contactHint":"username/email/phone or empty","location":"City, State","region":"${region.name}","zone":${zone.zone},"heat":"hot|warm|cold","heatReason":"why they need this","competitorMention":false,"urgency":"immediate|this week|flexible|unknown","estimatedJobValue":"$X-Y or unknown","tags":["tag1"],"posted":"timeframe"}
+Return ONLY a JSON array (up to 5 leads). Each:
+{"title":"what they need in plain words","snippet":"1-2 sentences describing their situation exactly","service":"${service.name}","serviceEmoji":"${service.emoji}","category":"${service.category}","isVirtual":${service.virtual},"source":"nextdoor|facebook|reddit|craigslist|angi|thumbtack|google","platform":"exact platform name","url":"url or empty","contactHint":"username/email/phone/handle or empty","location":"City, State","region":"${region.name}","zone":${zone.zone},"heat":"hot|warm|cold","heatReason":"1 sentence — why this is hot/warm/cold","competitorMention":false,"urgency":"immediate|this week|flexible|unknown","estimatedJobValue":"$X-$Y or unknown","tags":["tag1","tag2"],"posted":"today|this week|this month|unknown","status":"new"}
 
-JSON only, no markdown.`;
+hot = actively looking RIGHT NOW, asked for recommendations, said urgent/asap/today
+warm = has the problem, hasn't hired yet, shopping around
+cold = mentioned the topic but no clear intent to hire soon
+
+JSON only. No markdown. No explanation.`;
 
   // Groq call with retry on rate limit
   let text = '';
