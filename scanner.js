@@ -3002,8 +3002,8 @@ async function tavilySearch(query) {
       api_key: process.env.TAVILY_API_KEY,
       query: cleanQ,
       search_depth: 'advanced', // Upgraded to advanced to scrape deeper into forums
-      days: 7,                  // STRICT RECENCY: Only grabs results from the last 7 days
-      max_results: 8,
+      days: 30,                  // STRICT RECENCY: Only grabs results from the last 7 days
+      max_results: 20,
       include_answer: false,
       exclude_domains: [
         'wikipedia.org','amazon.com','ebay.com','walmart.com',
