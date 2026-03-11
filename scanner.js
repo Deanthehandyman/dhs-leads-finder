@@ -3015,7 +3015,7 @@ async function tavilySearch(query) {
       query: cleanQ,
       search_depth: 'advanced', 
       days: 14,                 // THE SWEET SPOT: Last 2 weeks only
-      max_results: 15,          // INCREASED: Pull 15 results per query instead of 8
+      max_results: 10,          // INCREASED: Pull 15 results per query instead of 8
       include_answer: false,
       exclude_domains: [
         'wikipedia.org','amazon.com','ebay.com','walmart.com',
@@ -3543,8 +3543,8 @@ async function pushToGoogleSheet(lead) {
     for (const svc of services) {
       const results = await scanCombo(zone, region, svc);
       allNew = allNew.concat(results);
-      // Wait 8 seconds between services to avoid rate limits
-      await new Promise(r => setTimeout(r, 8000));
+      // Wait 20 seconds between services to avoid rate limits
+      await new Promise(r => setTimeout(r, 20000));
     }
   } catch(e) { console.error('Scan error:', e); process.exit(1); }
 
