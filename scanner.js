@@ -100,7 +100,7 @@ const PRIORITY_CATEGORIES = new Set([
 ]);
 
 function getThisRunTargets() {
-  const slot   = Math.floor(Date.now() / (30 * 60 * 1000));
+  const slot   = Math.floor(Date.now() / (10 * 60 * 1000));
   const zone   = ROTATION[slot % ROTATION.length];
   const region = zone.regions[slot % zone.regions.length];
 
