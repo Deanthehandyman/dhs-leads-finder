@@ -2539,7 +2539,260 @@ const SERVICES = [
       '"warranty repair" contractor Texas East TX handyman apply',
     ],
   },
+  // ══ LOCAL FACEBOOK GROUPS — EAST TX CLASSIFIEDS & COMMUNITY ══════════════════
+  {
+    name:"East TX Facebook Groups — Classifieds", emoji:"👥", virtual:false, category:"Facebook",
+    searches:[
+      'site:facebook.com/groups "East Texas Classifieds" handyman OR repair OR install 2025',
+      'site:facebook.com/groups "Tyler Texas" "need someone" OR "looking for" handyman repair install',
+      'site:facebook.com/groups "Longview Texas" handyman OR repair OR install "need" OR "looking"',
+      'site:facebook.com/groups "Pittsburg Texas" OR "Camp County" handyman repair help needed',
+      'site:facebook.com/groups "Marshall Texas" OR "Harrison County" handyman repair install needed',
+      'site:facebook.com/groups "Texarkana" handyman OR repair OR install need help 2025',
+      'site:facebook.com/groups "East Texas" "handyman" OR "repair" OR "fix" need help 2025',
+      'site:facebook.com/groups "Sulphur Springs" OR "Mount Pleasant" handyman repair needed',
+    ],
+  },
+  {
+    name:"East TX Facebook Groups — Buy Sell Trade", emoji:"🏷️", virtual:false, category:"Facebook",
+    searches:[
+      'site:facebook.com/groups "Buy Sell Trade" "Tyler" OR "Longview" handyman repair install service',
+      'site:facebook.com/groups "Buy Sell Trade" "East Texas" handyman OR installer OR repair',
+      'site:facebook.com/groups "Texarkana Buy Sell Trade" handyman repair service needed',
+      'site:facebook.com/groups "Marshall" OR "Henderson" "buy sell" handyman repair install',
+      'site:facebook.com/groups "East Texas" "BST" handyman repair install service 2025',
+      'site:facebook.com/groups "Camp County" OR "Titus County" buy sell handyman repair',
+      'site:facebook.com/groups "Upshur County" OR "Gregg County" buy sell handyman service',
+    ],
+  },
+  {
+    name:"East TX Facebook Groups — Home & Neighborhood", emoji:"🏘️", virtual:false, category:"Facebook",
+    searches:[
+      'site:facebook.com/groups "Tyler Texas Homeowners" handyman repair install needed 2025',
+      'site:facebook.com/groups "Longview Homeowners" OR "Longview Neighbors" handyman repair',
+      'site:facebook.com/groups "East Texas Homeowners" repair OR install OR handyman need help',
+      'site:facebook.com/groups "Texarkana Homeowners" OR "Texarkana Neighbors" handyman repair',
+      'site:facebook.com/groups "Shreveport" homeowners OR neighbors handyman repair install',
+      'site:facebook.com/groups "Camp County" OR "Pittsburg TX" neighbors handyman repair install',
+      'site:facebook.com/groups "East Texas Moms" handyman OR repair OR fix need help recommend',
+      'site:facebook.com/groups "East Texas Real Estate" repair OR handyman OR fix needed',
+    ],
+  },
+  {
+    name:"East TX Facebook Groups — General Community", emoji:"💬", virtual:false, category:"Facebook",
+    searches:[
+      'site:facebook.com/groups "Tyler TX" "anyone recommend" OR "ISO" handyman repair install',
+      'site:facebook.com/groups "Longview TX" "anyone recommend" OR "ISO" handyman install repair',
+      'site:facebook.com/groups "East Texas" "anyone know" handyman OR repair OR installer 2025',
+      'site:facebook.com/groups "Texarkana" "anyone know" OR "ISO" handyman repair install',
+      'site:facebook.com/groups "Pittsburg" OR "Daingerfield" OR "Hughes Springs" handyman repair',
+      'site:facebook.com/groups "Marshall TX" "anyone know" OR "ISO" handyman repair install',
+      'site:facebook.com/groups "Nacogdoches" OR "Lufkin" handyman OR repair ISO recommend 2025',
+      'site:facebook.com/groups "Mineola" OR "Gilmer" OR "Winnsboro" handyman repair install',
+    ],
+  },
 
+  // ══ GOOGLE MAPS Q&A — QUESTIONS ON COMPETITOR LISTINGS ═══════════════════════
+  {
+    name:"Google Maps Q&A — Competitor Listings East TX", emoji:"📍", virtual:false, category:"Google",
+    searches:[
+      'site:google.com/maps "handyman" "Tyler TX" reviews OR questions 2025',
+      'site:google.com/maps "handyman" "Longview TX" reviews OR questions 2025',
+      '"Google Maps" "handyman" "East Texas" reviews questions 2025',
+      '"handyman Tyler TX" OR "handyman Longview TX" google reviews "too expensive" OR "overpriced" 2025',
+      '"handyman Texarkana" google reviews "too expensive" OR "overpriced" OR "not available" 2025',
+      '"handyman Marshall TX" OR "handyman Pittsburg TX" google "questions" OR "Q&A" 2025',
+      '"handyman" "East Texas" google maps review "looking for" OR "recommend" OR "alternative" 2025',
+      '"electrician" OR "plumber" Tyler OR Longview google "too expensive" need handyman instead',
+    ],
+  },
+  {
+    name:"Google Reviews — People Unhappy With Competitors", emoji:"⭐", virtual:false, category:"Google",
+    searches:[
+      '"handyman" "Tyler" OR "Longview" google review "never showed" OR "no call" OR "ghosted" 2025',
+      '"handyman" "East Texas" review "too expensive" OR "overpriced" OR "charged too much" 2025',
+      '"handyman" "Texarkana" OR "Marshall" review "bad experience" OR "disappointed" 2025',
+      '"handyman" "Tyler TX" OR "Longview TX" "still looking" OR "need someone else" review',
+      '"contractor" East Texas google "never finished" OR "walked off" OR "left the job" 2025',
+      '"handyman" East Texas "1 star" OR "would not recommend" OR "look elsewhere" 2025',
+      '"Angi" OR "Thumbtack" "East Texas" "bad experience" OR "never showed" OR "too expensive" 2025',
+      '"HomeAdvisor" East Texas handyman "never showed" OR "overpriced" OR "disappointed" 2025',
+    ],
+  },
+
+  // ══ HOUZZ, PORCH, BARK, HOMEGUIDE ════════════════════════════════════════════
+  {
+    name:"Houzz — East TX Project Requests", emoji:"🏡", virtual:false, category:"LeadSites",
+    searches:[
+      'site:houzz.com "Tyler TX" OR "Longview TX" handyman OR repair OR install project 2025',
+      'site:houzz.com "East Texas" handyman OR installation OR repair request 2025',
+      'site:houzz.com "Texarkana" OR "Marshall TX" handyman OR repair project 2025',
+      'site:houzz.com "Shreveport" OR "Bossier City" handyman OR repair project 2025',
+      'site:houzz.com "Tyler" OR "Longview" "ceiling fan" OR "faucet" OR "TV mount" project',
+      'site:houzz.com "East Texas" "need a handyman" OR "looking for" OR "recommend" 2025',
+      '"houzz" East Texas handyman installer recommendation 2025',
+    ],
+  },
+  {
+    name:"Porch.com — East TX Leads", emoji:"🪴", virtual:false, category:"LeadSites",
+    searches:[
+      'site:porch.com "Tyler TX" OR "Longview TX" handyman OR repair OR install 2025',
+      'site:porch.com "Texarkana TX" OR "Marshall TX" handyman OR repair 2025',
+      'site:porch.com "East Texas" handyman OR repair OR installation request 2025',
+      'site:porch.com "Pittsburg TX" OR "Camp County" handyman OR repair 2025',
+      'site:porch.com "Shreveport LA" OR "Bossier City LA" handyman OR repair 2025',
+      '"porch.com" East Texas handyman installer lead 2025',
+      '"porch" "Tyler" OR "Longview" handyman repair install request 2025',
+    ],
+  },
+  {
+    name:"Bark.com — East TX Service Requests", emoji:"🐶", virtual:false, category:"LeadSites",
+    searches:[
+      'site:bark.com "Tyler TX" OR "Longview TX" handyman OR repair OR install 2025',
+      'site:bark.com "Texarkana" OR "Marshall TX" handyman OR repair 2025',
+      'site:bark.com "East Texas" handyman OR installer OR repair request 2025',
+      'site:bark.com "Shreveport" OR "Bossier City" handyman OR repair 2025',
+      '"bark.com" East Texas handyman installer request lead 2025',
+      '"bark" "Tyler" OR "Longview" handyman repair install 2025',
+    ],
+  },
+  {
+    name:"HomeGuide & Fixr — East TX Requests", emoji:"📋", virtual:false, category:"LeadSites",
+    searches:[
+      'site:homeguide.com "Tyler TX" OR "Longview TX" handyman OR repair OR install 2025',
+      'site:homeguide.com "Texarkana" OR "Marshall TX" handyman OR repair 2025',
+      'site:homeguide.com "East Texas" handyman OR install OR repair request 2025',
+      'site:fixr.com "Tyler TX" OR "Longview TX" handyman OR repair cost estimate 2025',
+      'site:fixr.com "East Texas" OR "Texarkana" handyman OR repair cost 2025',
+      '"homeguide" East Texas handyman installer request 2025',
+      '"HomeGuide" "Tyler" OR "Longview" handyman repair install 2025',
+    ],
+  },
+
+  // ══ ALIGNABLE — SMALL BIZ REFERRAL NETWORK / GCS LOOKING FOR SUBS ════════════
+  {
+    name:"Alignable — East TX GC & Business Referrals", emoji:"🤝", virtual:false, category:"Alignable",
+    searches:[
+      'site:alignable.com "Tyler TX" handyman OR installer OR repair referral 2025',
+      'site:alignable.com "Longview TX" handyman OR installer OR repair 2025',
+      'site:alignable.com "Texarkana" OR "Marshall TX" handyman OR contractor 2025',
+      'site:alignable.com "East Texas" handyman OR installer OR subcontractor 2025',
+      'site:alignable.com "Shreveport" OR "Bossier City" handyman OR contractor 2025',
+      '"alignable" "East Texas" handyman OR installer referral partner 2025',
+      '"alignable" "Tyler" OR "Longview" contractor handyman subcontractor 2025',
+    ],
+  },
+  {
+    name:"Alignable — GCs & Property Managers Needing Subs", emoji:"🏗️", virtual:false, category:"Alignable",
+    searches:[
+      'site:alignable.com "Tyler" OR "Longview" "general contractor" OR "property manager" subcontractor 2025',
+      'site:alignable.com "East Texas" "looking for" subcontractor OR installer OR handyman',
+      'site:alignable.com "Texarkana" general contractor property manager subcontractor 2025',
+      '"alignable" "East Texas" "need a subcontractor" OR "need a handyman" OR "looking for installer"',
+      '"alignable" Tyler OR Longview OR Marshall general contractor referral handyman sub',
+      '"alignable" "East Texas" property management maintenance vendor referral 2025',
+    ],
+  },
+
+  // ══ DIY FAIL — HOMEOWNERS WHO TRIED AND GAVE UP ══════════════════════════════
+  {
+    name:"DIY Failed — Gave Up, Ready to Hire", emoji:"😤", virtual:false, category:"DIYFail",
+    searches:[
+      '"tried to fix it myself" OR "tried to install it myself" "East Texas" OR "Tyler" OR "Longview" need help',
+      '"watched the YouTube video" OR "followed the instructions" still need help "East Texas" OR "Tyler"',
+      '"bigger job than I thought" OR "in over my head" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana"',
+      'site:reddit.com "East Texas" OR "Tyler TX" OR "Longview TX" "gave up" OR "too hard" fix repair install',
+      'site:nextdoor.com "Tyler" OR "Longview" OR "Pittsburg" "tried" "didnt work" OR "gave up" repair fix',
+      'site:facebook.com/groups "East Texas" "tried" "in over my head" OR "bigger than I thought" repair',
+      '"made it worse" OR "now its broken" "East Texas" OR "Tyler" OR "Longview" fix repair help',
+      '"should have hired someone" "East Texas" OR "Tyler" OR "Longview" repair fix handyman',
+      '"not as easy as it looks" OR "harder than I thought" "East Texas" OR "Tyler" repair install',
+    ],
+  },
+  {
+    name:"DIY Failed — Specific Jobs Gone Wrong", emoji:"🔩", virtual:false, category:"DIYFail",
+    searches:[
+      '"stripped the screw" OR "cracked the tile" OR "broke the pipe" "East Texas" OR "Tyler" OR "Longview" help',
+      '"ceiling fan wont work" OR "fan just hums" OR "fan wobbles" "East Texas" OR "Tyler" OR "Longview" fix',
+      '"faucet still leaks" OR "still dripping" after fix "East Texas" OR "Tyler" OR "Longview"',
+      '"drywall cracked" OR "patch looks bad" OR "wall looks terrible" "East Texas" OR "Tyler" help',
+      '"IKEA instructions" OR "Wayfair instructions" confused OR wrong OR missing "East Texas" OR "Tyler"',
+      'site:reddit.com "East Texas" OR "Tyler" OR "Longview" DIY "went wrong" OR "messed up" OR "failed"',
+      'site:nextdoor.com "Tyler" OR "Longview" OR "East Texas" "tried to" "now" "not working" OR "worse"',
+      '"outlet sparks" OR "breaker trips" OR "wiring wrong" "East Texas" OR "Tyler" OR "Longview" help',
+    ],
+  },
+
+  // ══ LANDLORDS & PROPERTY MANAGERS — STEADY REPEAT WORK ══════════════════════
+  {
+    name:"Landlords Needing Repairs — East TX", emoji:"🏠", virtual:false, category:"Landlord",
+    searches:[
+      'site:reddit.com/r/Landlord "East Texas" OR "Tyler TX" OR "Longview TX" repair maintenance handyman',
+      'site:reddit.com/r/realestateinvesting "East Texas" OR "Tyler" OR "Longview" maintenance handyman',
+      'site:facebook.com/groups "East Texas Landlords" OR "Tyler Landlords" repair maintenance handyman',
+      'site:facebook.com/groups "East Texas Real Estate Investors" maintenance repair handyman',
+      '"landlord" "East Texas" OR "Tyler" OR "Longview" "need a handyman" OR "reliable maintenance" 2025',
+      '"rental property" "East Texas" OR "Tyler" OR "Longview" repair maintenance handyman 2025',
+      '"tenant called" OR "tenant complained" "East Texas" OR "Tyler" OR "Longview" repair handyman',
+      '"turnover" OR "make ready" "East Texas" OR "Tyler" OR "Longview" handyman repair 2025',
+      '"between tenants" OR "unit turnover" East Texas Tyler Longview repair handyman',
+    ],
+  },
+  {
+    name:"Property Managers — East TX Vendor Search", emoji:"🗝️", virtual:false, category:"Landlord",
+    searches:[
+      '"property manager" "East Texas" OR "Tyler" OR "Longview" "looking for" OR "need" handyman vendor',
+      '"property management" "East Texas" OR "Tyler" OR "Longview" maintenance vendor handyman 2025',
+      'site:alignable.com "Tyler" OR "Longview" OR "Texarkana" property management maintenance vendor',
+      'site:linkedin.com "property manager" "Tyler TX" OR "Longview TX" OR "Texarkana" maintenance',
+      '"preferred vendor" "East Texas" OR "Tyler" OR "Longview" handyman maintenance apply 2025',
+      '"HOA" "East Texas" OR "Tyler" OR "Longview" maintenance repair vendor handyman 2025',
+      '"Buildium" OR "AppFolio" "East Texas" maintenance vendor handyman repair 2025',
+      'site:facebook.com/groups "East Texas Landlords" OR "Tyler Real Estate" vendor maintenance repair',
+      '"make ready" handyman "East Texas" OR "Tyler" OR "Longview" reliable fast 2025',
+    ],
+  },
+  {
+    name:"Airbnb & Short-Term Rental Hosts — East TX", emoji:"🛎️", virtual:false, category:"Landlord",
+    searches:[
+      'site:reddit.com/r/airbnb "East Texas" OR "Tyler TX" OR "Longview TX" repair maintenance handyman',
+      'site:reddit.com/r/airbnb "Lake Fork" OR "Lake Bob Sandlin" OR "Lake Cypress Springs" repair maintenance',
+      '"Airbnb host" "East Texas" OR "Tyler" OR "Longview" OR "Lake Fork" handyman repair turnover',
+      '"VRBO host" "East Texas" OR lake handyman repair maintenance 2025',
+      'site:facebook.com/groups "East Texas Airbnb" OR "East Texas Short Term Rental" handyman repair',
+      '"between guests" OR "guest damaged" "East Texas" OR "Tyler" OR "Longview" repair handyman',
+      '"lake house" OR "cabin rental" "East Texas" repair maintenance handyman 2025',
+      '"short term rental" "East Texas" OR "Tyler" OR "Longview" maintenance vendor handyman',
+    ],
+  },
+
+  // ══ PRICE SHOPPERS — GOT A QUOTE, THOUGHT IT WAS TOO EXPENSIVE ═══════════════
+  {
+    name:"Sticker Shock — Too Expensive Quote", emoji:"💸", virtual:false, category:"PriceShopper",
+    searches:[
+      '"quote was too high" OR "quoted too much" handyman "East Texas" OR "Tyler" OR "Longview" 2025',
+      '"how much should it cost" OR "is this price normal" handyman "East Texas" OR "Tyler" OR "Longview"',
+      '"got a quote" "seems high" OR "seems expensive" OR "too much" "East Texas" OR "Tyler" OR "Longview"',
+      '"Angi quote" OR "Thumbtack quote" "too expensive" OR "too high" "East Texas" OR "Tyler" 2025',
+      'site:reddit.com "East Texas" OR "Tyler" OR "Longview" handyman "is this too much" OR "fair price"',
+      'site:nextdoor.com "Tyler" OR "Longview" OR "Pittsburg" handyman price quote "too high" OR "seems like a lot"',
+      '"overpriced" OR "rip off" handyman "East Texas" OR "Tyler" OR "Longview" 2025',
+      '"second opinion" OR "second quote" handyman "East Texas" OR "Tyler" OR "Longview" 2025',
+    ],
+  },
+  {
+    name:"Price Comparison Shoppers East TX", emoji:"🔍", virtual:false, category:"PriceShopper",
+    searches:[
+      '"how much does it cost" handyman "Tyler TX" OR "Longview TX" OR "East Texas" 2025',
+      '"average cost" OR "typical cost" handyman repair "East Texas" OR "Tyler" OR "Longview"',
+      '"cheapest handyman" OR "affordable handyman" "East Texas" OR "Tyler" OR "Longview" 2025',
+      '"best price" handyman "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" 2025',
+      'site:nextdoor.com "Tyler" OR "Longview" OR "East Texas" "anyone cheaper" OR "better price" handyman',
+      'site:facebook.com/groups "East Texas" "cheaper" OR "affordable" handyman repair install',
+      '"cost to install" OR "cost to fix" "East Texas" OR "Tyler" OR "Longview" handyman 2025',
+      '"HomeAdvisor estimate" OR "Thumbtack estimate" East Texas handyman "too high" 2025',
+    ],
+  },
 ];
 
 
@@ -2592,6 +2845,34 @@ const OUTREACH_SCRIPTS = {
   Subcontract: {
     subject: "Local installer available — East Texas — looking to partner",
     message: `Hi! I'm Dean with Dean's Handyman Service in Pittsburg TX (East Texas / ArkLaTex area). I'm an experienced handyman and installer looking to join your installer network or subcontract. I do Starlink, smart home, TV mounting, appliances, flooring, general repairs and more. Insured, reliable, fast. Would love to talk. Call or text: ${PHONE} or visit ${WEBSITE}`
+  },
+  Facebook: {
+    subject: "Local handyman here — saw you were looking",
+    message: `Hi! I'm Dean with Dean's Handyman Service in East Texas (Pittsburg TX area). I saw you were looking for help and wanted to reach out. I do repairs, installations, furniture assembly, Starlink, TV mounting and more — affordable and reliable. Call or text: ${PHONE}`
+  },
+  Google: {
+    subject: "Local handyman — alternative to that quote",
+    message: `Hi! I'm Dean with Dean's Handyman Service in East Texas. I'm local, affordable, and reliable — often a better option than the big names. Whatever you need done, give me a call: ${PHONE} or visit ${WEBSITE}`
+  },
+  LeadSites: {
+    subject: "Local handyman available — East Texas",
+    message: `Hi! I'm Dean with Dean's Handyman Service serving East Texas, Texarkana, Shreveport and the ArkLaTex area. I do all types of repairs, installations, and handyman work at affordable prices. Call or text: ${PHONE}`
+  },
+  Alignable: {
+    subject: "Local handyman looking to partner with contractors",
+    message: `Hi! I'm Dean with Dean's Handyman Service in Pittsburg TX (East Texas / ArkLaTex). I'm an experienced handyman and installer looking to build relationships with GCs and property managers. Reliable, affordable, fast turnaround. Let's connect: ${PHONE} or ${WEBSITE}`
+  },
+  DIYFail: {
+    subject: "I can finish that for you — local handyman",
+    message: `Hi! I'm Dean, a local handyman in East Texas. Sounds like the project got a little complicated — no worries, happens to everyone! I can come finish it up for you quickly and affordably. Call or text me: ${PHONE}`
+  },
+  Landlord: {
+    subject: "Reliable handyman for your rental properties",
+    message: `Hi! I'm Dean with Dean's Handyman Service in East Texas. I work with landlords and property managers for repairs, make-readies, and ongoing maintenance — fast turnaround, fair pricing, you can count on me to show up. Call or text: ${PHONE} or visit ${WEBSITE}`
+  },
+  PriceShopper: {
+    subject: "Get a second opinion — local handyman, fair prices",
+    message: `Hi! I'm Dean with Dean's Handyman Service in East Texas. If you got a quote that seemed high, I'd be happy to give you a second opinion. I'm local, affordable, and straightforward about pricing. Call or text: ${PHONE}`
   },
   default: {
     subject: "Local handyman here to help",
@@ -2965,7 +3246,11 @@ async function sendDailyDigest() {
   const ranch    = recent.filter(l=>l.category==='Ranch/Farm');
   const biz      = recent.filter(l=>l.category==='Business');
   const storm    = recent.filter(l=>l.category==='Storm');
-  const subcon   = recent.filter(l=>l.category==='Subcontract');
+  const subcon      = recent.filter(l=>l.category==='Subcontract');
+  const fbLeads     = recent.filter(l=>l.category==='Facebook');
+  const diyFail     = recent.filter(l=>l.category==='DIYFail');
+  const landlords   = recent.filter(l=>l.category==='Landlord');
+  const priceshop   = recent.filter(l=>l.category==='PriceShopper');
 
   // Group by category
   const byCat = {};
@@ -2979,8 +3264,8 @@ async function sendDailyDigest() {
   const uc = u=>u==='immediate'?'#dc2626':u==='this week'?'#d97706':'transparent';
   const ul = u=>u==='immediate'?'⚡NOW':u==='this week'?'📅WK':'';
 
-  const catOrder = ['Subcontract','Internet','New Homeowner','Real Estate','Ranch/Farm','Business','Storm','Handyman','Assembly','Installation','Hyperlocal','Permits','Seasonal','Social','Lead Platforms','Specialty','Tech','Smart Home','Virtual','New Mover','Other'];
-  const catEmoji = {Subcontract:'🔧',Internet:'📡',['New Homeowner']:'🏠',['Real Estate']:'🏡',['Ranch/Farm']:'🤠',Business:'🏪',Storm:'⛈️',Handyman:'🔨',Assembly:'📦',Installation:'⚙️',Hyperlocal:'📍',Permits:'📋',Seasonal:'🌸',['Lead Platforms']:'📌',Social:'👥',Specialty:'♿',Tech:'📷',['Smart Home']:'🏠',Virtual:'💻',['New Mover']:'🚚',Other:'📋'};
+  const catOrder = ['Subcontract','Facebook','DIYFail','Landlord','PriceShopper','Google','Alignable','LeadSites','Internet','New Homeowner','Real Estate','Ranch/Farm','Business','Storm','Handyman','Assembly','Installation','Hyperlocal','Permits','Seasonal','Social','Lead Platforms','Specialty','Tech','Smart Home','Virtual','New Mover','Other'];
+  const catEmoji = {Subcontract:'🔧',Facebook:'👥',DIYFail:'😤',Landlord:'🏠',PriceShopper:'💸',Google:'📍',Alignable:'🤝',LeadSites:'🏡',Internet:'📡',['New Homeowner']:'🏠',['Real Estate']:'🏡',['Ranch/Farm']:'🤠',Business:'🏪',Storm:'⛈️',Handyman:'🔨',Assembly:'📦',Installation:'⚙️',Hyperlocal:'📍',Permits:'📋',Seasonal:'🌸',['Lead Platforms']:'📌',Social:'👥',Specialty:'♿',Tech:'📷',['Smart Home']:'🏠',Virtual:'💻',['New Mover']:'🚚',Other:'📋'};
 
   const catBlocks = catOrder.filter(c=>byCat[c]&&byCat[c].length).map(cat=>{
     const leads = byCat[cat];
@@ -3062,6 +3347,18 @@ ${recent.length===0
   </div>`:''}
   ${subcon.length?`<div style="background:#f0fdf4;border:2px solid #4ade80;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center;font-size:13px">
     <b style="color:#166534">🔧 ${subcon.length} SUBCONTRACT LEADS — Companies looking for local installers. Steady recurring work. Apply today.</b>
+  </div>`:''}
+  ${diyFail.length?`<div style="background:#fef9c3;border:2px solid #fde047;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center;font-size:13px">
+    <b style="color:#854d0e">😤 ${diyFail.length} DIY FAIL LEADS — They tried it themselves and failed. Already motivated to hire someone. Call today.</b>
+  </div>`:''}
+  ${landlords.length?`<div style="background:#f0f9ff;border:2px solid #38bdf8;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center;font-size:13px">
+    <b style="color:#0369a1">🏠 ${landlords.length} LANDLORD LEADS — Repeat work, multiple properties. These customers are worth thousands per year.</b>
+  </div>`:''}
+  ${priceshop.length?`<div style="background:#fdf4ff;border:2px solid #e879f9;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center;font-size:13px">
+    <b style="color:#86198f">💸 ${priceshop.length} PRICE SHOPPER LEADS — Got a high quote and are looking for alternatives. Easy win — just be cheaper.</b>
+  </div>`:''}
+  ${fbLeads.length?`<div style="background:#eff6ff;border:2px solid #93c5fd;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center;font-size:13px">
+    <b style="color:#1d4ed8">👥 ${fbLeads.length} FACEBOOK GROUP LEADS — Local East TX groups. These people want someone nearby — that's you.</b>
   </div>`:''}\n  ${needFollowUp.length?`<div style="background:#fdf4ff;border:2px solid #c084fc;border-radius:12px;padding:14px;margin-bottom:12px">
     <div style="text-align:center;font-size:13px;font-weight:700;color:#7e22ce;margin-bottom:10px">
       ⏰ ${needFollowUp.length} LEAD${needFollowUp.length>1?'S':''} WAITING ON YOU — Haven't been followed up on yet
