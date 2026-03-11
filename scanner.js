@@ -123,7 +123,7 @@ function getThisRunTargets() {
   }
 
   return { zone, region, services: svcs };
-}
+} 'last 30 days'
 
 // ─── 50+ SERVICE CATEGORIES ───────────────────────────────────────────────────
 const SERVICES = [
