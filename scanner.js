@@ -93,15 +93,36 @@ const ZONES = [
 const ROTATION = [];
 ZONES.forEach(z=>{ for(let i=0;i<z.weight;i++) ROTATION.push(z); });
 
+// ── PRIORITY SERVICES — Dean's money makers ──────────────────────────────────
+// These run EVERY scan — at least 1 guaranteed per run, rotating through the list
+const PRIORITY_CATEGORIES = new Set([
+  'Internet', 'Smart Home', 'Tech', 'Subcontract'
+]);
+
 function getThisRunTargets() {
   const slot   = Math.floor(Date.now() / (30 * 60 * 1000));
   const zone   = ROTATION[slot % ROTATION.length];
   const region = zone.regions[slot % zone.regions.length];
-  const svcs   = [];
-  for(let i=0;i<3;i++) svcs.push(SERVICES[(slot*7 + i*11) % SERVICES.length]);
-  // Deduplicate
+
+  // Split services into priority (money makers) and general
+  const priority = SERVICES.filter(s => PRIORITY_CATEGORIES.has(s.category));
+  const general  = SERVICES.filter(s => !PRIORITY_CATEGORIES.has(s.category));
+
   const seen = new Set();
-  return { zone, region, services: svcs.filter(s=>{ if(seen.has(s.name)) return false; seen.add(s.name); return true; }) };
+  const svcs = [];
+
+  // Always pick 2 priority services per scan (rotating through them)
+  const p1 = priority[(slot * 3)     % priority.length];
+  const p2 = priority[(slot * 3 + 1) % priority.length];
+  [p1, p2].forEach(s => { if (!seen.has(s.name)) { seen.add(s.name); svcs.push(s); } });
+
+  // Fill remaining slot with general services
+  for (let i = 0; svcs.length < 3; i++) {
+    const s = general[(slot * 7 + i * 11) % general.length];
+    if (!seen.has(s.name)) { seen.add(s.name); svcs.push(s); }
+  }
+
+  return { zone, region, services: svcs };
 }
 
 // ─── 50+ SERVICE CATEGORIES ───────────────────────────────────────────────────
@@ -111,82 +132,67 @@ const SERVICES = [
   {
     name:"Starlink Installation", emoji:"🛰️", virtual:false, category:"Internet",
     searches:[
-      '"starlink" install OR mount OR setup Texas OR Arkansas OR Louisiana OR Oklahoma need help',
-      '"just got starlink" OR "starlink arrived" OR "starlink kit" install setup help',
-      '"starlink" "need someone" OR "need help" OR "hire" install mount 2025 OR 2026',
-      'site:reddit.com/r/Starlink "installer" OR "installation" OR "help installing" 2025',
-      'site:reddit.com/r/Starlink "just got" OR "finally got" OR "arrived today" mount help',
-      'site:craigslist.org Texas OR Arkansas OR Louisiana OR Oklahoma "starlink" install',
-      '"anyone install starlink" OR "someone install starlink" "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
-      'site:facebook.com "starlink" install help Texas OR Arkansas OR Louisiana 2025',
-      '"starlink" "pole mount" OR "roof mount" OR "J-mount" OR "tree mount" install Texas',
-      '"starlink" confused OR hard OR difficult install setup help 2025',
-      'site:nextdoor.com "starlink" install OR setup help recommend',
-      '"starlink" rural Texas OR Oklahoma OR Arkansas internet setup affordable',
-      '"starlink RV" OR "starlink portable" install setup help',
-      '"starlink business" OR "starlink priority" install Texas help',
-      'site:thumbtack.com "starlink installation" Texas OR nearby',
-      'site:angi.com "starlink installation" Texas request',
+      'site:nextdoor.com "starlink" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "anyone install" OR "recommend" OR "need help"',
+      'site:facebook.com/groups "starlink" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "need someone" OR "anyone install" OR "just got"',
+      '"just got starlink" OR "starlink arrived" OR "starlink kit" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" need help install mount',
+      '"anyone install starlink" OR "can someone install starlink" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      'site:reddit.com/r/Starlink "Tyler TX" OR "Longview TX" OR "East Texas" OR "Texarkana" install help',
+      'site:reddit.com/r/Starlink "just got" OR "finally got" OR "arrived today" mount help confused',
+      'site:craigslist.org texarkana OR tyler OR longview OR shreveport "starlink" install mount setup',
+      '"starlink" "pole mount" OR "roof mount" OR "J-mount" cant figure out help "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"starlink" "in over my head" OR "too complicated" OR "need a pro" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"starlink RV" OR "starlink roam" setup help "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"starlink business" OR "starlink priority" setup help "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"starlink" "oilfield" OR "construction site" OR "ranch" internet setup "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"switched to starlink" OR "getting starlink" need installer "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"starlink" wifi setup extend mesh router help "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
     ],
   },
   {
     name:"HughesNet Switchers → Starlink", emoji:"😤", virtual:false, category:"Internet",
     searches:[
-      '"hughesnet" "hate" OR "terrible" OR "slow" OR "awful" Texas OR Arkansas OR Louisiana OR Oklahoma 2025',
-      '"hughesnet" "switching to starlink" OR "switched to starlink" OR "worth switching"',
-      'site:reddit.com "hughesnet" "starlink" OR "switching" OR "alternatives" 2025 OR 2026',
-      '"hughesnet" "data cap" OR "throttled" OR "FAP" OR "buffering" frustrated',
-      '"leaving hughesnet" OR "cancel hughesnet" OR "done with hughesnet" Texas',
-      '"stuck with hughesnet" OR "tired of hughesnet" OR "hughesnet sucks" rural',
-      'site:reddit.com/r/Rural_Internet "hughesnet" problem OR terrible OR slow OR awful 2025',
-      '"hughesnet" "$100" OR "$150" OR "$200" a month "not worth it" OR "too expensive"',
-      '"hughesnet" complaint Texas OR Arkansas OR Oklahoma forum 2025 2026',
-      '"hughesnet" "need something better" OR "any alternatives" rural',
-      'site:twitter.com "hughesnet" terrible OR slow OR hate OR cancel 2025',
-      '"hughesnet" vs "starlink" Texas rural which is better 2025',
-      'site:facebook.com "hughesnet" "switching" OR "recommendations" Texas 2025',
-      '"hughesnet" OR "hughes network" rural internet complaint community forum Texas',
-      '"gen5" hughesnet slow Texas OR rural alternative starlink',
+      'site:facebook.com/groups "hughesnet" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "hate" OR "terrible" OR "switching" OR "alternatives"',
+      'site:nextdoor.com "hughesnet" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "terrible" OR "slow" OR "switching" OR "alternatives"',
+      '"hughesnet" "switching to starlink" OR "switched to starlink" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana"',
+      '"done with hughesnet" OR "canceling hughesnet" OR "tired of hughesnet" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana"',
+      '"hughesnet" "data cap" OR "throttled" OR "buffering" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" frustrated alternatives',
+      'site:reddit.com/r/Rural_Internet "hughesnet" terrible slow "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" alternative 2025',
+      '"hughesnet" "$100" OR "$150" OR "$200" month "not worth it" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana"',
+      '"hughesnet" "anyone switched" OR "worth switching" OR "is starlink worth it" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana"',
+      'site:reddit.com "hughesnet" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" alternatives',
+      '"hughesnet sucks" OR "hughesnet terrible" OR "worst internet" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" starlink',
     ],
   },
   {
     name:"Viasat Switchers → Starlink", emoji:"😡", virtual:false, category:"Internet",
     searches:[
-      '"viasat" "hate" OR "terrible" OR "slow" OR "cancel" Texas OR Arkansas OR Oklahoma 2025',
-      '"viasat" "switching to starlink" OR "switched to starlink" OR "worth it"',
-      'site:reddit.com "viasat" "starlink" switch OR switching OR better 2025 OR 2026',
-      '"viasat" "data cap" OR "throttled" OR "buffering" frustrated rural',
-      '"leaving viasat" OR "cancel viasat" OR "done with viasat"',
-      '"stuck with viasat" OR "tired of viasat" OR "viasat sucks"',
-      'site:reddit.com/r/Rural_Internet "viasat" terrible OR slow OR problem 2025',
-      '"viasat" "$150" OR "$200" OR "$300" "not worth it" OR "too expensive"',
-      '"exede" OR "wildblue" OR "viasat" rural internet complaint Texas 2025',
-      '"viasat" "need something better" OR "alternatives" rural Texas',
-      'site:twitter.com "viasat" terrible OR slow OR hate OR cancel 2025',
-      '"viasat" vs "starlink" Texas rural comparison 2025',
-      'site:facebook.com "viasat" switching OR recommendations Texas 2025',
-      '"viasat" contract OR "early termination" Texas stuck alternatives',
-      '"ViaSat-3" OR "viasat unlimited" still slow rural Texas problem',
+      'site:facebook.com/groups "viasat" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "hate" OR "terrible" OR "switching" OR "alternatives"',
+      'site:nextdoor.com "viasat" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "slow" OR "switching" OR "alternatives" OR "cancel"',
+      '"done with viasat" OR "canceling viasat" OR "tired of viasat" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana"',
+      '"viasat" "switching to starlink" OR "switched to starlink" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana"',
+      '"viasat" "data cap" OR "throttled" OR "buffering" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" frustrated',
+      'site:reddit.com/r/Rural_Internet "viasat" terrible slow "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" 2025',
+      '"viasat" "$150" OR "$200" month "not worth it" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" alternatives',
+      '"viasat contract" OR "early termination fee" stuck "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" alternatives starlink',
+      'site:reddit.com "viasat" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" starlink switch',
+      '"viasat sucks" OR "viasat terrible" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" starlink alternative',
     ],
   },
   {
     name:"Rural Internet Complaints", emoji:"🌾", virtual:false, category:"Internet",
     searches:[
-      '"rural internet" Texas OR Arkansas OR Louisiana OR Oklahoma problem OR terrible OR slow 2025',
-      '"no good internet" OR "no broadband" rural Texas help options 2025',
-      '"satellite internet" OR "fixed wireless" rural Texas options compare',
-      'site:reddit.com "rural Texas" OR "rural Oklahoma" internet slow terrible options 2025',
-      '"no fiber" OR "no cable" rural Texas internet what options',
-      '"cell internet" OR "hotspot" rural Texas "not enough" OR "throttled" OR "too slow"',
-      '"DSL too slow" OR "DSL terrible" rural Texas alternative options',
-      '"off grid internet" OR "remote property" internet Texas options 2025',
-      'site:reddit.com/r/Rural_Internet Texas OR Oklahoma OR Arkansas 2025',
-      '"Elon Musk internet" OR "space internet" rural Texas help setup',
-      '"internet options" rural Texas ZIP OR county 2025',
-      '"T-Mobile Home Internet" OR "Verizon Home Internet" rural TX not working',
-      '"no internet" new construction OR new home Texas rural 2025',
-      'site:facebook.com Texas rural internet group "starlink" OR "recommendations"',
-      '"work from home" rural Texas internet bad slow options',
+      'site:facebook.com/groups "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "internet" "terrible" OR "no good internet" OR "what do yall use"',
+      'site:nextdoor.com "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "internet" "slow" OR "bad" OR "recommendations" OR "what does everyone use"',
+      '"no good internet" OR "no broadband" "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" what options starlink',
+      '"what internet do you use" OR "what internet is available" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" rural',
+      '"anyone know of good internet" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" rural recommendations',
+      'site:reddit.com/r/Rural_Internet "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" 2025',
+      '"T-Mobile Home Internet" not working "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" alternatives starlink',
+      '"hotspot" OR "cell internet" not enough slow "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" alternatives options',
+      '"no internet" new house OR new construction "East Texas" OR "rural Texas" OR "rural Oklahoma" OR "rural Arkansas" OR "rural Louisiana" options starlink',
+      '"work from home" bad internet "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" need better solution starlink',
+      '"Windstream slow" OR "Windstream terrible" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" alternatives starlink',
+      '"Suddenlink" OR "Optimum" bad internet "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" alternatives starlink',
     ],
   },
   {
@@ -798,7 +804,7 @@ const SERVICES = [
     ],
   },
   {
-    name:"Security Cameras & Smart Home", emoji:"📷", virtual:true, category:"Tech",
+    name:"Security Cameras & Smart Home", emoji:"📷", virtual:false, category:"Tech",
     searches:[
       '"security camera" install OR setup help Texas hire affordable',
       '"ring camera" OR "ring doorbell" setup install help confused',
@@ -1247,81 +1253,78 @@ const SERVICES = [
 
   // ══ SMART HOME — FULL EXPANSION ═══════════════════════════════════════════════
   {
-    name:"Smart Doorbells & Video Doorbells", emoji:"🔔", virtual:true, category:"Smart Home",
+    name:"Smart Doorbells & Video Doorbells", emoji:"🔔", virtual:false, category:"Smart Home",
     searches:[
-      '"video doorbell" install OR setup help Texas affordable handyman',
-      '"ring doorbell" install OR setup confused help Texas',
-      '"nest doorbell" OR "google doorbell" install help Texas',
-      '"arlo doorbell" OR "eufy doorbell" install setup help',
-      '"doorbell camera" wiring OR install Texas affordable',
-      'site:reddit.com "ring doorbell" install help confused wiring 2025',
-      '"doorbell" "no existing wiring" OR "no chime" install help Texas',
-      '"video doorbell" "how to install" OR "need help" 2025',
-      'site:nextdoor.com Texas "doorbell camera" install recommend need',
-      '"ring" OR "nest" doorbell "not working" OR "offline" Texas help',
+      'site:nextdoor.com "doorbell" OR "ring" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "install" OR "recommend" OR "need someone"',
+      'site:facebook.com/groups "ring doorbell" OR "doorbell camera" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "need help" OR "anyone install"',
+      '"anyone install" OR "can someone install" "ring doorbell" OR "doorbell camera" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"ring doorbell" "confused" OR "cant figure out" OR "wiring" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"no existing doorbell" OR "no chime wire" doorbell install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"doorbell camera" "just got" OR "just bought" need help install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"nest doorbell" OR "google doorbell" install help confused "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"video doorbell" not working OR offline OR keeps going offline "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" fix',
+      'site:reddit.com "ring doorbell" install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana"',
+      '"Airbnb" OR "rental property" doorbell camera install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
     ],
   },
   {
-    name:"Smart Thermostats", emoji:"🌡️", virtual:true, category:"Smart Home",
+    name:"Smart Thermostats", emoji:"🌡️", virtual:false, category:"Smart Home",
     searches:[
-      '"smart thermostat" install OR setup help Texas affordable',
-      '"nest thermostat" install OR setup confused help Texas',
-      '"ecobee" install OR setup help Texas affordable handyman',
-      '"honeywell smart" OR "sensi thermostat" install help Texas',
-      '"thermostat" "C wire" OR "common wire" problem install help',
-      'site:reddit.com "smart thermostat" install help "C wire" confused 2025',
-      '"smart thermostat" "no C wire" install help Texas',
-      '"thermostat" not working OR wrong wiring Texas fix help',
-      '"smart thermostat" "heat pump" wiring install Texas help',
-      'site:nextdoor.com Texas "thermostat" install recommend need help',
+      'site:nextdoor.com "thermostat" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "install" OR "recommend" OR "need someone" OR "confused"',
+      'site:facebook.com/groups "nest" OR "ecobee" OR "smart thermostat" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "need help" OR "confused"',
+      '"anyone install" OR "can someone install" "nest thermostat" OR "ecobee" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"C wire" OR "no C wire" smart thermostat install confused help "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"thermostat wiring" confused OR wrong OR dont understand "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"nest thermostat" "not working" OR "blank screen" OR "wrong temp" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" fix',
+      '"heat pump" thermostat wiring confused "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" need help install',
+      '"smart thermostat" "just bought" OR "just got" need help install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      'site:reddit.com "smart thermostat" "East Texas" OR "Tyler" OR "Longview" install confused',
+      '"ecobee" OR "honeywell" thermostat install help "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable',
     ],
   },
   {
-    name:"Smart Lighting & Switches", emoji:"💡", virtual:true, category:"Smart Home",
+    name:"Smart Lighting & Switches", emoji:"💡", virtual:false, category:"Smart Home",
     searches:[
-      '"smart lights" OR "smart bulbs" setup install help Texas',
-      '"smart switch" install OR setup help Texas confused',
-      '"Lutron" OR "Caseta" install setup Texas help affordable',
-      '"Kasa" OR "Leviton" smart switch install help Texas',
-      '"Philips Hue" OR "LIFX" setup help Texas',
-      '"smart dimmer" install help Texas no neutral wire',
-      '"no neutral wire" smart switch install help Texas',
-      'site:reddit.com "smart switch" install "no neutral" help confused 2025',
-      '"under cabinet lighting" OR "accent lighting" install Texas affordable',
-      '"outdoor smart lights" OR "smart landscape lights" install Texas',
-      '"motion sensor light" OR "smart flood light" install Texas',
-      '"smart ceiling fan" install OR "smart fan" setup help Texas',
+      'site:nextdoor.com "smart switch" OR "smart lights" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "recommend" OR "anyone install" OR "confused"',
+      'site:facebook.com/groups "smart switch" OR "smart lights" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "need help" OR "confused" OR "anyone"',
+      '"anyone install" OR "can someone install" "smart switch" OR "smart lights" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"no neutral wire" smart switch install confused "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"Lutron Caseta" OR "Kasa smart switch" confused install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"smart dimmer" "doesnt work" OR confused install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"Philips Hue" OR "smart bulbs" setup confused "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"motion sensor light" OR "smart flood light" install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable help',
+      '"under cabinet lights" OR "smart under cabinet" install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"3 way switch" smart OR dimmer confused install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
     ],
   },
   {
-    name:"Smart Locks & Keypads", emoji:"🔐", virtual:true, category:"Smart Home",
+    name:"Smart Locks & Keypads", emoji:"🔐", virtual:false, category:"Smart Home",
     searches:[
-      '"smart lock" install OR setup help Texas affordable',
-      '"schlage encode" OR "kwikset halo" install help Texas',
-      '"august smart lock" OR "yale smart lock" install help',
-      '"keypad lock" install Texas affordable handyman',
-      '"keyless entry" install OR setup Texas affordable',
-      'site:reddit.com "smart lock" install help confused 2025',
-      '"deadbolt" smart lock install Texas affordable handyman',
-      '"door lock" not working OR install Texas help',
-      '"Airbnb lock" OR "rental lock" install Texas',
-      '"keypad" install Texas vacation rental Airbnb VRBO help',
+      'site:nextdoor.com "smart lock" OR "keypad lock" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "recommend" OR "anyone install" OR "help"',
+      'site:facebook.com/groups "smart lock" OR "keypad" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "need help" OR "anyone install"',
+      '"anyone install" "smart lock" OR "keypad lock" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"Schlage" OR "Kwikset" OR "August" smart lock install confused "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"Airbnb lock" OR "rental keypad" install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help affordable',
+      '"keyless entry" install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable handyman help',
+      '"smart lock" "not pairing" OR "not connecting" OR "wont work" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" fix',
+      '"door lock" replace OR install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable handyman',
+      'site:reddit.com "smart lock" install "East Texas" OR "Tyler" OR "Longview"',
+      '"landlord" keypad OR "smart lock" install rental "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
     ],
   },
   {
-    name:"Smart Home Hubs & Systems", emoji:"🏠", virtual:true, category:"Smart Home",
+    name:"Smart Home Hubs & Systems", emoji:"🏠", virtual:false, category:"Smart Home",
     searches:[
-      '"smart home" setup OR install help Texas affordable',
-      '"google home" OR "amazon echo" setup help Texas',
-      '"alexa" setup OR install help Texas home',
-      '"apple homekit" setup install help Texas',
-      '"home assistant" setup install help Texas',
-      '"samsung smartthings" setup install help Texas',
-      '"z-wave" OR "zigbee" smart home setup help Texas',
-      'site:reddit.com "smart home" setup help beginner Texas 2025',
-      '"whole home automation" install Texas affordable',
-      '"matter" smart home setup help Texas 2025',
-      '"voice control" home setup install Texas help',
+      'site:nextdoor.com "smart home" OR "alexa" OR "google home" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "confused" OR "need help" OR "anyone set up"',
+      'site:facebook.com/groups "smart home" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "need someone" OR "confused" OR "anyone set up"',
+      '"alexa" OR "google home" "not working" OR "wont connect" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help fix',
+      '"smart home" "where do I start" OR "totally lost" OR "overwhelmed" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"just moved in" smart home setup "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" need help configure',
+      '"Home Assistant" OR "smartthings" setup confused "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"smart home" "new house" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help set up affordable',
+      '"everything connected" smart home setup "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable help',
+      '"apple homekit" OR "matter" smart home setup confused "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"whole home automation" setup "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable help install',
     ],
   },
   {
@@ -1342,20 +1345,18 @@ const SERVICES = [
     ],
   },
   {
-    name:"Smart Security Systems", emoji:"🚨", virtual:true, category:"Smart Home",
+    name:"Smart Security Systems", emoji:"🚨", virtual:false, category:"Smart Home",
     searches:[
-      '"security system" install OR setup help Texas affordable',
-      '"ring alarm" setup install help Texas',
-      '"simplisafe" setup install help Texas',
-      '"ADT" OR "vivint" alternative Texas cheaper self install',
-      '"motion sensor" install OR setup Texas help',
-      '"door sensor" OR "window sensor" install Texas help',
-      '"glass break sensor" install Texas help',
-      '"alarm system" self install help Texas confused',
-      'site:reddit.com "home security" self install help Texas 2025',
-      '"security system" "no monthly fee" install Texas help',
-      '"NVR system" OR "CCTV" install help Texas affordable',
-      '"outdoor camera" install Texas weatherproof affordable',
+      'site:nextdoor.com "security camera" OR "security system" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport" "recommend" OR "anyone install"',
+      'site:facebook.com/groups "security camera" OR "ring camera" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "need someone" OR "anyone install"',
+      '"anyone install" OR "can someone install" security cameras "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"ring alarm" OR "simplisafe" setup confused install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"NVR system" OR "CCTV" install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable help',
+      '"outdoor cameras" install weatherproof "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable handyman',
+      '"ADT too expensive" OR "Vivint too expensive" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" alternative self-install help',
+      '"camera" "not recording" OR "offline" OR "wont connect" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" fix',
+      '"break in" OR "got robbed" OR "vandalism" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" need security cameras install',
+      '"rental property" OR "Airbnb" security cameras install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
     ],
   },
   {
@@ -1385,20 +1386,20 @@ const SERVICES = [
     ],
   },
   {
-    name:"Whole Home WiFi & Networking", emoji:"📶", virtual:true, category:"Smart Home",
+    name:"Whole Home WiFi & Networking", emoji:"📶", virtual:false, category:"Smart Home",
     searches:[
-      '"mesh wifi" OR "whole home wifi" setup install Texas help',
-      '"eero" OR "orbi" OR "google wifi" setup help Texas',
-      '"wifi dead zones" OR "bad wifi" Texas fix help',
-      '"ethernet" run OR install Texas affordable handyman',
-      '"wifi extender" OR "wifi booster" setup Texas help',
-      'site:reddit.com "mesh wifi" setup help Texas 2025',
-      '"network" setup home Texas affordable help',
-      '"wifi" not reaching garage OR shop OR barn Texas fix',
-      '"outdoor wifi" OR "wifi to shop" Texas extend help',
-      '"starlink" wifi setup mesh extend Texas help',
-      '"cat6" OR "ethernet cable" run home Texas affordable',
-      '"network closet" OR "patch panel" setup Texas affordable',
+      'site:nextdoor.com "wifi" "dead zones" OR "doesnt reach" OR "bad signal" "Pittsburg" OR "Tyler" OR "Longview" OR "Marshall" OR "Texarkana" OR "Shreveport"',
+      'site:facebook.com/groups "wifi" "doesnt reach" OR "bad signal" OR "need help" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"wifi doesnt reach" OR "no wifi in the shop" OR "no wifi in the barn" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" fix extend',
+      '"dead zone" wifi OR internet "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" fix help extend mesh',
+      '"eero" OR "orbi" OR "google wifi" setup confused help "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
+      '"starlink" wifi "not reaching" OR "need to extend" OR "mesh" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help setup',
+      '"ethernet" run OR install shop OR barn OR garage "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable handyman',
+      '"cat6" OR "network cable" run home office "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable install',
+      '"wifi to my shop" OR "wifi to my barn" OR "wifi outside" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" help',
+      '"whole home wifi" setup install "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable help',
+      '"mesh wifi" confused setup "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" need help install',
+      '"network" setup new home OR new build "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" affordable help',
     ],
   },
   {
@@ -3019,8 +3020,9 @@ async function scanCombo(zone, region, service) {
 
   // Short focused prompt to stay under token limits
   const prompt = `You are a lead hunter for Dean's Handyman Service in ${city} (${region.name}).
-Service: "${service.name}" | Category: ${service.category}
-${zone.zone === 1 ? 'PRIORITY: This is Dean\'s home territory — be aggressive finding leads here.' : ''}
+Dean's SPECIALTY and highest-paying services: Starlink installation, internet setup, WiFi/networking, smart home devices (cameras, doorbells, thermostats, locks, switches), TV mounting, and smart device installation. PRIORITIZE these above all else.
+Service this scan: "${service.name}" | Category: ${service.category}
+${zone.zone === 1 ? 'PRIORITY ZONE: This is Dean\'s home territory within 200 miles of Pittsburg TX. Be aggressive here.' : ''}
 
 WHAT COUNTS AS A LEAD — real people who:
 - Asked "anyone recommend a [handyman/installer]" on Nextdoor or Facebook
@@ -3247,6 +3249,7 @@ async function sendDailyDigest() {
   const biz      = recent.filter(l=>l.category==='Business');
   const storm    = recent.filter(l=>l.category==='Storm');
   const subcon      = recent.filter(l=>l.category==='Subcontract');
+  const techLeads   = recent.filter(l=>['Internet','Smart Home','Tech'].includes(l.category));
   const fbLeads     = recent.filter(l=>l.category==='Facebook');
   const diyFail     = recent.filter(l=>l.category==='DIYFail');
   const landlords   = recent.filter(l=>l.category==='Landlord');
@@ -3333,6 +3336,11 @@ ${recent.length===0
       <b>Tip:</b> Go to GitHub Actions → Run workflow → Run a manual scan right now.
     </div>`
   : `
+  ${techLeads.length?`<div style="background:#0c1a2e;border:2px solid #00d4ff;border-radius:12px;padding:14px;margin-bottom:10px;text-align:center">
+    <div style="font-size:22px">🛰️📶🏠</div>
+    <b style="color:#00d4ff;font-size:14px">MONEY MAKERS — ${techLeads.length} STARLINK / INTERNET / SMART HOME LEADS</b>
+    <div style="color:#7a9cc0;font-size:11px;margin-top:4px">These are Dean's highest-value jobs — Starlink installs, WiFi, smart devices. Call these first.</div>
+  </div>`:''}
   ${immed.length?`<div style="background:#fee2e2;border:2px solid #f87171;border-radius:12px;padding:12px;margin-bottom:10px;text-align:center;font-size:13px">
     <b style="color:#dc2626">⚡ ${immed.length} PEOPLE NEED IMMEDIATE HELP — CALL THESE FIRST THING THIS MORNING</b>
   </div>`:''}
@@ -3384,7 +3392,10 @@ ${recent.length===0
   ${catBlocks}`}
 
 <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px;margin-bottom:12px;font-size:12px;color:#166534;line-height:1.9">
-  <b>💡 Dean's Daily Playbook:</b><br>
+  <b>💡 Dean's Daily Playbook — Money Makers First:</b><br>
+  🛰️ Starlink leads: CALL FIRST — ask "How much do you pay for internet monthly?" Starlink saves most people money AND is faster<br>
+  📶 WiFi/networking leads: Quick $150-300 job — extend to shop/barn/garage, run ethernet, set up mesh<br>
+  🏠 Smart home leads: $75-200/device — cameras, doorbells, thermostats, locks. Easy installs, high value<br>
   🔥 Hot leads: Call within the hour — they are actively shopping right now<br>
   📡 HughesNet/Viasat leads: Ask "How much do you pay monthly?" — Starlink is often cheaper AND faster<br>
   🏠 New homeowner leads: They have a whole list of things to do — big recurring customer opportunity<br>
