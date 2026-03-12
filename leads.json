@@ -1,5 +1,33 @@
 [
   {
+    "title": "Ceiling Fan Wobbling",
+    "snippet": "I have a ceiling fan that wobbles very badly. We have tried a balance kit. We have braced it in",
+    "service": "Ceiling Fan Installation",
+    "serviceEmoji": "🔩",
+    "category": "DIYFail",
+    "isVirtual": false,
+    "source": "Facebook",
+    "platform": "Facebook",
+    "url": "https://www.facebook.com/groups/784314888586050/posts/2580870285597159/",
+    "contactHint": "",
+    "location": "Unknown, Unknown",
+    "region": "Rural West",
+    "zone": 4,
+    "heat": "hot",
+    "heatReason": "Frustrated with current solution",
+    "competitorMention": false,
+    "urgency": "immediate",
+    "estimatedJobValue": "$100-$300",
+    "tags": [
+      "Ceiling Fan",
+      "Installation"
+    ],
+    "posted": "this week",
+    "status": "new",
+    "id": "1773283964018-zle5xq",
+    "foundAt": "2026-03-12T02:52:44.018Z"
+  },
+  {
     "title": "Need a permit to build a porch or deck",
     "snippet": "Grad student looking to build a stand-alone deck, pergola, or porch and needs to know if a permit is required",
     "service": "Reddit — Home Improvement Help Wanted",
