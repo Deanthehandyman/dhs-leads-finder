@@ -1,5 +1,33 @@
 [
   {
+    "title": "DFW Area Home Theater Contractor for Installation or Setup Advice",
+    "snippet": "Hey everyone, any recommendations for a Dallas/Fort Worth, Texas area contractor that can perform home theater wiring installation? For example, I have some surround speaker wiring I would like to run in my attic, then down the wall.",
+    "service": "Home Theater Installation",
+    "serviceEmoji": "📺",
+    "category": "Smart Home",
+    "isVirtual": false,
+    "source": "Reddit",
+    "platform": "Reddit",
+    "url": "https://www.reddit.com/r/hometheater/comments/137w4s6/dfw_area_home_theater_contractor_for_installation/",
+    "contactHint": "",
+    "location": "Dallas, Texas",
+    "region": "Dallas Rural & East DFW",
+    "zone": 1,
+    "heat": "warm",
+    "heatReason": "Shopping around for a contractor",
+    "competitorMention": false,
+    "urgency": "this week",
+    "estimatedJobValue": "unknown",
+    "tags": [
+      "home theater",
+      "installation"
+    ],
+    "posted": "this week",
+    "status": "new",
+    "id": "1773309331299-8ahi80",
+    "foundAt": "2026-03-12T09:55:31.299Z"
+  },
+  {
     "title": "Tesla Wall Charger Installation",
     "snippet": "Who can recommend an electrician to install a Tesla wall charger in Denison, Texas?",
     "service": "EV Chargers & Solar",
