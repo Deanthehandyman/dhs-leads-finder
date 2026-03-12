@@ -1,5 +1,33 @@
 [
   {
+    "title": "Need Better Rural Internet",
+    "snippet": "We’re getting ready to move to Pittsburgh, Texas, in a rural area",
+    "service": "People Working From Home — Need Better Internet",
+    "serviceEmoji": "💻",
+    "category": "Internet",
+    "isVirtual": false,
+    "source": "Facebook",
+    "platform": "Facebook",
+    "url": "https://www.facebook.com/groups/561603227805500/posts/1742744583024686/",
+    "contactHint": "",
+    "location": "Pittsburgh, Texas",
+    "region": "Marshall & Harrison County TX",
+    "zone": 1,
+    "heat": "warm",
+    "heatReason": "Moving to a new area, likely needs internet setup",
+    "competitorMention": false,
+    "urgency": "this week",
+    "estimatedJobValue": "unknown",
+    "tags": [
+      "rural internet",
+      "new move"
+    ],
+    "posted": "this week",
+    "status": "new",
+    "id": "1773302177919-ihgerk",
+    "foundAt": "2026-03-12T07:56:17.919Z"
+  },
+  {
     "title": "Reliable local handyman in Texarkana",
     "snippet": "Looking for a local handyman with a good track record to complete a couple of tasks at our office",
     "service": "Handyman",
