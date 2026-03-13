@@ -4,7 +4,7 @@
 // Facebook · Nextdoor · Twitter/X · Google · Yelp · Forums
 // HughesNet/Viasat · New Homeowners · Ranchers · Farmers · Businesses
 // Mobile Homes · Storm Damage · Veterans · Churches · Lake Houses · RV Parks
-// GOAL: Hundreds of leads per day
+// GOAL: Hundreds of fresh 2026 leads per day
 
 const fs      = require('fs');
 const path    = require('path');
@@ -120,7 +120,7 @@ function getThisRunTargets() {
   return { zone, region, services: svcs };
 }
 
-// ─── 50+ SERVICE CATEGORIES ───────────────────────────────────────────────────
+// ─── 50+ SERVICE CATEGORIES (Cleaned of hardcoded years) ──────────────────────
 const SERVICES = [
   // ══ INTERNET & STARLINK ══════════════════════════════════════════════════════
   {
@@ -572,8 +572,9 @@ function buildHumanQueries(service, region, zone) {
 
 // ─── Search API Call (Tavily) ────────────────────────────────────────────────
 async function tavilySearch(query) {
+  // Professionally strip years so we hit human posts, not SEO spam blogs
   const cleanQ = query
-    .replace(/2025|2026/g, '') 
+    .replace(/\b(2024|2025|2026)\b/g, '') 
     .replace(/\s{2,}/g, ' ')
     .trim();
 
@@ -584,7 +585,7 @@ async function tavilySearch(query) {
       api_key: process.env.TAVILY_API_KEY,
       query: cleanQ,
       search_depth: 'advanced', 
-      days: 14,                 
+      days: 14, // Enforces recent indexing                 
       max_results: 15,          
       include_answer: false,
       exclude_domains: [
@@ -632,16 +633,21 @@ async function scanCombo(zone, region, service) {
 
   console.log(`    📄 Total search context: ${searchContext.length} chars`);
 
-  const prompt = `You are a lead hunter for Dean's Handyman Service in ${city} (${region.name}).
+  // DYNAMIC DATE INJECTION: The LLM needs to know exactly what today is.
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  const prompt = `You are a professional lead scraper for Dean's Handyman Service in ${city} (${region.name}).
+TODAY'S DATE IS: ${today}.
 
 WHAT COUNTS AS A REAL LEAD (Look for FIRST-PERSON language: "I need", "my roof", "we are looking for"):
-- Real humans asking for recommendations, quotes, or help within the LAST 14 DAYS.
+- Real humans asking for recommendations, quotes, or help STRICTLY within the LAST 14 DAYS.
 - People venting about a problem they can't fix themselves (IKEA box, bad HughesNet, broken tech).
 - Truncated snippets that strongly imply a homeowner looking for local services (e.g., "Looking for a guy to...").
 - People saying "just moved in" or "just bought a house".
 
 WHAT TO REJECT (DO NOT INCLUDE THESE):
-- ANYTHING OLDER THAN 14 DAYS. If the snippet says "3 weeks ago", "1 month ago", "2024", etc., REJECT IT IMMEDIATELY.
+- ANYTHING FROM 2025 OR EARLIER. If the snippet implies it is from 2025, 2024, or older, REJECT IT IMMEDIATELY.
+- ANYTHING OLDER THAN 14 DAYS from today's date (${today}). 
 - Businesses advertising their own services (e.g., "We offer the best plumbing in town").
 - News articles, business directory listings, generic blog posts, or national job postings.
 
@@ -652,7 +658,7 @@ IMPORTANT: If there are no real humans asking for help in the last 14 days, retu
 Do not invent or guess leads. 
 
 Return ONLY a JSON array (up to 5 leads). Each:
-{"title":"what they need","snippet":"Exact description of their situation","service":"${service.name}","serviceEmoji":"${service.emoji}","category":"${service.category}","isVirtual":${service.virtual},"source":"platform name","platform":"platform name","url":"url or empty","contactHint":"email/phone or empty","location":"City, State","region":"${region.name}","zone":${zone.zone},"heat":"hot|warm|cold","heatReason":"Why this is hot (e.g., 'First-person plea for help, very recent')","competitorMention":true/false,"urgency":"immediate|this week|flexible|unknown","estimatedJobValue":"$X-$Y or unknown","tags":["tag1","tag2"],"posted":"EXACT age based on snippet (e.g., '2 days ago') - MUST BE UNDER 14 DAYS","status":"new"}
+{"title":"what they need","snippet":"Exact description of their situation","service":"${service.name}","serviceEmoji":"${service.emoji}","category":"${service.category}","isVirtual":${service.virtual},"source":"platform name","platform":"platform name","url":"url or empty","contactHint":"email/phone or empty","location":"City, State","region":"${region.name}","zone":${zone.zone},"heat":"hot|warm|cold","heatReason":"Why this is hot (e.g., 'First-person plea for help, very recent')","competitorMention":true/false,"urgency":"immediate|this week|flexible|unknown","estimatedJobValue":"$X-$Y or unknown","tags":["tag1","tag2"],"posted":"EXACT age based on snippet (e.g., '2 days ago', 'March 10') - MUST BE UNDER 14 DAYS","status":"new"}
 
 hot = actively looking RIGHT NOW, frustrated with competitor, urgent
 warm = has the problem, shopping around or general question
@@ -671,7 +677,7 @@ JSON only. No markdown. No explanation. Ensure all quotes inside values are prop
       body: JSON.stringify({
         model:       'llama-3.3-70b-versatile',
         max_tokens:  3000,
-        temperature: 0.3, 
+        temperature: 0.2, // Ultra-strict adherence to instructions
         messages: [{ role: 'user', content: prompt }],
       }),
     });
