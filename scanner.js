@@ -1,8 +1,7 @@
-// Dean's Tech & Network Solutions — V10 24/7 CONTINUOUS HUNTER
+// Dean's Tech & Network Solutions — V13 24/7 FULL DELIVERY EDITION
 // Pittsburg TX 75686 | Spiral from 75686 outward
 // FOCUS: Starlink, WiFi, Smart Home, Security Cameras, TV Mounting, Thermostats
-// MEMORY: Uses seen.json to NEVER return a lead you've already seen.
-// BEHAVIOR: Runs 24/7. Hunts for leads, sleeps, wakes up, repeats.
+// BEHAVIOR: Runs 24/7. Hunts for 5 leads, Pushes to Sheets, Emails you, Sleeps, Repeats.
 
 const fs      = require('fs');
 const path    = require('path');
@@ -15,8 +14,8 @@ const BASE     = "Pittsburg TX 75686";
 // ⚙️ 24/7 ENGINE SETTINGS
 const TARGET_LEADS = 5;               // Goal per hunting session
 const MAX_LOOPS    = 10;              // Max loops per session before forcing a break
-const SESSION_DELAY_MINUTES = 15;     // How long to sleep between hunting sessions (saves API credits)
-const DIGEST_HOUR  = 8;               // Sends daily email at 8 AM
+const SESSION_DELAY_MINUTES = 15;     // How long to sleep between hunting sessions
+const DIGEST_HOUR  = 8;               // Sends daily summary email at 8 AM
 
 // 🛑 BANNED KEYWORDS
 const BANNED_KEYWORDS = [
@@ -172,10 +171,9 @@ function buildHumanQueries(service, region, zone) {
   return result.sort(() => 0.5 - Math.random()).slice(0, 3);
 }
 
-// ─── Search API Call (Tavily - Strict 14 Days & Anti-Spam) ────────────────────
+// ─── Search API Call ──────────────────────────────────────────────────────────
 async function tavilySearch(query) {
   const cleanQ = query.replace(/\b(2024|2025|2026)\b/g, '').replace(/\s{2,}/g, ' ').trim();
-
   const resp = await fetch('https://api.tavily.com/search', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -200,7 +198,7 @@ async function tavilySearch(query) {
   return data.results || [];
 }
 
-// ─── LLM Filtering & Parsing (Groq) ──────────────────────────────────────────
+// ─── LLM Parsing (Groq) ──────────────────────────────────────────────────────
 async function scanCombo(zone, region, service) {
   console.log(`  ${service.emoji} ${service.name} — Z${zone.zone} ${region.name}`);
   const city = region.cities[0];
@@ -299,7 +297,65 @@ JSON only. No markdown. Ensure all quotes are escaped.`;
   }
 }
 
-// ─── Daily digest ─────────────────────────────────────────────────────────────
+// ─── PUSH TO GOOGLE SHEETS ────────────────────────────────────────────────────
+async function pushToGoogleSheet(lead) {
+  if (!process.env.GOOGLE_SHEET_WEBHOOK) return;
+  try {
+    await fetch(process.env.GOOGLE_SHEET_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        date: new Date().toLocaleDateString(),
+        title: lead.title || '',
+        service: lead.service || '',
+        snippet: lead.snippet || '',
+        urgency: lead.urgency || '',
+        value: lead.estimatedJobValue || '',
+        location: lead.location || '',
+        contact: lead.contactHint || '',
+        url: lead.url || ''
+      })
+    });
+  } catch (e) {
+    console.log(`  ⚠️ Failed to push to Google Sheet: ${e.message}`);
+  }
+}
+
+// ─── SEND BATCH EMAIL (ALL NEW LEADS) ─────────────────────────────────────────
+async function sendBatchAlert(leads) {
+  if (!leads.length || !process.env.GMAIL_USER) return;
+  const nodemailer = require('nodemailer');
+  const t = nodemailer.createTransport({ service:'gmail', auth:{ user:process.env.GMAIL_USER, pass:process.env.GMAIL_APP_PASSWORD } });
+  
+  let html = `<html><body style="font-family:Arial,sans-serif;background:#f8fafc;padding:20px;">
+    <div style="background:#04080f;border-radius:12px;padding:20px;text-align:center;margin-bottom:20px">
+      <h2 style="color:#00d4ff;margin:0">🚀 ${leads.length} NEW TECH LEADS FOUND</h2>
+    </div>`;
+
+  leads.forEach(l => {
+    let color = l.heat === 'hot' ? '#f59e0b' : '#3b82f6';
+    html += `<div style="background:white;border-left:4px solid ${color};border-radius:8px;padding:16px;margin-bottom:15px;box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <b style="font-size:16px;color:#1e293b">${l.serviceEmoji||'⚙️'} ${l.title}</b>
+        <span style="background:${color};color:white;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:bold;">${(l.heat||'new').toUpperCase()}</span>
+      </div>
+      <p style="color:#475569;font-size:14px;line-height:1.5;margin-top:0">${l.snippet}</p>
+      <div style="font-size:12px;color:#64748b;margin-bottom:10px">📍 ${l.location || 'East Texas'} · ⏳ ${l.posted || 'Recent'}</div>
+      ${l.url ? `<a href="${l.url}" style="display:inline-block;background:#00d4ff;color:#04080f;padding:8px 16px;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">View Lead →</a>` : ''}
+    </div>`;
+  });
+
+  html += `</body></html>`;
+
+  await t.sendMail({ 
+    from:`"Dean's Leads Scanner" <${process.env.GMAIL_USER}>`, 
+    to:process.env.NOTIFY_EMAIL || process.env.GMAIL_USER, 
+    subject: `🚀 ${leads.length} New Tech Leads Ready`, 
+    html 
+  });
+}
+
+// ─── DAILY DIGEST ─────────────────────────────────────────────────────────────
 async function sendDailyDigest(existing) {
   if (!process.env.GMAIL_USER) return;
   console.log('☀️  Building and sending 8 AM digest email...');
@@ -353,7 +409,7 @@ const LEADS_FILE = path.join(__dirname, 'leads.json');
 const SEEN_FILE  = path.join(__dirname, 'seen.json');
 
 (async () => {
-  console.log(`\n🚀 DEAN'S TECH OVERDRIVE V10 — 24/7 CONTINUOUS HUNTER`);
+  console.log(`\n🚀 DEAN'S TECH OVERDRIVE V13 — 24/7 FULL DELIVERY EDITION`);
   console.log(`📍 ${BASE} | NO REDDIT`);
   console.log(`🎯 Goal: Hunt until ${TARGET_LEADS} leads are bagged, then sleep for ${SESSION_DELAY_MINUTES} mins.`);
   
@@ -426,12 +482,24 @@ const SEEN_FILE  = path.join(__dirname, 'seen.json');
       }
     }
 
-    // ── Save Results ──
+    // ── Save Results & Push to Outputs ──
     if (freshBounty.length > 0) {
       const merged = [...freshBounty, ...existing].slice(0, 5000);
       fs.writeFileSync(LEADS_FILE, JSON.stringify(merged, null, 2));
       fs.writeFileSync(SEEN_FILE, JSON.stringify(seenLog, null, 2));
       console.log(`\n💾 Saved ${freshBounty.length} new leads to database and memory vault.`);
+
+      // 1. Push to Google Sheets (So it appears on your frontend/dashboard)
+      console.log(`📊 Pushing ${freshBounty.length} leads to Google Sheets...`);
+      for (const lead of freshBounty) {
+        await pushToGoogleSheet(lead);
+        await sleep(500); // Prevent rate limiting from Google
+      }
+
+      // 2. Email you EVERY lead it just found in a beautiful batch
+      console.log(`📧 Sending email alert for ${freshBounty.length} leads...`);
+      await sendBatchAlert(freshBounty);
+
     } else {
       console.log(`\n📉 No new leads found after ${loopCount} cycles. The internet is quiet.`);
     }
