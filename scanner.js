@@ -1,7 +1,7 @@
 // Dean's Handyman Service LLC — V6 MAXIMUM OVERDRIVE (FREE — Groq + Tavily Search)
 // Pittsburg TX 75686 | Spiral from 75686 outward
-// 50+ service categories | Angi · Thumbtack · HomeAdvisor · Craigslist · Reddit
-// Facebook · Nextdoor · Twitter/X · Google · Yelp · Forums
+// 50+ service categories | Angi · Thumbtack · HomeAdvisor · Craigslist · Facebook
+// Nextdoor · Twitter/X · Google · Yelp · Forums
 // HughesNet/Viasat · New Homeowners · Ranchers · Farmers · Businesses
 // Mobile Homes · Storm Damage · Veterans · Churches · Lake Houses · RV Parks
 // GOAL: Hundreds of fresh 2026 leads per day
@@ -120,7 +120,7 @@ function getThisRunTargets() {
   return { zone, region, services: svcs };
 }
 
-// ─── 50+ SERVICE CATEGORIES (Cleaned of hardcoded years) ──────────────────────
+// ─── 50+ SERVICE CATEGORIES (Cleaned of hardcoded years and Reddit) ────────────
 const SERVICES = [
   // ══ INTERNET & STARLINK ══════════════════════════════════════════════════════
   {
@@ -130,8 +130,6 @@ const SERVICES = [
       'facebook.com /groups "starlink" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" "need someone" OR "anyone install" OR "just got"',
       '"just got starlink" OR "starlink arrived" OR "starlink kit" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport" need help install mount',
       '"anyone install starlink" OR "can someone install starlink" "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
-      'reddit.com /r/Starlink "Tyler TX" OR "Longview TX" OR "East Texas" OR "Texarkana" install help',
-      'reddit.com /r/Starlink "just got" OR "finally got" OR "arrived today" mount help confused',
       'craigslist.org texarkana OR tyler OR longview "starlink" install mount setup',
       '"starlink" "pole mount" OR "roof mount" OR "J-mount" cant figure out help "East Texas" OR "Tyler" OR "Longview" OR "Texarkana" OR "Pittsburg" OR "Shreveport"',
     ],
@@ -181,7 +179,6 @@ const SERVICES = [
       '"just bought a house" OR "just closed" Texas need repairs handyman',
       '"new homeowner" Texas need help fix repair work done',
       '"first time homeowner" Texas repairs handyman affordable help',
-      'reddit.com "just bought a house" Texas handyman repairs',
       '"home inspection" repairs Texas fix affordable before moving in',
     ],
   },
@@ -552,7 +549,6 @@ function buildHumanQueries(service, region, zone) {
     `"${city1}" "anyone recommend" ${svc}`,
     `"${city1}" "help with my" ${svc}`,
     `"${city1}" "how much to" ${svc}`,
-    `site:reddit.com "${city1}" ${svc}`, // Forces Reddit
     `site:craigslist.org "${city1}" ${svc} wanted`, // Forces Craigslist
   ];
 
@@ -592,7 +588,7 @@ async function tavilySearch(query) {
         'wikipedia.org','amazon.com','ebay.com','walmart.com',
         'homedepot.com','lowes.com', 'yelp.com', 'yellowpages.com', 'bbb.org',
         'angi.com', 'homeadvisor.com', 'thumbtack.com', 'taskrabbit.com',
-        'porch.com', 'houzz.com', 'expertise.com', 'homeguide.com', 'fixr.com', 'buildzoom.com' 
+        'porch.com', 'houzz.com', 'expertise.com', 'homeguide.com', 'fixr.com', 'buildzoom.com', 'reddit.com'
       ],
     }),
   });
@@ -993,7 +989,7 @@ ${recent.length===0
   <b>${COMPANY}</b> · <a href="tel:${PHONE}">${PHONE}</a> · <a href="https://${WEBSITE}">${WEBSITE}</a><br>
   Pittsburg TX 75686 · East TX · ArkLaTex · OK · All Texas · Neighboring States<br>
   50+ Service Categories · HughesNet/Viasat · New Homeowners · Ranchers · Businesses · Storm Damage<br>
-  Reddit · Facebook · Nextdoor · Craigslist · Angi · Thumbtack · Yelp · Twitter<br>
+  Facebook · Nextdoor · Craigslist · Angi · Thumbtack · Yelp · Twitter<br>
   🔥 Hot leads = instant email · ☀️ Next digest tomorrow 8am Central
 </div>
 </body></html>`;
@@ -1060,7 +1056,7 @@ async function pushToGoogleSheet(lead) {
   const { zone, region, services } = getThisRunTargets();
   console.log(`🗺️  Zone ${zone.zone} (${zone.label}): ${region.name} [${region.zip}]`);
   console.log(`🛠  ${services.length} services: ${services.map(s=>s.emoji+s.name).join(' · ')}`);
-  console.log(`🌐 Reddit·FB·Nextdoor·Craigslist·Angi·Thumbtack·Yelp·Twitter·Google\n`);
+  console.log(`🌐 FB·Nextdoor·Craigslist·Angi·Thumbtack·Yelp·Twitter·Google\n`);
 
   let allNew = [];
   try {
